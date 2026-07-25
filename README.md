@@ -1,4 +1,4 @@
-[🇺🇦 Українська](docs/README_uk.md) &nbsp;|&nbsp; [🇷🇺 Русский](docs/README_ru.md) &nbsp;|&nbsp; [🇵🇱 Polski](docs/README_pl.md)
+[UA](docs/README_uk.md) &nbsp;|&nbsp; [RU](docs/README_ru.md) &nbsp;|&nbsp; [PL](docs/README_pl.md)
 
 # Labs Solutions
 
