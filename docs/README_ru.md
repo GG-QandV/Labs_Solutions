@@ -1,4 +1,4 @@
-[🇬🇧 English](../README.md) &nbsp;|&nbsp; [🇺🇦 Українська](README_uk.md)
+[🇬🇧 English](../README.md) &nbsp;|&nbsp; [🇺🇦 Українська](README_uk.md) &nbsp;|&nbsp; [🇵🇱 Polski](README_pl.md)
 
 # Labs Solutions
 
