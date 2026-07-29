@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- sitemap.xml — при добавлении страниц демо раскомментировать блоки ниже.
+     lastmod проставляется в CI/деплой-скрипте (см. docs/DEPLOY.md §6). -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+
+  <url>
+    <loc>https://labs.mnemostroma.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://labs.mnemostroma.com/uk/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
+    <lastmod>2026-07-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <!--
+  <url><loc>https://labs.mnemostroma.com/demos/dispatcher</loc><priority>0.8</priority></url>
+  <url><loc>https://labs.mnemostroma.com/demos/extraction</loc><priority>0.8</priority></url>
+  <url><loc>https://labs.mnemostroma.com/demos/rag</loc><priority>0.8</priority></url>
+  <url><loc>https://labs.mnemostroma.com/demos/reports</loc><priority>0.8</priority></url>
+  <url><loc>https://labs.mnemostroma.com/demos/crm</loc><priority>0.7</priority></url>
+  <url><loc>https://labs.mnemostroma.com/demos/analyst</loc><priority>0.7</priority></url>
+  -->
+</urlset>

@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "title": "Labs Mnemostroma — live AI automation you can run before you buy",
+    "description": "Working AI pipelines for documents, requests and CRM. Run the demo on your own data, see every source and confidence score, and keep a human signature before anything leaves the system."
+  },
+  "a11y": { "skip": "Skip to content", "theme": "Switch theme" },
+  "nav": { "demos": "Demos", "pipeline": "Pipeline", "control": "Control", "work": "How we work", "faq": "FAQ" },
+  "cta": {
+    "book": "Book a consultation",
+    "demo": "Open a live demo",
+    "try": "Try it",
+    "case": "Read the case",
+    "repo": "Source on GitHub",
+    "product": "See the product"
+  },
+  "hero": {
+    "eyebrow": "Live automation lab — not slideware",
+    "h1": "See the automation run before you pay for it.",
+    "lead": "Working pipelines for documents, incoming requests, knowledge bases and CRM. Open-source components, your data stays where your policy allows, and nothing leaves the system without a human signature.",
+    "fact1": "A human signs off before anything is sent",
+    "fact2": "Every answer carries file, page and confidence",
+    "fact3": "Runs self-hosted; open-source core"
+  },
+  "runner": {
+    "file": "invoice_88214.pdf",
+    "ask": "ask",
+    "gateText": "The pipeline stops here. Nothing is sent, changed in CRM or invoiced until a person approves it.",
+    "approve": "Approve & send",
+    "state": { "idle": "idle", "running": "running", "gate": "awaiting approval", "done": "sent" }
+  },
+  "track": {
+    "received": "Received", "extracted": "Extracted", "verified": "Verified",
+    "matched": "Matched in base", "drafted": "Drafted", "gate": "Awaiting approval", "sent": "Sent"
+  },
+  "problem": {
+    "eyebrow": "The starting point",
+    "h2": "Where the hours actually go",
+    "c1": { "t": "Retyping documents", "d": "Invoices, CMR, packing lists and contracts are read by a person and typed into a system a second time." },
+    "c2": { "t": "Sorting the inbox", "d": "Requests arrive by mail, form and messenger. Someone decides what it is, who owns it and what is missing." },
+    "c3": { "t": "Hunting for the rule", "d": "The price, the condition, the exception — it exists, in a file nobody can locate fast enough." },
+    "c4": { "t": "Assembling the same report", "d": "Quotes and client reports are rebuilt by hand every week from the same four sources." }
+  },
+  "pipe": {
+    "eyebrow": "The model",
+    "h2": "Not a chat. A process with a stop valve.",
+    "lead": "Every demo on this site runs the same seven-state track. Deterministic work — sums, rules, validation — is code and SQL. The model only extracts, classifies, summarises and drafts. The gate is not optional.",
+    "s1": { "t": "Received", "d": "Mail, form, Telegram, upload. Raw file stored untouched." },
+    "s2": { "t": "Extracted", "d": "OCR and field extraction into a typed JSON contract." },
+    "s3": { "t": "Verified", "d": "Schema validation, arithmetic checks, confidence per field." },
+    "s4": { "t": "Matched", "d": "Rules, prices and conditions retrieved with the source fragment." },
+    "s5": { "t": "Drafted", "d": "Task, reply, quote or PDF prepared — still internal." },
+    "s6": { "t": "Awaiting approval", "d": "A named person reviews raw data, draft and sources, then signs." },
+    "s7": { "t": "Sent", "d": "Only now the mail goes out, the CRM changes, the file is delivered." }
+  },
+  "demos": {
+    "eyebrow": "Run it yourself",
+    "h2": "Six modules. One track. No sign-up to look.",
+    "lead": "Each module works standalone or chained into the full run. Sample files are preloaded — bring your own only when you want to.",
+    "in": "In", "out": "Out",
+    "cold": "Demos run on demand and sleep when idle. A cold module needs a few seconds to wake — the button tells you when it is ready.",
+    "d1": { "t": "Request dispatcher", "d": "Free-text mail or message in — service, contact, deadline, priority, missing fields and a reply draft out." },
+    "d2": { "t": "Document extraction", "d": "Invoice, CMR, packing list or contract in — typed fields, arithmetic checks and per-field confidence out." },
+    "d3": { "t": "Answers with sources", "d": "Ask your own documents. Every answer returns file, page and fragment — or an explicit \"not confirmed in the base\"." },
+    "d4": { "t": "Quote & report builder", "d": "A table or a request card in — a branded PDF and an email draft out. Generation is one deliberate click, never automatic." },
+    "d5": { "t": "CRM copilot", "d": "Thread, documents and status in — a summary, the next step, a task and a reply waiting for approval out." },
+    "d6": { "t": "Table analyst", "d": "CSV or spreadsheet in — calculations, charts, flagged anomalies and a plain-language explanation out." }
+  },
+  "demoState": { "ready": "ready", "cold": "sleeping", "soon": "soon", "down": "offline" },
+  "control": {
+    "eyebrow": "Control",
+    "h2": "What the model is allowed to touch",
+    "c1": { "t": "Nothing critical is autonomous", "d": "Sending mail, changing a deal, issuing a document — all of it waits behind a named approver. The model can prepare; it cannot commit." },
+    "c2": { "t": "Everything is checkable", "d": "Original file, raw extraction, source fragment, status and confidence stay visible. The clean version never overwrites the raw one." },
+    "c3": { "t": "Sensitive data is masked first", "d": "A local layer removes identifying data before any cloud call and restores it afterwards. For the strictest cases the cloud path is switched off entirely." },
+    "c4": { "t": "Your key, your model", "d": "Use our limited demo key, plug in your own, point at Azure OpenAI or Bedrock, or run an OpenAI-compatible endpoint inside your network." },
+    "tblCap": "Key handling by context",
+    "th1": "Context", "th2": "Mode", "th3": "Where the key lives",
+    "r1a": "Public demo", "r1b": "Platform demo key", "r1c": "Separate provider project, spend-capped",
+    "r2a": "Closed pilot", "r2b": "Ephemeral BYOK", "r2c": "RAM of an isolated session worker, 30–60 min TTL",
+    "r3a": "Regular cloud work", "r3b": "Encrypted BYOK", "r3c": "Encrypted store, decrypted only for the call",
+    "r4a": "Sensitive / enterprise", "r4b": "Local connector", "r4c": "Never leaves your infrastructure",
+    "honest": "An honest limit: a key you type into our backend has passed through our backend. We do not store it in clear text, never expose it to front-end code, never write it to logs or analytics, and use it only for the calls you allowed. For production we recommend the local connector, where the key never travels at all."
+  },
+  "proof": {
+    "eyebrow": "Track record",
+    "h2": "Shipped, not sketched",
+    "tagClient": "Client deployment",
+    "tagRef": "Reference implementation",
+    "p1": { "t": "Freight document intake", "d": "Invoices, CMR and packing lists for China–EU shipments parsed into a typed contract with validation before they reach the operator.", "m": "Stack: OCR, field extraction, schema validation, human review queue" },
+    "p2": { "t": "Answers with citations", "d": "Retrieval over internal documents where an answer without a verifiable source is treated as a failure, not a stylistic issue.", "m": "Stack: chunking, embeddings, reranking, vector store, citation contract" },
+    "p3": { "t": "Memory layer for agents", "d": "Mnemostroma — an offline memory sidecar that keeps context for AI agents locally, with no data leaving the host.", "m": "Stack: local ONNX models, SQLite WAL, vector index, MCP server" },
+    "honest": "Cards marked “reference implementation” are our own builds, not client work. Client deployments are shown with the client’s permission; where the name is under NDA, the scope and the stack are still described in full and can be walked through live."
+  },
+  "work": {
+    "eyebrow": "Engagement",
+    "h2": "From a demo to something your team runs on Monday",
+    "s1": { "t": "Discovery", "d": "One short form and one call: the process, the volumes, the systems, the privacy rules." },
+    "s2": { "t": "Audit", "d": "Where automation pays back, where it does not, and what the honest failure modes are." },
+    "s3": { "t": "Pilot", "d": "One pipeline on your real documents, measured against how the work is done today." },
+    "s4": { "t": "Integration", "d": "Wired into your mail, storage, CRM and reporting, with approval steps where they belong." },
+    "s5": { "t": "Handover", "d": "Runbook, training, monitoring and the option to keep everything self-hosted on your side." },
+    "s6": { "t": "Support", "d": "Maintenance, new document types, model changes, capacity tuning." },
+    "pricing": "Most components are open-source. You are paying for analysis, design, integration, adaptation and support — not for tokens."
+  },
+  "stack": {
+    "eyebrow": "Under the hood",
+    "h2": "Open components, replaceable providers",
+    "adapter": "Model adapter",
+    "api": "API for your agents"
+  },
+  "faq": {
+    "eyebrow": "Questions people actually ask",
+    "h2": "FAQ",
+    "q1": "Will my documents be used to train a model?",
+    "a1": "No. Demo uploads are deleted on a short schedule and are never used for training. In a deployment, storage and retention are yours to set, and the strict path keeps everything inside your network.",
+    "q2": "What happens when the model is wrong?",
+    "a2": "A wrong field is a visible field: low confidence is flagged, arithmetic is checked in code, and the approval step exists precisely because extraction is never perfect. An answer without a source is returned as “not confirmed”, not as a guess.",
+    "q3": "Do I have to move to the cloud?",
+    "a3": "No. The same pipelines run on your server or on a VPS you control. The cloud model is one interchangeable component behind an adapter, and it can be replaced with a local endpoint.",
+    "q4": "How long does a first result take?",
+    "a4": "A pilot on one document type or one request channel is typically the first milestone. The audit tells you the honest range for your volumes before any build starts.",
+    "q5": "Can our own agents call these tools?",
+    "a5": "Yes. Registered users get a scoped API key and OpenAPI schema for the same endpoints the site uses. An MCP server over the same tools is on the roadmap.",
+    "q6": "What does it cost?",
+    "a6": "Audit and design are fixed-scope. Build and integration are quoted per pipeline after discovery. Most software components are open-source, so licence cost is usually not the line item that matters."
+  },
+  "consult": {
+    "eyebrow": "Next step",
+    "h2": "Bring one process. Leave with a straight answer.",
+    "lead": "Thirty minutes, no deck. Describe the process you want automated and you get a feasibility read, the honest risks and a rough shape of the work."
+  },
+  "form": {
+    "name": "Your name", "email": "Work email", "company": "Company",
+    "industry": "Industry", "industryPh": "logistics, wholesale, services…",
+    "process": "The process you want automated",
+    "processPh": "What comes in, who touches it, what has to come out.",
+    "volume": "Monthly volume", "choose": "Choose…",
+    "v1": "Under 100 documents / requests", "v2": "100 – 1 000", "v3": "1 000 – 10 000", "v4": "Over 10 000",
+    "privacy": "Data sensitivity",
+    "p1": "Cloud models are fine", "p2": "Cloud allowed if data is masked", "p3": "Must stay on our infrastructure",
+    "systems": "Systems in use", "systemsPh": "CRM, ERP, mail, storage, spreadsheets…",
+    "consent": "I agree that this information is used to prepare and hold the consultation.",
+    "submit": "Request the consultation",
+    "invalid": "Check the highlighted fields.",
+    "sending": "Sending…",
+    "ok": "Request received. Your reference is",
+    "fail": "Could not send. Write to contact@labs.mnemostroma.com.",
+    "rate": "Too many attempts. Try again in a few minutes.",
+    "offline": "Network error. Write to contact@labs.mnemostroma.com."
+  },
+  "cab": {
+    "h": "Already sent a request?",
+    "d": "Enter the reference from your confirmation email to see its status.",
+    "ref": "Reference", "check": "Check status",
+    "bad": "Reference looks like LM-2026-XXXXXX.",
+    "none": "No request found for that reference.",
+    "state": {
+      "received": "received, waiting for review",
+      "reviewing": "being reviewed",
+      "scheduled": "call scheduled",
+      "answered": "answered by email",
+      "closed": "closed"
+    }
+  },
+  "ftr": {
+    "tag": "Live AI automation, built to be inspected.",
+    "demos": "Demos", "company": "Lab", "security": "Security & keys",
+    "api": "API for agents", "product": "Mnemostroma product",
+    "contact": "Contact", "privacy": "Privacy", "terms": "Terms"
+  }
+}

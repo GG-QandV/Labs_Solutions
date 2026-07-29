@@ -1,0 +1,2 @@
+Сюда положить self-hosted woff2 (Archivo-Variable, Inter-Variable, JetBrains Mono).
+Инструкция и сабсеттинг — landing/docs/DEPLOY.md §5. Без них работает системный fallback.

@@ -10,7 +10,14 @@ Showcasing working AI automations on real scenarios — extraction, verification
 
 - `docs/` — specs, prompts, architecture analysis, deployment guides
   - `docs/speech_translate/` — local STT + cloud translation MVP
-- `backups/` — project archives (tar.gz, zip): landing builds, demo modules
+- `landing/` — **implemented** static landing site (laid out from the backup zip, UK version prerendered)
+- `backups/` — project archives (tar.gz, zip): landing source, demo modules
+
+## Start here
+
+- [`docs/MASTER_PLAN.md`](docs/MASTER_PLAN.md) — source strategic plan (positioning, finance, jurisdictions, legal)
+- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) — canonical technical architecture + project tree
+- [`docs/ROADMAP.md`](docs/ROADMAP.md) — implementation plan with checklist
 
 ## Demo Modules
 
@@ -32,6 +39,7 @@ Showcasing working AI automations on real scenarios — extraction, verification
 
 ## Docs
 
+- [Landing site](landing/README.md) — implemented; run `cd landing && python3 build/prerender.py && python3 -m http.server 8080`
 - [Landing Labs spec](docs/Landing_Labs_fin_v.1.md) — architecture, i18n, deployment
 - [OpsHub prompt](docs/ПРОМПТ_OPSHUB_v1.md)
 - [RAG demo prompt](docs/ПРОМПТ_RAG_ДЕМО_v1.1.md)
