@@ -19,7 +19,7 @@
 | RAG-демо | 🟡 код готов (v1.1) | `backend/rag-demo/` | ONNX-модели, интеграция в парк, страница демо |
 | PDF-отчёты | 🟡 код готов (v3_VPS) | `backend/pdf-demo-vps/` (референс — `pdf-demo-base/`) | Redis/Playwright на VPS, Resend-ключ, страница демо |
 | STT/Speech (one-on-one) | 🟡 реализован в отд. репо | `GG-QandV/one-on-one_dialogues` (+ срез `backend/stt-mvp/`) | интеграция в парк, страница демо |
-| Hermes + Telegram | ⬜ кандидат (реализуемо) | внешн.: `GG-QandV/tg-mcp`, `NousResearch/hermes-agent` | см. Этап 7a |
+| Hermes + Telegram-бот | ⬜ **Tier 1** (принято) | внешн.: `NousResearch/hermes-agent` (нативный TG-бот) | установка+лок-даун+сценарий, см. Этап 2a |
 | Диспетчер заявок | ⬜ кандидат-база (реализуемо) | внешн.: `Rahilralu/FlowDesk-AI` (MIT) | адаптация под парк, см. Этап 3a |
 | CRM-copilot | ⬜ | — | весь модуль |
 | CSV/XLSX-аналитик | ⬜ | — | весь модуль |
@@ -75,6 +75,24 @@ OpsHub должен работать до запуска любого демо (
 - [ ] Traefik-роут `ops.solutions.dpdns.org` → opshub:8700, basic-auth (bcrypt, users в SQLite)
 - [ ] Задать секрет `OPSHUB_KEY` в `.env` парка
 - [ ] Smoke: убить процесс в демо → oom/die виден на дашборде; 30 мин без heartbeat → автостоп; попытка 4-го демо → отказ
+
+---
+
+## Этап 2a — Hermes-оркестратор + Telegram-бот (**Tier 1**, принятое решение)
+
+Живой диалог клиента с автоматизацией прямо в Telegram — крючок для лендинга. Выбранный вариант:
+**Hermes + его нативный Telegram-бот** (не свой оркестратор, не MTProto-`tg-mcpd`). Обоснование и лок-даун —
+[`ARCHITECTURE.md`](ARCHITECTURE.md) §5.6, аудит — [`backend/hermes/AUDIT.md`](../backend/hermes/AUDIT.md).
+
+- [ ] Установить `NousResearch/hermes-agent` **внешней зависимостью** с pin-версией через `uv` (код не вендорить; в репо — только тонкий конфиг `backend/hermes/`)
+- [ ] Включить **нативный Telegram-gateway** (бот-токен); остальные каналы (Discord/Slack/WhatsApp/Signal/Email/Teams) выключить
+- [ ] **Лок-даун безопасности:** safe-mode без terminal + whitelist toolset (только RPC демо-инструментов), command approval, DM pairing, container isolation
+- [ ] LLM: BYOK-провайдер парка (`hermes model` → OpenAI-совместимый / Gemini-прокси), без GPU
+- [ ] Фиксированный skill/сценарий с JSON-контрактами (dispatcher → OCR → RAG → PDF); стоп перед критичными действиями (human-in-the-loop)
+- [ ] gateway как always-on инфра-демон (держать «тёплым», не lazy — чтобы не терять входящие); label/`mem_limit`/heartbeat по конвенциям OpsHub
+- [ ] Маскирование PII перед облачным LLM (§6); ключи в секретах, не в логах; dashboard только localhost/SSH-туннель
+- [ ] (Опц.) `tg-mcp`/MTProto — только если понадобится работа от пользовательского аккаунта (для бота не нужно)
+- [ ] (Опц.) связать с `GG-QandV/one-on-one_dialogues`: речь клиента → текст → сценарий Hermes
 
 ---
 
@@ -152,22 +170,6 @@ OpsHub должен работать до запуска любого демо (
 
 ---
 
-## Этап 7a — Hermes-оркестратор + Telegram-туннель (кандидат)
-
-Живой диалог клиента с автоматизацией прямо в Telegram — крючок для лендинга. Реализуемо под ВПС
-(вся LLM в облаке, без локальной модели/GPU). Детали — [`ARCHITECTURE.md`](ARCHITECTURE.md) §5.6.
-
-- [ ] Исследовать `GG-QandV/one-on-one_dialogues` (голосовой слой) и зафиксировать точки интеграции
-- [ ] Развернуть `tg-mcpd` (Telethon MTProto-демон) как always-on инфра-сервис уровня OpsHub (systemd/Docker, `mem_limit ~128m`), QR-auth, rate-limit/FloodWait
-- [ ] Собрать Hermes (trimmed) из `NousResearch/hermes-agent` через `uv`: CLI-оркестратор без встроенного gateway, Telegram — через `tg-mcp`, LLM — BYOK-провайдер парка (без локальной модели/GPU)
-- [ ] Задать skill/сценарий Hermes с фиксированными этапами и JSON-контрактами инструментов демо (dispatcher → OCR → RAG → PDF); стоп перед критичными действиями (human-in-the-loop)
-- [ ] Интеграция в парк по конвенциям OpsHub (lazy-start + autostop, heartbeat); одна LLM-сессия за раз
-- [ ] Маскирование PII перед облачным LLM; ключи только в `tg-mcpd`/worker, не в логах (§6)
-- [ ] Проверить лицензии перед публичным запуском (hermes-agent — MIT; Telethon/tg-mcp — уточнить)
-- [ ] (Опц.) связать с `one-on-one_dialogues`: речь клиента → текст → сценарий Hermes
-
----
-
 ## Сквозные задачи (параллельно всем этапам)
 
 **Юридика и деньги** (детали — MASTER_PLAN.md §8–9)
@@ -184,7 +186,8 @@ OpsHub должен работать до запуска любого демо (
 
 ## Порядок и оценка
 
-Реалистичный первый публичный релиз — **лендинг + OpsHub + одно демо (PDF)**: этапы 1–3.
+**Tier 1 (первый публичный релиз):** лендинг (1) + OpsHub (2) + **Hermes + Telegram-бот (2a)** +
+первое демо PDF (3). Hermes+TG-бот поднят в Tier 1 как живой крючок для лендинга.
 Далее RAG (этап 4), затем Lead flow/Stripe/API (этап 5). STT и остальные демо (этапы 6–7) —
 после первых лидов. Гейт между этапами: демо не выходит в паблик, пока не соблюдает конвенции
 OpsHub (`demo=true`, `mem_limit`, heartbeat, healthcheck) и лимиты публичного контура.
