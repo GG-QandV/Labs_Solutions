@@ -18,7 +18,8 @@
 | OpsHub | 🟡 код готов | `backend/opshub/` | деплой на VPS, basic-auth пользователи |
 | RAG-демо | 🟡 код готов (v1.1) | `backend/rag-demo/` | ONNX-модели, интеграция в парк, страница демо |
 | PDF-отчёты | 🟡 код готов (v3_VPS) | `backend/pdf-demo-vps/` (референс — `pdf-demo-base/`) | Redis/Playwright на VPS, Resend-ключ, страница демо |
-| STT/Speech | 🟡 только LLM-слой | `backend/stt-mvp/` | whisper.cpp + PipeWire + аудио-пайплайн + UI |
+| STT/Speech (one-on-one) | 🟡 реализован в отд. репо | `GG-QandV/one-on-one_dialogues` (+ срез `backend/stt-mvp/`) | интеграция в парк, страница демо |
+| Hermes + Telegram | ⬜ кандидат (реализуемо) | внешн.: `GG-QandV/tg-mcp`, `NousResearch/hermes-agent` | см. Этап 7a |
 | Диспетчер заявок | ⬜ | — (описан в Контексте) | весь модуль |
 | CRM-copilot | ⬜ | — | весь модуль |
 | CSV/XLSX-аналитик | ⬜ | — | весь модуль |
@@ -131,6 +132,22 @@ OpsHub должен работать до запуска любого демо (
 - [ ] CRM-copilot (лид/переписка → summary, next step, письмо на утверждение)
 - [ ] CSV/XLSX-аналитик (таблица → расчёты, графики, аномалии)
 - [ ] Сквозной демонстрационный pipeline: dispatcher → OCR → RAG → CRM draft → PDF, с видимым pipeline-bar
+
+---
+
+## Этап 7a — Hermes-оркестратор + Telegram-канал (кандидат)
+
+Живой диалог клиента с автоматизацией прямо в Telegram — крючок для лендинга. Реализуемо под ВПС
+(вся LLM в облаке, без локальной модели/GPU). Детали — [`ARCHITECTURE.md`](ARCHITECTURE.md) §5.6.
+
+- [ ] Исследовать `GG-QandV/one-on-one_dialogues` (голосовой слой) и зафиксировать точки интеграции
+- [ ] Развернуть `tg-mcpd` (Telethon MTProto-демон) как always-on инфра-сервис уровня OpsHub (systemd/Docker, `mem_limit ~128m`), QR-auth, rate-limit/FloodWait
+- [ ] Собрать Hermes (trimmed) из `NousResearch/hermes-agent` через `uv`: CLI-оркестратор без встроенного gateway, Telegram — через `tg-mcp`, LLM — BYOK-провайдер парка (без локальной модели/GPU)
+- [ ] Задать skill/сценарий Hermes с фиксированными этапами и JSON-контрактами инструментов демо (dispatcher → OCR → RAG → PDF); стоп перед критичными действиями (human-in-the-loop)
+- [ ] Интеграция в парк по конвенциям OpsHub (lazy-start + autostop, heartbeat); одна LLM-сессия за раз
+- [ ] Маскирование PII перед облачным LLM; ключи только в `tg-mcpd`/worker, не в логах (§6)
+- [ ] Проверить лицензии перед публичным запуском (hermes-agent — MIT; Telethon/tg-mcp — уточнить)
+- [ ] (Опц.) связать с `one-on-one_dialogues`: речь клиента → текст → сценарий Hermes
 
 ---
 
