@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpsHub</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header>
+  <div class="mark">ops<span>/</span>hub</div>
+  <div id="counter" class="counter">running –/–</div>
+</header>
+<main>
+  <section id="grid" class="grid"></section>
+  <section class="logs">
+    <div class="logs-head">
+      <h2>Recent errors</h2>
+      <select id="svcFilter"><option value="">all services</option></select>
+    </div>
+    <ul id="logList"></ul>
+  </section>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

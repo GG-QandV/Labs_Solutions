@@ -1,4 +1,4 @@
-[EN](../README.md) &nbsp;|&nbsp; [UA](README_uk.md) &nbsp;|&nbsp; [RU](README_ru.md)
+[EN](../README.md) &nbsp;|&nbsp; [UA](README_uk.md) &nbsp;|&nbsp; [PL](README_pl.md) &nbsp;|&nbsp; [RU](README_ru.md)
 
 # Labs Solutions
 
@@ -9,14 +9,13 @@ Prezentacja działających automatyzacji AI na rzeczywistych scenariuszach — e
 ## Zawartość
 
 - `docs/` — specyfikacje, prompt'y, analiza architektury, przewodniki wdrożeniowe
-  - `docs/speech_translate/` — lokalny STT + chmurowy tłumacz MVP
-- `backups/` — archiwa projektów (tar.gz, zip): buildy landingów, moduły demo
+- `backend/` — rozpakowane moduły demo (opshub, rag-demo, pdf-demo, stt-mvp)
 
 ## Moduły demo
 
 | Moduł | Opis |
 |-------|------|
-| **Landing Labs** | B2B landing dla AI automation lab — i18n (EN/UK), motywy, statyczny HTML/CSS/JS, prerender |
+| **Landing Labs** | B2B landing dla AI automation lab — i18n (EN/UK/PL/RU), motywy, statyczny HTML/CSS/JS, prerender |
 | **OpsHub** | Centrum operacyjne do orkiestracji parku demo |
 | **RAG Demo** | Demo RAG — zapytania do dokumentów przez AI |
 | **PDF Report** | Automatyczna generacja raportów PDF |
@@ -35,5 +34,5 @@ Prezentacja działających automatyzacji AI na rzeczywistych scenariuszach — e
 - [Specyfikacja landing'u](Landing_Labs_fin_v.1.md) — architektura, i18n, wdrożenie
 - [Prompt OpsHub](ПРОМПТ_OPSHUB_v1.md)
 - [Prompt RAG demo](ПРОМПТ_RAG_ДЕМО_v1.1.md)
-- [Specyfikacja Speech Translate MVP](speech_translate/SPEC_speech_local_MVP.md)
+
 - [Porównanie VPS Netcup](VPS_Netcup.md)

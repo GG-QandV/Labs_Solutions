@@ -9,14 +9,13 @@ AI-автоматизації та лендинг-рішення для бізн
 ## Вміст
 
 - `docs/` — специфікації, промпти, архітектурний аналіз, гайди деплою
-  - `docs/speech_translate/` — локальний STT + хмарний переклад MVP
-- `backups/` — архіви проєктів (tar.gz, zip): білди лендингів, модулі демо
+- `backend/` — розпаковані модулі демо (opshub, rag-demo, pdf-demo, stt-mvp)
 
 ## Демо-модулі
 
 | Модуль | Опис |
 |--------|------|
-| **Landing Labs** | B2B лендинг для AI automation lab — i18n (EN/UK), теми, статика HTML/CSS/JS, пререндер |
+| **Landing Labs** | B2B лендинг для AI automation lab — i18n (EN/UK/PL/RU), теми, статика HTML/CSS/JS, пререндер |
 | **OpsHub** | Операційний хаб для оркестрації парку демо |
 | **RAG Demo** | Демо RAG — запити до документів через AI |
 | **PDF Report** | Автоматизована генерація PDF-звітів |
@@ -35,5 +34,5 @@ AI-автоматизації та лендинг-рішення для бізн
 - [Специфікація лендингу](Landing_Labs_fin_v.1.md) — архітектура, i18n, деплой
 - [Промпт OpsHub](ПРОМПТ_OPSHUB_v1.md)
 - [Промпт RAG демо](ПРОМПТ_RAG_ДЕМО_v1.1.md)
-- [Специфікація Speech Translate MVP](speech_translate/SPEC_speech_local_MVP.md)
+
 - [Порівняння VPS Netcup](VPS_Netcup.md)

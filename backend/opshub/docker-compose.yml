@@ -1,0 +1,31 @@
+# OpsHub — permanent host infrastructure (outside the "3 demo stacks" rule)
+services:
+  opshub:
+    build: .
+    container_name: opshub
+    restart: unless-stopped
+    mem_limit: 128m
+    cpus: 0.3
+    environment:
+      - OPSHUB_KEY=${OPSHUB_KEY}
+      - ADMIN_LOGIN=${ADMIN_LOGIN:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - MAX_RUNNING_DEMOS=3
+      - DEMOS_DATA_ROOT=/srv/demos
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock   # rw: required by the launcher (documented risk)
+      - /srv/opshub/data:/data
+      - /srv/demos:/srv/demos:ro                     # disk metrics for demo /data dirs
+    networks: [web, opsnet]
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.opshub.rule=Host(`ops.solutions.dpdns.org`)"
+      - "traefik.http.routers.opshub.entrypoints=websecure"
+      - "traefik.http.routers.opshub.tls.certresolver=le"
+      - "traefik.http.services.opshub.loadbalancer.server.port=8700"
+
+networks:
+  web:
+    external: true
+  opsnet:
+    name: opsnet

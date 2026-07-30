@@ -1,0 +1,33 @@
+# RAG demo — one container, OpsHub fleet conventions, Traefik routing
+services:
+  rag-demo:
+    build: .
+    container_name: rag-demo
+    restart: on-failure          # fleet convention: native OOM auto-restart
+    mem_limit: 2048m             # cgroup OOM protection (primary leak defence)
+    cpus: 2.0
+    environment:
+      - PUBLIC_BASE_URL=https://rag.solutions.dpdns.org
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
+      - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
+      - OPSHUB_URL=http://opshub:8700
+      - OPSHUB_KEY=${OPSHUB_KEY}
+      - OPSHUB_SERVICE=rag-demo
+    volumes:
+      - /srv/demos/rag-demo/data:/data
+    networks: [web, opsnet]
+    labels:
+      - "demo=true"
+      - "traefik.enable=true"
+      - "traefik.http.routers.rag.rule=Host(`rag.solutions.dpdns.org`)"
+      - "traefik.http.routers.rag.entrypoints=websecure"
+      - "traefik.http.routers.rag.tls.certresolver=le"
+      - "traefik.http.services.rag.loadbalancer.server.port=8080"
+
+networks:
+  web:
+    external: true
+  opsnet:
+    external: true

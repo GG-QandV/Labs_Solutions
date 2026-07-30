@@ -1,0 +1,26 @@
+name = "pdf-report-demo-api"
+main = "src/index.ts"
+compatibility_date = "2025-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Route the API on the main domain (option chosen: path-based, no extra subdomain)
+routes = [
+  { pattern = "solutions.dpdns.org/api/*", zone_name = "solutions.dpdns.org" }
+]
+
+[browser]
+binding = "MYBROWSER"
+
+[[kv_namespaces]]
+binding = "KV"
+id = "REPLACE_WITH_KV_ID"          # wrangler kv namespace create KV
+
+[[r2_buckets]]
+binding = "R2"
+bucket_name = "pdf-demo-files"      # wrangler r2 bucket create pdf-demo-files
+
+# Secrets (set via: wrangler secret put RESEND_API_KEY)
+# RESEND_API_KEY
+
+[vars]
+PUBLIC_BASE_URL = "https://solutions.dpdns.org"

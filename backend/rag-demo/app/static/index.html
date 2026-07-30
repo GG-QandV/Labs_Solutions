@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>RAG Demo — ask your documents</title>
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="mast">
+  <div class="mark">rag<span>/</span>demo</div>
+  <div id="timer" class="timer"></div>
+</header>
+<main class="shell">
+  <section class="hero">
+    <h1>Ask your documents</h1>
+    <p class="tagline">Answers come only from the fragments retrieved in your files — with the source shown next to every claim.</p>
+  </section>
+
+  <div id="startBox" class="panel center">
+    <button class="primary" id="startBtn">Start demo session</button>
+  </div>
+
+  <div id="app" hidden>
+    <section class="panel">
+      <div class="panel-head"><h2>Documents</h2><span id="usage" class="counter"></span></div>
+      <ul id="docs" class="docs"></ul>
+      <label class="upload">
+        <input type="file" id="file" accept=".pdf,.docx,.txt">
+        <span>Upload your file</span>
+        <em id="uploadHint">PDF, DOCX or TXT · up to 5 files / 10 pages</em>
+      </label>
+      <p class="note">Demo only — upload test files without sensitive or valuable content. All data is wiped daily.</p>
+    </section>
+
+    <section class="panel">
+      <div class="ask">
+        <input id="q" type="text" placeholder="What does the contract say about payment terms?">
+        <button class="primary" id="askBtn">Ask</button>
+      </div>
+      <div id="answer" class="answer" hidden></div>
+      <div id="sources" class="sources"></div>
+    </section>
+
+    <section class="panel slim">
+      <div class="reg">
+        <input id="email" type="email" placeholder="you@company.com">
+        <button id="regBtn">Keep my chat history</button>
+      </div>
+      <p class="note">We send one confirmation email. History is kept for 7 days.</p>
+    </section>
+  </div>
+
+  <div id="banner" class="banner" hidden></div>
+</main>
+<script src="/static/app.js"></script>
+</body>
+</html>

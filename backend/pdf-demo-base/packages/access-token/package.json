@@ -1,0 +1,9 @@
+{
+  "name": "@demo/access-token",
+  "version": "0.1.0",
+  "type": "module",
+  "main": "src/index.ts",
+  "types": "src/index.ts",
+  "scripts": { "typecheck": "tsc --noEmit", "build": "echo skip" },
+  "devDependencies": { "typescript": "^5.6.0", "@cloudflare/workers-types": "^4.20241106.0" }
+}
