@@ -49,7 +49,7 @@
 
 **Проверка**
 - [ ] Локальный smoke: `cd landing && python3 -m http.server 8080` → обе темы, оба языка, анимация pipeline, `prefers-reduced-motion`
-- [ ] Валидация HTML обеих версий, сходимость ключей i18n (EN/UK)
+- [ ] Валидация HTML обеих версий, сходимость ключей i18n (EN/UA)
 
 ---
 

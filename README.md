@@ -10,7 +10,7 @@ Showcasing working AI automations on real scenarios — extraction, verification
 
 - `docs/` — specs, prompts, architecture analysis, deployment guides
   - `docs/speech_translate/` — local STT + cloud translation MVP
-- `landing/` — **implemented** static landing site (laid out from the backup zip, UK version prerendered)
+- `landing/` — **implemented** static landing site (laid out from the backup zip, Ukrainian (UA) version prerendered)
 - `backups/` — project archives (tar.gz, zip): landing source, demo modules
 
 ## Start here
@@ -23,7 +23,7 @@ Showcasing working AI automations on real scenarios — extraction, verification
 
 | Module | Description |
 |--------|-------------|
-| **Landing Labs** | B2B landing for AI automation lab — i18n (EN/UK), themes, static HTML/CSS/JS, prerender |
+| **Landing Labs** | B2B landing for AI automation lab — i18n (EN/UA), themes, static HTML/CSS/JS, prerender |
 | **OpsHub** | Operations hub for demo park orchestration |
 | **RAG Demo** | Retrieval-augmented generation demo with document queries |
 | **PDF Report** | Automated PDF report generation pipeline |
