@@ -20,7 +20,7 @@
 | PDF-отчёты | 🟡 код готов (v3_VPS) | `backend/pdf-demo-vps/` (референс — `pdf-demo-base/`) | Redis/Playwright на VPS, Resend-ключ, страница демо |
 | STT/Speech (one-on-one) | 🟡 реализован в отд. репо | `GG-QandV/one-on-one_dialogues` (+ срез `backend/stt-mvp/`) | интеграция в парк, страница демо |
 | Hermes + Telegram | ⬜ кандидат (реализуемо) | внешн.: `GG-QandV/tg-mcp`, `NousResearch/hermes-agent` | см. Этап 7a |
-| Диспетчер заявок | ⬜ | — (описан в Контексте) | весь модуль |
+| Диспетчер заявок | ⬜ кандидат-база (реализуемо) | внешн.: `Rahilralu/FlowDesk-AI` (MIT) | адаптация под парк, см. Этап 3a |
 | CRM-copilot | ⬜ | — | весь модуль |
 | CSV/XLSX-аналитик | ⬜ | — | весь модуль |
 
@@ -89,6 +89,22 @@ OpsHub должен работать до запуска любого демо (
 
 ---
 
+## Этап 3a — AI-диспетчер заявок — вход демо-цикла (на базе `Rahilralu/FlowDesk-AI`)
+
+Демо #1 и **стартовая точка демо-цикла лендинга**. Кандидат-база — `Rahilralu/FlowDesk-AI` (MIT):
+мультиканальный intake → Gemini-классификация → real-time дашборд. Оценка — [`ARCHITECTURE.md`](ARCHITECTURE.md) §5.7.
+
+- [ ] Форкнуть/вендорить `Rahilralu/FlowDesk-AI`; выкинуть managed-хостинг (Render/Upstash), собрать локально по конвенциям парка
+- [ ] БД: переключить Prisma `provider` на **SQLite** (проверить Postgres-специфику) — вместо PostgreSQL
+- [ ] Очередь: локальный Redis + BullMQ (уже в парке, §5.4); для MVP слить classification-worker в API (2–3 контейнера на демо-слот)
+- [ ] Каналы MVP: Telegram Bot-webhook (**туннель через Cloudflare Worker**) + REST + форма лендинга; Twilio/WhatsApp отключить
+- [ ] LLM: Gemini free tier (как в RAG); маскирование PII перед облаком (§6)
+- [ ] Интеграция OpsHub (labels/mem_limit/heartbeat/lazy-start); Traefik-роут `dispatcher.solutions.dpdns.org`
+- [ ] Страница демо на лендинге, снять `data-href-todo` для «Request dispatcher»; человек подтверждает черновик ответа (human-in-the-loop)
+- [ ] Smoke: сообщение в Telegram/форму → классификация → карточка заявки с приоритетом + черновик ответа в дашборде
+
+---
+
 ## Этап 4 — RAG-демо с цитатами
 
 Демонстрирует работу с корпоративными знаниями; код готов (v1.1).
@@ -127,7 +143,7 @@ OpsHub должен работать до запуска любого демо (
 
 ## Этап 7 — Остальные демо и сквозной pipeline
 
-- [ ] AI-диспетчер заявок (email/форма/Telegram → структурированная заявка + черновик ответа)
+- [x] ~~AI-диспетчер заявок~~ → вынесен в **Этап 3a** (база `Rahilralu/FlowDesk-AI`)
 - [ ] OCR + извлечение полей (PaddleOCR, PDF/скан → JSON-поля + валидация + confidence)
 - [ ] CRM-copilot (лид/переписка → summary, next step, письмо на утверждение)
 - [ ] CSV/XLSX-аналитик (таблица → расчёты, графики, аномалии)
@@ -135,7 +151,7 @@ OpsHub должен работать до запуска любого демо (
 
 ---
 
-## Этап 7a — Hermes-оркестратор + Telegram-канал (кандидат)
+## Этап 7a — Hermes-оркестратор + Telegram-туннель (кандидат)
 
 Живой диалог клиента с автоматизацией прямо в Telegram — крючок для лендинга. Реализуемо под ВПС
 (вся LLM в облаке, без локальной модели/GPU). Детали — [`ARCHITECTURE.md`](ARCHITECTURE.md) §5.6.

@@ -71,7 +71,7 @@ Ubuntu 24.04, Docker + Traefik standalone. (Сравнение тарифов �
                     Stripe (биллинг), Telegram API (через tg-mcpd)
 ```
 
-**Постоянно в RAM:** Traefik, OpsHub и (при включённом Telegram-канале) `tg-mcpd` —
+**Постоянно в RAM:** Traefik, OpsHub и (при включённом Telegram-туннеле) `tg-mcpd` —
 инфраструктура, вне лимита «≤3 демо». Бюджет OpsHub — `cpus: 0.3`, `mem_limit: 128m`;
 `tg-mcpd` — одно MTProto-соединение, ~`mem_limit: 128m`. Всё остальное — по запросу.
 Hermes-оркестратор — обычное демо-стек (lazy-start + autostop, «спит» в простое).
@@ -171,13 +171,13 @@ Caddy/Traefik reverse-proxy, локальное `/data` с cron-очисткой
 и `docs/анализ_логик_промпт_ПАТЧ_v1.1.md`; полная спека `SPEC_speech_local_MVP.md` — локально в `arch/`
 (в git не хранится). Детальное исследование репозитория — по мере интеграции в парк.
 
-### 5.6. Hermes-оркестратор + Telegram-канал (кандидат, обоснование ниже)
+### 5.6. Hermes-оркестратор + Telegram-туннель (кандидат, обоснование ниже)
 Демонстратор/оркестратор ограниченного сценария (роль «Hermes» из `Контекст_…md`): проговаривает
 шаг, вызывает разрешённые API-инструменты демо (dispatcher → OCR → RAG → PDF), показывает
 structured result и **останавливается перед критичными действиями** (human-in-the-loop). Два внешних
 кирпича, оба лёгкие, потому что вся LLM-нагрузка уходит в облако (без локальной модели/GPU):
 
-- **Telegram-канал — `tg-mcp` v2 (`tg-mcpd`)** ([`GG-QandV/tg-mcp`](https://github.com/GG-QandV/tg-mcp),
+- **Telegram-туннель — `tg-mcp` v2 (`tg-mcpd`)** ([`GG-QandV/tg-mcp`](https://github.com/GG-QandV/tg-mcp),
   доки — `backups/tg-mcp/`): Python-демон с одним постоянным MTProto-соединением (Telethon) + лёгкие
   stateless-прокси (один на агента/топик) через Unix-socket IPC, systemd, авто-reconnect, rate-limit
   против FloodWait. Даёт агенту «руки» в Telegram (48 инструментов) — клиент общается с демо прямо в чате.
@@ -191,11 +191,50 @@ structured result и **останавливается перед критичн�
 `tg-mcpd` — always-on инфра-демон уровня OpsHub (одно соединение, ~128 MB, вне лимита «≤3 демо»).
 Hermes — обычный демо-стек с lazy-start + autostop (нативно «спит» без сессии), одна LLM-сессия за раз,
 инференс в облаке ⇒ CPU/RAM хоста почти не растут. Совместимо с моделью безопасности (§6): маскирование
-перед облачным LLM, BYOK, стоп перед значимыми действиями. Лицензии: hermes-agent — MIT (коммерчески
-безопасно с указанием авторства); Telethon/tg-mcp — проверить перед публичным запуском. Связка с §5.5:
-Hermes может использовать `one-on-one_dialogues` как голосовой слой (речь клиента → текст → сценарий).
+перед облачным LLM, BYOK, стоп перед значимыми действиями. Лицензии: hermes-agent и tg-mcp — **MIT**
+(коммерчески безопасно с указанием авторства), вопрос снят. Связка с §5.5: Hermes может использовать
+`one-on-one_dialogues` как голосовой слой (речь клиента → текст → сценарий).
 Ценность для лендинга: живой диалог с автоматизацией прямо в Telegram — сильный крючок для клиента.
 Статус — кандидат; план подключения — в [`ROADMAP.md`](ROADMAP.md) (Этап 7a).
+
+**Два способа проброса Telegram-туннеля** (ключевое — сам туннель, оба реализуемы):
+- **MTProto-демон `tg-mcpd`** — работа от имени *пользовательского аккаунта* (48 инструментов, полная
+  автоматизация чатов), always-on демон на VPS. Нужен для Hermes и «работы в чатах вместо человека».
+- **Bot API + webhook через Cloudflare Worker** — работа от имени *бота*, легче и serverless: Telegram шлёт
+  update на Worker, тот проксирует в бэкенд демо. Достаточно для intake заявок (см. §5.7) и не держит
+  постоянного процесса. Именно так принимает Telegram FlowDesk-AI.
+
+Выбор туннеля — по сценарию: intake заявок в диспетчер — Bot API/Cloudflare; полноценный агент в чатах — `tg-mcpd`.
+
+### 5.7. AI-диспетчер заявок — вход демо-цикла (на базе `Rahilralu/FlowDesk-AI`)
+Демо #1 из `Контекст_…md` («AI-диспетчер заявок») и **стартовая точка демо-цикла лендинга**.
+Кандидат-база — [`Rahilralu/FlowDesk-AI`](https://github.com/Rahilralu/FlowDesk-AI) (MIT): платформа
+приёма клиентских обращений из нескольких каналов (Telegram-webhook, WhatsApp/Twilio, REST) → **классификация
+Gemini** → real-time дашборд (Socket.IO) с маршрутизацией, статусами, audit-trail, внутренними заметками.
+Точно ложится на сценарий диспетчера: вход (email/форма/Telegram) → структурированная заявка + приоритет +
+классификация + черновик ответа + задача.
+
+Стек FlowDesk: React+Vite+Tailwind (фронт, Cloudflare Pages), Node.js/Express, Prisma ORM, BullMQ,
+Socket.IO, JWT; PostgreSQL; Redis (Upstash); Gemini. Деплой в оригинале — Cloudflare Pages + Render + Upstash;
+для локальной разработки есть Docker Compose.
+
+**Совпадения с проектом:** Gemini (как в RAG-демо), Telegram-intake через Bot-webhook (совпадает с §5.6,
+и это тот самый «проброс TG-туннеля через Cloudflare»), фронт на Cloudflare Pages (как лендинг), MIT, готовая
+асинхронная классификация (BullMQ) — как в PDF-демо. Это **самый близкий к сценарию** готовый OSS-каркас.
+
+**Расхождения со стеком парка и адаптация:**
+- **PostgreSQL** — парк намеренно на SQLite (§1). Prisma поддерживает провайдер `sqlite` → для демо
+  переключить datasource на SQLite (проверить Postgres-специфику), либо один общий небольшой Postgres на парк.
+- **Redis/BullMQ** — уже есть в парке (PDF-демо, §5.4); Upstash → локальный Redis-контейнер.
+- **Twilio/WhatsApp** — платный внешний канал; для MVP-демо отключить, оставить Telegram-webhook + REST + форму лендинга.
+- **Managed-хостинг (Render/Upstash)** → self-host по конвенциям парка: контейнеры (API + worker + фронт +
+  SQLite/Redis) за Traefik, labels/mem_limit/heartbeat/lazy-start OpsHub.
+- Внутри это самый «тяжёлый» демо-стек (несколько процессов) — для MVP слить worker в API и SQLite вместо
+  Postgres, чтобы уложиться в 2–3 контейнера в рамках одного демо-слота.
+
+**Вердикт по ВПС: реализуемо** как демо-стек (lazy-start + autostop), одна активная классификация за раз,
+инференс Gemini в облаке ⇒ нагрузка на хост умеренная. Рекомендуется как **база модуля dispatcher** с
+адаптацией выше. Статус — кандидат-старт демо-цикла; план — в [`ROADMAP.md`](ROADMAP.md) (Этап 3a).
 
 ---
 
@@ -275,8 +314,9 @@ Labs_Solutions/
 
 **Внешние репозитории (не в этом дереве):**
 `GG-QandV/one-on-one_dialogues` — реализация STT/speech-модуля (§5.5);
-`GG-QandV/tg-mcp` — Telegram-MCP демон (§5.6, доки-срез в `backups/tg-mcp/`);
-`NousResearch/hermes-agent` — база для Hermes-оркестратора (§5.6, MIT).
+`GG-QandV/tg-mcp` — Telegram-MCP демон, MIT (§5.6, доки-срез в `backups/tg-mcp/`);
+`NousResearch/hermes-agent` — база для Hermes-оркестратора (§5.6, MIT);
+`Rahilralu/FlowDesk-AI` — база для диспетчера заявок, MIT (§5.7).
 
 Ранее модули хранились архивами в `backups/`; теперь они **распакованы в `backend/`** —
 так удобнее контролировать структуру, доки и диффы в git. Исходные архивы держатся только
