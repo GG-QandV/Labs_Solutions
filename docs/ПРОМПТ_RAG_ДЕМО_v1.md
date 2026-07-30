@@ -14,13 +14,13 @@
 
 Источник: https://github.com/GG-QandV/mnemostroma — взять модуль `models/` целиком и адаптировать:
 
-| Файл | Роль в RAG-демо |
-|---|---|
-| `models/onnx_engine.py`, `engine_pool.py`, `protocol.py`, `mock_engine.py` | Движок инференса ONNX + пул + мок для тестов |
-| `models/content_embedder.py`, `embedding_utils.py` | Эмбеддинги e5-small (384d, префиксы `query:` / `passage:`) |
-| `models/reranker.py` (+ `memory/reranker.py` как референс) | Cross-encoder TinyBERT rerank top-k |
-| `models/hybrid_ner.py`, `bert_ner.py` | NER — подсветка сущностей в цитатах |
-| `models_manifest.json` | Манифест весов, скачивание при сборке образа |
+| Файл                                                                       | Роль в RAG-демо                                            |
+| -------------------------------------------------------------------------- | ---------------------------------------------------------- |
+| `models/onnx_engine.py`, `engine_pool.py`, `protocol.py`, `mock_engine.py` | Движок инференса ONNX + пул + мок для тестов               |
+| `models/content_embedder.py`, `embedding_utils.py`                         | Эмбеддинги e5-small (384d, префиксы `query:` / `passage:`) |
+| `models/reranker.py` (+ `memory/reranker.py` как референс)                 | Cross-encoder TinyBERT rerank top-k                        |
+| `models/hybrid_ner.py`, `bert_ner.py`                                      | NER — подсветка сущностей в цитатах                        |
+| `models_manifest.json`                                                     | Манифест весов, скачивание при сборке образа               |
 
 Модели (ONNX INT8, суммарно ~300 MB диск): multilingual-e5-small (384d, max 512 ток.), distilbert-multilingual-NER, ms-marco-TinyBERT-L2-v2 (реранкер, lazy load, fallback quant8 для CPU без AVX2). Веса скачиваются на этапе сборки Docker-образа с HuggingFace (Xenova/*), в образ не коммитятся.
 
@@ -29,6 +29,7 @@
 ## Хранилище
 
 **SQLite + sqlite-vec** (расширение векторного поиска для SQLite) — один файл `/data/rag.db`, WAL-режим:
+
 - Таблицы: `users` (регистрация), `sessions` (демо-токены), `documents`, `chunks` (text, page, chunk_index, metadata), виртуальная таблица `vec_chunks` (embedding float[384]), `chat_history` (только для зарегистрированных).
 - Metadata чанка: `tenant_id, demo_id, document_id, filename, page, chunk_index, created_at`. Все поисковые запросы фильтруются по `tenant_id` текущей сессии.
 - Никаких Qdrant/Postgres.
@@ -67,15 +68,15 @@ UI: ответ + блок «Sources»: filename, страница, текст ф
 
 ## Лимиты демо
 
-| Параметр | Значение |
-|---|---|
-| Файлов за сессию | до 5, суммарно **до 10 страниц** (5×2, 2×5 и т.п.) |
-| Размер | до 10 MB/файл (конфиг) |
-| Форматы | PDF, DOCX, TXT |
-| Индексация | 1 активная задача на tenant, очередь |
-| OCR | максимум 10 страниц/сессию (совпадает с лимитом страниц) |
-| Вопросов | 20/час на tenant (конфиг) |
-| Глобально | суточный счётчик Gemini-вызовов с запасом под free tier |
+| Параметр         | Значение                                                 |
+| ---------------- | -------------------------------------------------------- |
+| Файлов за сессию | до 5, суммарно **до 10 страниц** (5×2, 2×5 и т.п.)       |
+| Размер           | до 10 MB/файл (конфиг)                                   |
+| Форматы          | PDF, DOCX, TXT                                           |
+| Индексация       | 1 активная задача на tenant, очередь                     |
+| OCR              | максимум 10 страниц/сессию (совпадает с лимитом страниц) |
+| Вопросов         | 20/час на tenant (конфиг)                                |
+| Глобально        | суточный счётчик Gemini-вызовов с запасом под free tier  |
 
 Предзагруженный тестовый набор: 2–3 небольших документа в общем read-only tenant `demo-public`, доступен без загрузки своих файлов.
 

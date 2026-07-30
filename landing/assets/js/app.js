@@ -6,7 +6,7 @@
 'use strict';
 
 const API = '/api/v1';                 // единая база; см. docs/BACKEND_API.md
-const LANGS = ['en', 'uk'];
+const LANGS = ['en', 'uk', 'pl', 'ru'];
 /* Язык, УЖЕ зашитый в разметку текущего файла: 'en' для /, 'uk' для /uk/ (см. build/prerender.py) */
 const DEFAULT_LANG = document.documentElement.getAttribute('data-lang-default') || 'en';
 

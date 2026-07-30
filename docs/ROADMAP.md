@@ -52,12 +52,12 @@
 - [ ] Валидация HTML обеих версий, сходимость ключей i18n (EN/UA)
 
 **Добавить языки PL + RU в переключатель** (сейчас только EN/UA; тексты-референс — `docs/README_pl.md`, `docs/README_ru.md`)
-- [ ] `landing/i18n/pl.json`, `landing/i18n/ru.json` — перевести все ключи (эталон набора ключей — `en.json`)
-- [ ] `landing/assets/js/app.js:9` — `LANGS = ['en','uk','pl','ru']`; расширить автоопределение языка браузера (be/uk→uk, ru→ru, pl→pl)
-- [ ] `landing/index.html` — кнопки `PL`/`RU` в переключатель (2 места: шапка + мобильное меню) + `hreflang`-alternate для pl/ru (строки 14–16)
-- [ ] `landing/build/prerender.py` — вынести `LANG` в цикл (uk/pl/ru), собирать `/pl/index.html`, `/ru/index.html` (canonical/og:url/hreflang по аналогии)
-- [ ] `landing/sitemap.xml` — добавить `<loc>` для `/pl/`, `/ru/` и hreflang-альтернативы в каждый блок
-- [ ] `landing/README.md` — обновить список языков; пересобрать: `python3 build/prerender.py`
+- [x] `landing/i18n/pl.json`, `landing/i18n/ru.json` — перевести все ключи (эталон набора ключей — `en.json`)
+- [x] `landing/assets/js/app.js:9` — `LANGS = ['en','uk','pl','ru']`; расширить автоопределение языка браузера (be/uk→uk, ru→ru, pl→pl)
+- [x] `landing/index.html` — кнопки `PL`/`RU` в переключатель (2 места: шапка + мобильное меню) + `hreflang`-alternate для pl/ru (строки 14–16)
+- [x] `landing/build/prerender.py` — вынести `LANG` в цикл (uk/pl/ru), собирать `/pl/index.html`, `/ru/index.html` (canonical/og:url/hreflang по аналогии)
+- [x] `landing/sitemap.xml` — добавить `<loc>` для `/pl/`, `/ru/` и hreflang-альтернативы в каждый блок
+- [x] `landing/README.md` — обновить список языков; пересобрать: `python3 build/prerender.py`
 
 ---
 

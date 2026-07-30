@@ -14,7 +14,8 @@
       lang = 'en';
       for (var i = 0; i < list.length; i++) {
         var c = String(list[i]).toLowerCase().slice(0, 2);
-        if (c === 'uk' || c === 'ru' || c === 'be') { lang = 'uk'; break; }
+        if (c === 'pl' || c === 'ru') { lang = c; break; }
+        if (c === 'uk' || c === 'be') { lang = 'uk'; break; }
         if (c === 'en') { lang = 'en'; break; }
       }
     }

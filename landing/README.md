@@ -8,14 +8,16 @@
 ```
 index.html                  главная (английская версия, текст зашит в разметке — SEO)
 uk/index.html               украинская версия, генерируется скриптом
+pl/index.html               польская версия
+ru/index.html               русская версия
 assets/css/style.css        дизайн-система, обе темы, адаптив
 assets/js/theme-init.js     синхронная установка темы и языка (без вспышки)
 assets/js/app.js            i18n, тема, меню, анимация pipeline, формы, статусы демо
 assets/fonts/               ПУСТО — положить woff2 (см. docs/DEPLOY.md §5)
 assets/icons/               ПУСТО — сюда SVG из локальной коллекции
-i18n/en.json, i18n/uk.json  все тексты, включая подзаголовки
+i18n/en.json, i18n/uk.json, i18n/pl.json, i18n/ru.json  все тексты, включая подзаголовки
 robots.txt, sitemap.xml, site.webmanifest
-build/prerender.py          сборка /uk/index.html из index.html + uk.json
+build/prerender.py          сборка /uk/, /pl/, /ru/ из index.html + i18n/*.json
 docs/BACKEND_API.md         контракт эндпоинтов для разработчика бэкенда
 docs/DEPLOY.md              деплой на Netcup VPS, Traefik, CSP, шрифты, SEO-чеклист
 docs/ICONS.md               замена плейсхолдеров, список из 31 иконки
@@ -44,7 +46,7 @@ python3 -m http.server 8080     # открыть http://localhost:8080
 **JetBrains Mono** (состояния, поля, подписи). Всё self-hosted.
 
 Тема: `prefers-color-scheme` → сохранённый выбор в `localStorage` перекрывает системный.
-Язык: браузерный `uk/ru/be` → украинский, иначе английский; выбор пользователя сохраняется.
+Язык: браузерный `uk/ru/be` → украинский, `pl` → польский, `ru` → русский, иначе английский; выбор пользователя сохраняется.
 
 ## Сигнатурный элемент
 

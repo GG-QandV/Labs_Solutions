@@ -21,14 +21,14 @@ Showcasing working AI automations on real scenarios — extraction, verification
 
 ## Demo Modules
 
-| Module | Description |
-|--------|-------------|
-| **Landing Labs** | B2B landing for AI automation lab — i18n (EN/UA), themes, static HTML/CSS/JS, prerender |
-| **OpsHub** | Operations hub for demo park orchestration |
-| **RAG Demo** | Retrieval-augmented generation demo with document queries |
-| **PDF Report** | Automated PDF report generation pipeline |
-| **STT-LLM** | Speech-to-text + LLM processing pipeline |
-| **Speech Translate** | Local whisper.cpp transcription + cloud translation (MVP spec) |
+| Module               | Description                                                                             |
+| -------------------- | --------------------------------------------------------------------------------------- |
+| **Landing Labs**     | B2B landing for AI automation lab — i18n (EN/UK), themes, static HTML/CSS/JS, prerender |
+| **OpsHub**           | Operations hub for demo park orchestration                                              |
+| **RAG Demo**         | Retrieval-augmented generation demo with document queries                               |
+| **PDF Report**       | Automated PDF report generation pipeline                                                |
+| **STT-LLM**          | Speech-to-text + LLM processing pipeline                                                |
+| **Speech Translate** | Local whisper.cpp transcription + cloud translation (MVP spec)                          |
 
 ## Stack
 

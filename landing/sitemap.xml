@@ -8,8 +8,10 @@
     <loc>https://labs.mnemostroma.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
     <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://labs.mnemostroma.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://labs.mnemostroma.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -18,8 +20,34 @@
     <loc>https://labs.mnemostroma.com/uk/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
     <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://labs.mnemostroma.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://labs.mnemostroma.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://labs.mnemostroma.com/pl/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://labs.mnemostroma.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://labs.mnemostroma.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
+    <lastmod>2026-07-30</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://labs.mnemostroma.com/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://labs.mnemostroma.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://labs.mnemostroma.com/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/"/>
+    <lastmod>2026-07-30</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>

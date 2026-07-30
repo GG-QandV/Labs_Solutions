@@ -1,0 +1,171 @@
+{
+  "meta": {
+    "title": "Labs Mnemostroma — żywa automatyzacja AI, którą możesz uruchomić przed zakupem",
+    "description": "Działające potoki AI dla dokumentów, zgłoszeń i CRM. Uruchom demo na własnych danych, zobacz każde źródło i poziom pewności, a podpis człowieka pozostaje obowiązkowy przed każdym wysłaniem."
+  },
+  "a11y": { "skip": "Przejdź do treści", "theme": "Zmień motyw" },
+  "nav": { "demos": "Demo", "pipeline": "Proces", "control": "Kontrola", "work": "Jak działamy", "faq": "FAQ" },
+  "cta": {
+    "book": "Umów konsultację",
+    "demo": "Otwórz live demo",
+    "try": "Wypróbuj",
+    "case": "Przeczytaj case study",
+    "repo": "Kod na GitHub",
+    "product": "Zobacz produkt"
+  },
+  "hero": {
+    "eyebrow": "Laboratorium żywych dem — nie slajdy",
+    "h1": "Zobacz automatyzację w działaniu, zanim zapłacisz.",
+    "lead": "Działające potoki dla dokumentów, zgłoszeń przychodzących, baz wiedzy i CRM. Otwarte komponenty, Twoje dane pozostają tam, gdzie pozwala polityka, a nic nie opuszcza systemu bez podpisu człowieka.",
+    "fact1": "Człowiek zatwierdza przed każdym wysłaniem",
+    "fact2": "Każda odpowiedź zawiera plik, stronę i poziom pewności",
+    "fact3": "Działa na Twoim serwerze; otwarte jądro"
+  },
+  "runner": {
+    "file": "invoice_88214.pdf",
+    "ask": "zapytaj",
+    "gateText": "Tutaj potok się zatrzymuje. Nic nie jest wysyłane, zmieniane w CRM ani fakturowane, dopóki osoba nie zatwierdzi.",
+    "approve": "Zatwierdź i wyślij",
+    "state": { "idle": "oczekuje", "running": "uruchomiony", "gate": "czeka na zatwierdzenie", "done": "wysłano" }
+  },
+  "track": {
+    "received": "Otrzymano", "extracted": "Wydobyto", "verified": "Zweryfikowano",
+    "matched": "Znaleziono w bazie", "drafted": "Przygotowano", "gate": "Czeka na zatwierdzenie", "sent": "Wysłano"
+  },
+  "problem": {
+    "eyebrow": "Punkt wyjścia",
+    "h2": "Gdzie naprawdę idą godziny",
+    "c1": { "t": "Przepisywanie dokumentów", "d": "Faktury, CMR, listy przewozowe i umowy są czytane przez człowieka i drugi raz przepisywane do systemu." },
+    "c2": { "t": "Sortowanie skrzynki", "d": "Zgłoszenia przychodzą mailem, formularzem i messengerem. Ktoś decyduje, co to jest, czyje i czego brakuje." },
+    "c3": { "t": "Szukanie reguły", "d": "Cena, warunek, wyjątek — istnieje, w pliku, którego nikt nie znajduje wystarczająco szybko." },
+    "c4": { "t": "Ten sam raport co tydzień", "d": "Oferty i raporty klienta są składane ręcznie z tych samych czterech źródeł." }
+  },
+  "pipe": {
+    "eyebrow": "Model działania",
+    "h2": "Nie czat. Proces z zaworem bezpieczeństwa.",
+    "lead": "Każde demo na tej stronie przechodzi ten sam siedmiostanowy tor. Praca deterministyczna — sumy, reguły, walidacja — to kod i SQL. Model tylko wydobywa, klasyfikuje, podsumowuje i przygotowuje szkice. Krok zatwierdzenia nie jest opcjonalny.",
+    "s1": { "t": "Otrzymano", "d": "Poczta, formularz, Telegram, upload. Oryginał przechowywany bez zmian." },
+    "s2": { "t": "Wydobyto", "d": "OCR i ekstrakcja pól do typowanego kontraktu JSON." },
+    "s3": { "t": "Zweryfikowano", "d": "Walidacja schematu, kontrole arytmetyczne, pewność dla każdego pola." },
+    "s4": { "t": "Znaleziono", "d": "Reguły, ceny i warunki pobrane z fragmentem źródła." },
+    "s5": { "t": "Przygotowano", "d": "Zadanie, odpowiedź, oferta lub PDF gotowe — ale wciąż wewnętrzne." },
+    "s6": { "t": "Czeka na zatwierdzenie", "d": "Konkretna osoba widzi surowe dane, szkic i źródła — i zatwierdza." },
+    "s7": { "t": "Wysłano", "d": "Dopiero teraz mail wychodzi, CRM się zmienia, plik dociera do klienta." }
+  },
+  "demos": {
+    "eyebrow": "Uruchom sam",
+    "h2": "Sześć modułów. Jeden tor. Bez rejestracji.",
+    "lead": "Każdy moduł działa samodzielnie lub w połączonym potoku. Przykładowe pliki są wstępnie załadowane — swoje podłączysz tylko gdy chcesz.",
+    "in": "Wejście", "out": "Wyjście",
+    "cold": "Demo uruchamiają się na żądanie i zasypiają bez aktywności. Zimny moduł potrzebuje kilku sekund — przycisk pokaże, gdy będzie gotowy.",
+    "d1": { "t": "Dyspozytor zgłoszeń", "d": "Na wejściu — mail lub wiadomość. Na wyjściu — usługa, kontakt, termin, priorytet, lista braków i szkic odpowiedzi." },
+    "d2": { "t": "Ekstrakcja dokumentów", "d": "Na wejściu — faktura, CMR, list przewozowy lub umowa. Na wyjściu — typowane pola, kontrole arytmetyczne i pewność dla każdego pola." },
+    "d3": { "t": "Odpowiedzi ze źródłami", "d": "Zapytaj własne dokumenty. Każda odpowiedź zwraca plik, stronę i fragment — lub wprost «nie potwierdzone w bazie»." },
+    "d4": { "t": "Kreator ofert i raportów", "d": "Na wejściu — tabela lub karta zgłoszenia. Na wyjściu — firmowy PDF i szkic maila. Generacja tylko osobnym przyciskiem, nigdy automatyczna." },
+    "d5": { "t": "CRM copilot", "d": "Na wejściu — korespondencja, dokumenty, status. Na wyjściu — podsumowanie, następny krok, zadanie i odpowiedź czekająca na zatwierdzenie." },
+    "d6": { "t": "Analityk tabel", "d": "Na wejściu — CSV lub arkusz. Na wyjściu — obliczenia, wykresy, oznaczone anomalie i wyjaśnienie prostym językiem." }
+  },
+  "demoState": { "ready": "gotowe", "cold": "śpi", "soon": "wkrótce", "down": "niedostępne" },
+  "control": {
+    "eyebrow": "Kontrola",
+    "h2": "Czego model może dotykać",
+    "c1": { "t": "Nic krytycznego nie jest autonomiczne", "d": "Wysyłanie maila, zmiana umowy, wystawienie dokumentu — wszystko czeka na konkretną osobę. Model może przygotować, ale nie może sfinalizować." },
+    "c2": { "t": "Wszystko można sprawdzić", "d": "Oryginalny plik, surowa ekstrakcja, fragment źródła, status i pewność pozostają widoczne. Wersja czysta nigdy nie nadpisuje surowej." },
+    "c3": { "t": "Wrażliwe dane są najpierw maskowane", "d": "Lokalna warstwa usuwa dane identyfikujące przed każdym wywołaniem chmurowym i przywraca je po. Dla najsurowszych przypadków ścieżka chmurowa jest wyłączona całkowicie." },
+    "c4": { "t": "Twój klucz, Twój model", "d": "Nasz ograniczony klucz demo, Twój własny klucz, Azure OpenAI lub Bedrock, albo punkt końcowy zgodny z OpenAI wewnątrz Twojej sieci." },
+    "tblCap": "Obsługa klucza według kontekstu",
+    "th1": "Kontekst", "th2": "Tryb", "th3": "Gdzie żyje klucz",
+    "r1a": "Publiczne demo", "r1b": "Klucz demo platformy", "r1c": "Oddzielny projekt dostawcy z limitem wydatków",
+    "r2a": "Zamknięty pilot", "r2b": "Tymczasowy BYOK", "r2c": "Tylko w pamięci izolowanego workera, TTL 30–60 min",
+    "r3a": "Regularna praca w chmurze", "r3b": "Szyfrowany BYOK", "r3c": "Szyfrowane repozytorium, deszyfrowanie tylko na wywołanie",
+    "r4a": "Wrażliwe / enterprise", "r4b": "Lokalny łącznik", "r4c": "Nigdy nie opuszcza Twojej infrastruktury",
+    "honest": "Szczere ograniczenie: klucz wpisany w nasz backend przechodzi przez ten backend. Nie przechowujemy go w czystej postaci, nie udostępniamy frontendowi, nie zapisujemy w logach ani analityce i używamy tylko do dozwolonych przez Ciebie wywołań. Do produkcji zalecamy lokalny łącznik, gdzie klucz w ogóle nie podróżuje."
+  },
+  "proof": {
+    "eyebrow": "Doświadczenie",
+    "h2": "Zrobione, nie narysowane",
+    "tagClient": "Wdrożenie u klienta",
+    "tagRef": "Własna realizacja",
+    "p1": { "t": "Przyjmowanie dokumentów transportowych", "d": "Faktury, CMR i listy przewozowe dla przesyłek Chiny–UE parsowane do typowanego kontraktu z walidacją, zanim trafią do operatora.", "m": "Stack: OCR, ekstrakcja pól, walidacja schematu, kolejka ręcznego przeglądu" },
+    "p2": { "t": "Odpowiedzi z cytatami", "d": "Wyszukiwanie w wewnętrznych dokumentach, gdzie odpowiedź bez weryfikowalnego źródła jest traktowana jako błąd, a nie kwestia stylu.", "m": "Stack: chunking, embeddingi, reranking, magazyn wektorowy, kontrakt cytowania" },
+    "p3": { "t": "Warstwa pamięci dla agentów", "d": "Mnemostroma — offline sidecar pamięci, który przechowuje kontekst agentów AI lokalnie, bez wychodzenia danych poza host.", "m": "Stack: lokalne modele ONNX, SQLite WAL, indeks wektorowy, serwer MCP" },
+    "honest": "Karty oznaczone «własna realizacja» to nasze projekty, nie wdrożenia klienckie. Prace klienckie pokazujemy za zgodą klienta; jeśli nazwa jest objęta NDA, zakres i stack są mimo to opisane w pełni i można je omówić na żywo."
+  },
+  "work": {
+    "eyebrow": "Format współpracy",
+    "h2": "Od demo do czegoś, czym Twój zespół pracuje w poniedziałek",
+    "s1": { "t": "Discovery", "d": "Jeden krótki formularz i jedna rozmowa: proces, wolumeny, systemy, zasady prywatności." },
+    "s2": { "t": "Audyt", "d": "Gdzie automatyzacja się zwraca, gdzie nie i jakie są uczciwe scenariusze awarii." },
+    "s3": { "t": "Pilot", "d": "Jeden potok na Twoich rzeczywistych dokumentach, mierzony względem obecnego sposobu pracy." },
+    "s4": { "t": "Integracja", "d": "Podłączenie do poczty, magazynu, CRM i raportowania — z krokami zatwierdzenia tam, gdzie są potrzebne." },
+    "s5": { "t": "Przekazanie", "d": "Instrukcja, szkolenie, monitoring i możliwość utrzymania wszystkiego na własnym serwerze." },
+    "s6": { "t": "Wsparcie", "d": "Utrzymanie, nowe typy dokumentów, zmiana modeli, dostosowanie wydajności." },
+    "pricing": "Większość komponentów jest open-source. Płacisz za analizę, projektowanie, integrację, adaptację i wsparcie — nie za tokeny."
+  },
+  "stack": {
+    "eyebrow": "Pod maską",
+    "h2": "Otwarte komponenty, wymienni dostawcy",
+    "adapter": "Adapter modeli",
+    "api": "API dla Twoich agentów"
+  },
+  "faq": {
+    "eyebrow": "Pytania, które ludzie naprawdę zadają",
+    "h2": "FAQ",
+    "q1": "Czy moje dokumenty zostaną użyte do trenowania modelu?",
+    "a1": "Nie. Przesłane pliki w demo są usuwane po krótkim czasie i nigdy nie służą do trenowania. We wdrożeniu przechowywanie i czas retencji określasz Ty, a ścieżka ściśle lokalna pozostawia wszystko w Twojej sieci.",
+    "q2": "Co się stanie, gdy model się pomyli?",
+    "a2": "Błędne pole jest widoczne: niska pewność jest oznaczona, arytmetyka jest sprawdzana w kodzie, a krok zatwierdzenia istnieje właśnie dlatego, że ekstrakcja nigdy nie jest idealna. Odpowiedź bez źródła zwracana jest jako «nie potwierdzone», a nie jako zgadywanie.",
+    "q3": "Czy muszę przejść do chmury?",
+    "a3": "Nie. Te same potoki działają na Twoim serwerze lub na VPS, który kontrolujesz. Model chmurowy to jeden wymienny komponent za adapterem i można go zastąpić lokalnym punktem końcowym.",
+    "q4": "Ile czasu do pierwszego wyniku?",
+    "a4": "Pierwszym kamieniem milowym jest zazwyczaj pilot na jednym typie dokumentów lub jednym kanale zgłoszeń. Audyt podaje uczciwy zakres dla Twoich wolumenów przed rozpoczęciem budowy.",
+    "q5": "Czy nasi agenci mogą wywoływać te narzędzia?",
+    "a5": "Tak. Zarejestrowani użytkownicy otrzymują ograniczony klucz API i schemat OpenAPI do tych samych endpointów, których używa strona. Serwer MCP dla tych samych narzędzi jest w planach.",
+    "q6": "Ile to kosztuje?",
+    "a6": "Audyt i projektowanie mają stały zakres. Budowa i integracja są wyceniane po pipeline po discovery. Większość komponentów jest open-source, więc koszt licencji zwykle nie jest decydującą pozycją."
+  },
+  "consult": {
+    "eyebrow": "Następny krok",
+    "h2": "Przynieś jeden proces. Odbierz prostą odpowiedź.",
+    "lead": "Trzydzieści minut bez prezentacji. Opisz proces, który chcesz zautomatyzować, a otrzymasz ocenę realności, uczciwe ryzyka i przybliżony zakres prac."
+  },
+  "form": {
+    "name": "Twoje imię", "email": "Służbowy e-mail", "company": "Firma",
+    "industry": "Branża", "industryPh": "logistyka, hurt, usługi…",
+    "process": "Proces do automatyzacji",
+    "processPh": "Co wpływa, kto to przetwarza, co ma wyjść.",
+    "volume": "Wolumen miesięczny", "choose": "Wybierz…",
+    "v1": "Do 100 dokumentów / zgłoszeń", "v2": "100 – 1 000", "v3": "1 000 – 10 000", "v4": "Ponad 10 000",
+    "privacy": "Wrażliwość danych",
+    "p1": "Modele chmurowe są OK", "p2": "Chmura dozwolona pod warunkiem maskowania", "p3": "Musi pozostać w naszej infrastrukturze",
+    "systems": "Używane systemy", "systemsPh": "CRM, ERP, poczta, magazyn, arkusze…",
+    "consent": "Zgadzam się, że te dane zostaną użyte do przygotowania i przeprowadzenia konsultacji.",
+    "submit": "Zamów konsultację",
+    "invalid": "Sprawdź podświetlone pola.",
+    "sending": "Wysyłanie…",
+    "ok": "Zgłoszenie przyjęte. Twój numer —",
+    "fail": "Nie udało się wysłać. Napisz na contact@labs.mnemostroma.com.",
+    "rate": "Zbyt wiele prób. Spróbuj za kilka minut.",
+    "offline": "Błąd sieci. Napisz na contact@labs.mnemostroma.com."
+  },
+  "cab": {
+    "h": "Już wysyłałeś zgłoszenie?",
+    "d": "Wprowadź numer z e-maila potwierdzającego, aby sprawdzić status.",
+    "ref": "Numer zgłoszenia", "check": "Sprawdź status",
+    "bad": "Numer wygląda jak LM-2026-XXXXXX.",
+    "none": "Nie znaleziono zgłoszenia o tym numerze.",
+    "state": {
+      "received": "przyjęto, czeka na rozpatrzenie",
+      "reviewing": "w trakcie analizy",
+      "scheduled": "rozmowa umówiona",
+      "answered": "odpowiedź wysłana e-mailem",
+      "closed": "zamknięte"
+    }
+  },
+  "ftr": {
+    "tag": "Żywa automatyzacja AI, zbudowana do wglądu.",
+    "demos": "Demo", "company": "Laboratorium", "security": "Bezpieczeństwo i klucze",
+    "api": "API dla agentów", "product": "Produkt Mnemostroma",
+    "contact": "Kontakt", "privacy": "Prywatność", "terms": "Warunki"
+  }
+}

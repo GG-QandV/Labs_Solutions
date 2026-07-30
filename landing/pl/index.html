@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark" data-lang-default="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+<!-- ============================================================
+     SEO / GEO  (значения меняются prerender-скриптом для /uk/)
+     ============================================================ -->
+<title data-i18n="meta.title">Labs Mnemostroma — żywa automatyzacja AI, którą możesz uruchomić przed zakupem</title>
+<meta name="description" data-i18n-attr="content:meta.description"
+      content="Działające potoki AI dla dokumentów, zgłoszeń i CRM. Uruchom demo na własnych danych, zobacz każde źródło i poziom pewności, a podpis człowieka pozostaje obowiązkowy przed każdym wysłaniem.">
+<link rel="canonical" href="https://labs.mnemostroma.com/pl/">
+<link rel="alternate" hreflang="en" href="https://labs.mnemostroma.com/">
+<link rel="alternate" hreflang="uk" href="https://labs.mnemostroma.com/uk/">
+<link rel="alternate" hreflang="pl" href="https://labs.mnemostroma.com/pl/">
+<link rel="alternate" hreflang="ru" href="https://labs.mnemostroma.com/ru/">
+<link rel="alternate" hreflang="x-default" href="https://labs.mnemostroma.com/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Labs Mnemostroma">
+<meta property="og:url" content="https://labs.mnemostroma.com/pl/">
+<meta property="og:title" data-i18n-attr="content:meta.title" content="Labs Mnemostroma — żywa automatyzacja AI, którą możesz uruchomić przed zakupem">
+<meta property="og:description" data-i18n-attr="content:meta.description" content="Działające potoki AI dla dokumentów, zgłoszeń i CRM. Uruchom demo na własnych danych, zobacz każde źródło i poziom pewności, a podpis człowieka pozostaje obowiązkowy przed każdym wysłaniem.">
+<!-- PLACEHOLDER-IMAGE: og-cover 1200x630 — тёмно-фиолетовый фон, слева wordmark LABS, справа pipeline-лента с подсвеченным оранжевым шагом "Awaiting approval" -->
+<meta property="og:image" content="https://labs.mnemostroma.com/assets/og-cover.png">
+<meta name="twitter:card" content="summary_large_image">
+
+<meta name="theme-color" content="#14101E" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#E9EEF5" media="(prefers-color-scheme: light)">
+
+<!-- GEO: обслуживаемые рынки; уточнить/сократить под реальную практику -->
+<meta name="geo.region" content="UA">
+<meta name="geo.placename" content="Ukraine / EU / remote">
+
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="manifest" href="/site.webmanifest">
+
+<!-- Шрифты: self-hosted variable woff2, preload только тех начертаний, что в первом экране.
+     Если файлов нет — сработает системный fallback-стек, layout не ломается. -->
+<link rel="preload" href="/assets/fonts/Archivo-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/assets/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
+
+<link rel="stylesheet" href="/assets/css/style.css">
+<!-- Тема ставится до первой отрисовки: отдельный файл, а не inline — чтобы CSP обошлась без unsafe-inline -->
+<script src="/assets/js/theme-init.js"></script>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ProfessionalService",
+  "name": "Labs Mnemostroma",
+  "url": "https://labs.mnemostroma.com/",
+  "description": "Live AI automation demos and implementation: document extraction, request routing, RAG with citations, report generation, CRM copilot.",
+  "areaServed": ["UA", "EU", "US"],
+  "availableLanguage": ["en", "uk", "pl", "ru"],
+  "email": "contact@labs.mnemostroma.com",
+  "sameAs": ["https://github.com/GG-QandV/"],
+  "parentOrganization": { "@type": "Organization", "name": "Mnemostroma", "url": "https://mnemostroma.com/" }
+}
+</script>
+</head>
+
+<body>
+<a class="skip" href="#main" data-i18n="a11y.skip">Przejdź do treści</a>
+
+<!-- ==========================================================
+     HEADER
+     ========================================================== -->
+<header class="hdr" id="top">
+  <div class="wrap hdr__in">
+
+    <a class="brand" href="/" aria-label="Labs Mnemostroma — home">
+      <span class="brand__mark">
+        <!-- ICON-PLACEHOLDER -->
+        <span class="ico ico--brand" data-icon="hexagon-nodes" data-tone="accent"
+              title="Иконка: гексагон из связанных узлов (граф). Цвет: акцент (оранжевый в тёмной теме / сливовый в светлой). Смысл: связанные модули, а не один бот."></span>
+      </span>
+      <span class="brand__txt">
+        <b class="brand__labs">LABS</b>
+        <span class="brand__of">mnemostroma</span>
+      </span>
+    </a>
+
+    <nav class="nav" aria-label="Main">
+      <a href="#demos" data-i18n="nav.demos">Demo</a>
+      <a href="#pipeline" data-i18n="nav.pipeline">Proces</a>
+      <a href="#control" data-i18n="nav.control">Kontrola</a>
+      <a href="#work" data-i18n="nav.work">Jak działamy</a>
+      <a href="#faq" data-i18n="nav.faq">FAQ</a>
+    </nav>
+
+    <div class="hdr__tools">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" class="seg__b" data-lang-set="en" aria-pressed="true">EN</button>
+        <button type="button" class="seg__b" data-lang-set="uk" aria-pressed="false">UA</button>
+        <button type="button" class="seg__b" data-lang-set="pl" aria-pressed="false">PL</button>
+        <button type="button" class="seg__b" data-lang-set="ru" aria-pressed="false">RU</button>
+      </div>
+
+      <button type="button" class="iconbtn" id="themeToggle" aria-pressed="false"
+              data-i18n-attr="aria-label:a11y.theme" aria-label="Zmień motyw">
+        <span class="ico ico--sm" data-icon="sun-moon" data-tone="muted"
+              title="Иконка: солнце/луна (две половины). Цвет: приглушённый текст. Смысл: переключатель темы."></span>
+      </button>
+
+      <a class="btn btn--primary btn--sm" href="#consult" data-i18n="cta.book">Umów konsultację</a>
+
+      <button type="button" class="iconbtn burger" id="burger" aria-expanded="false" aria-controls="nav"
+              aria-label="Menu">
+        <span class="ico ico--sm" data-icon="menu-2" data-tone="text"
+              title="Иконка: две горизонтальные линии (меню). Цвет: основной текст."></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ==========================================================
+     HERO — сигнатурный элемент: живая лента pipeline с остановкой
+     на шаге human approval
+     ========================================================== -->
+<section class="hero">
+  <div class="wrap hero__grid">
+
+    <div class="hero__copy">
+      <p class="eyebrow" data-i18n="hero.eyebrow">Laboratorium żywych dem — nie slajdy</p>
+      <h1 class="h1" data-i18n="hero.h1">Zobacz automatyzację w działaniu, zanim zapłacisz.</h1>
+      <p class="lead" data-i18n="hero.lead">Działające potoki dla dokumentów, zgłoszeń przychodzących, baz wiedzy i CRM. Otwarte komponenty, Twoje dane pozostają tam, gdzie pozwala polityka, a nic nie opuszcza systemu bez podpisu człowieka.</p>
+
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#demos" data-i18n="cta.demo">Otwórz live demo</a>
+        <a class="btn btn--ghost" href="#consult" data-i18n="cta.book">Umów konsultację</a>
+      </div>
+
+      <ul class="hero__facts">
+        <li>
+          <span class="ico" data-icon="hand-stop" data-tone="accent"
+                title="Иконка: раскрытая ладонь «стоп». Цвет: акцент. Смысл: человек подтверждает критичное действие."></span>
+          <span data-i18n="hero.fact1">Człowiek zatwierdza przed każdym wysłaniem</span>
+        </li>
+        <li>
+          <span class="ico" data-icon="quote-source" data-tone="accent"
+                title="Иконка: кавычка со стрелкой к документу. Цвет: акцент. Смысл: ответ всегда с цитатой источника."></span>
+          <span data-i18n="hero.fact2">Każda odpowiedź zawiera plik, stronę i poziom pewności</span>
+        </li>
+        <li>
+          <span class="ico" data-icon="server-lock" data-tone="accent"
+                title="Иконка: стойка сервера с замком. Цвет: акцент. Смысл: self-hosted, данные в контуре клиента."></span>
+          <span data-i18n="hero.fact3">Działa na Twoim serwerze; otwarte jądro</span>
+        </li>
+      </ul>
+    </div>
+
+    <!-- SIGNATURE -->
+    <div class="runner" id="runner" aria-label="Pipeline run preview">
+      <div class="runner__bar">
+        <span class="runner__file" data-i18n="runner.file">invoice_88214.pdf</span>
+        <span class="runner__badge" id="runnerState" data-i18n="runner.state.idle">oczekuje</span>
+      </div>
+
+      <ol class="track" id="track">
+        <li class="track__i" data-step="received"><span class="track__d"></span><span data-i18n="track.received">Otrzymano</span></li>
+        <li class="track__i" data-step="extracted"><span class="track__d"></span><span data-i18n="track.extracted">Wydobyto</span></li>
+        <li class="track__i" data-step="verified"><span class="track__d"></span><span data-i18n="track.verified">Zweryfikowano</span></li>
+        <li class="track__i" data-step="matched"><span class="track__d"></span><span data-i18n="track.matched">Znaleziono w bazie</span></li>
+        <li class="track__i" data-step="drafted"><span class="track__d"></span><span data-i18n="track.drafted">Przygotowano</span></li>
+        <li class="track__i track__i--gate" data-step="gate"><span class="track__d"></span><span data-i18n="track.gate">Czeka na zatwierdzenie</span></li>
+        <li class="track__i" data-step="sent"><span class="track__d"></span><span data-i18n="track.sent">Wysłano</span></li>
+      </ol>
+
+      <div class="runner__out" id="runnerOut">
+        <div class="kv"><span class="kv__k">consignee</span><span class="kv__v">Zhejiang Ruifeng Ltd</span><span class="kv__c kv__c--ok">0.98</span></div>
+        <div class="kv"><span class="kv__k">incoterms</span><span class="kv__v">FOB Ningbo</span><span class="kv__c kv__c--ok">0.94</span></div>
+        <div class="kv"><span class="kv__k">gross_weight</span><span class="kv__v">— missing</span><span class="kv__c kv__c--warn" data-i18n="runner.ask">zapytaj</span></div>
+        <div class="kv"><span class="kv__k">total_amount</span><span class="kv__v">USD 14 260.00</span><span class="kv__c kv__c--ok">0.99</span></div>
+      </div>
+
+      <div class="runner__gate" id="runnerGate">
+        <span class="ico" data-icon="signature" data-tone="accent"
+              title="Иконка: перо/подпись. Цвет: акцент. Смысл: точка человеческого подтверждения."></span>
+        <p data-i18n="runner.gateText">Tutaj potok się zatrzymuje. Nic nie jest wysyłane, zmieniane w CRM ani fakturowane, dopóki osoba nie zatwierdzi.</p>
+        <button type="button" class="btn btn--primary btn--sm" id="runnerApprove" data-i18n="runner.approve">Zatwierdź i wyślij</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==========================================================
+     PROBLEM
+     ========================================================== -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="problem.eyebrow">Punkt wyjścia</p>
+    <h2 class="h2" data-i18n="problem.h2">Gdzie naprawdę idą godziny</h2>
+
+    <div class="grid grid--4">
+      <article class="card">
+        <span class="ico ico--lg" data-icon="file-stack" data-tone="accent"
+              title="Иконка: стопка документов. Цвет: акцент. Смысл: ручной разбор входящих PDF/сканов."></span>
+        <h3 class="h4" data-i18n="problem.c1.t">Przepisywanie dokumentów</h3>
+        <p data-i18n="problem.c1.d">Faktury, CMR, listy przewozowe i umowy są czytane przez człowieka i drugi raz przepisywane do systemu.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="inbox-arrow" data-tone="accent"
+              title="Иконка: входящий лоток со стрелкой. Цвет: акцент. Смысл: разбор входящих заявок из почты/мессенджеров."></span>
+        <h3 class="h4" data-i18n="problem.c2.t">Sortowanie skrzynki</h3>
+        <p data-i18n="problem.c2.d">Zgłoszenia przychodzą mailem, formularzem i messengerem. Ktoś decyduje, co to jest, czyje i czego brakuje.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="search-book" data-tone="accent"
+              title="Иконка: лупа над раскрытой книгой. Цвет: акцент. Смысл: поиск по внутренним знаниям/прайсам."></span>
+        <h3 class="h4" data-i18n="problem.c3.t">Szukanie reguły</h3>
+        <p data-i18n="problem.c3.d">Cena, warunek, wyjątek — istnieje, w pliku, którego nikt nie znajduje wystarczająco szybko.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="report-clock" data-tone="accent"
+              title="Иконка: лист отчёта с циферблатом. Цвет: акцент. Смысл: ручная сборка отчётов и КП."></span>
+        <h3 class="h4" data-i18n="problem.c4.t">Ten sam raport co tydzień</h3>
+        <p data-i18n="problem.c4.d">Oferty i raporty klienta są składane ręcznie z tych samych czterech źródeł.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     PIPELINE (детализация сигнатуры)
+     ========================================================== -->
+<section class="sec sec--alt" id="pipeline">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="pipe.eyebrow">Model działania</p>
+    <h2 class="h2" data-i18n="pipe.h2">Nie czat. Proces z zaworem bezpieczeństwa.</h2>
+    <p class="lead lead--wide" data-i18n="pipe.lead">Każde demo na tej stronie przechodzi ten sam siedmiostanowy tor. Praca deterministyczna — sumy, reguły, walidacja — to kod i SQL. Model tylko wydobywa, klasyfikuje, podsumowuje i przygotowuje szkice. Krok zatwierdzenia nie jest opcjonalny.</p>
+
+    <ol class="steps">
+      <li class="step"><span class="step__n">01</span><h3 class="h4" data-i18n="pipe.s1.t">Otrzymano</h3><p data-i18n="pipe.s1.d">Poczta, formularz, Telegram, upload. Oryginał przechowywany bez zmian.</p></li>
+      <li class="step"><span class="step__n">02</span><h3 class="h4" data-i18n="pipe.s2.t">Wydobyto</h3><p data-i18n="pipe.s2.d">OCR i ekstrakcja pól do typowanego kontraktu JSON.</p></li>
+      <li class="step"><span class="step__n">03</span><h3 class="h4" data-i18n="pipe.s3.t">Zweryfikowano</h3><p data-i18n="pipe.s3.d">Walidacja schematu, kontrole arytmetyczne, pewność dla każdego pola.</p></li>
+      <li class="step"><span class="step__n">04</span><h3 class="h4" data-i18n="pipe.s4.t">Znaleziono</h3><p data-i18n="pipe.s4.d">Reguły, ceny i warunki pobrane z fragmentem źródła.</p></li>
+      <li class="step"><span class="step__n">05</span><h3 class="h4" data-i18n="pipe.s5.t">Przygotowano</h3><p data-i18n="pipe.s5.d">Zadanie, odpowiedź, oferta lub PDF gotowe — ale wciąż wewnętrzne.</p></li>
+      <li class="step step--gate"><span class="step__n">06</span><h3 class="h4" data-i18n="pipe.s6.t">Czeka na zatwierdzenie</h3><p data-i18n="pipe.s6.d">Konkretna osoba widzi surowe dane, szkic i źródła — i zatwierdza.</p></li>
+      <li class="step"><span class="step__n">07</span><h3 class="h4" data-i18n="pipe.s7.t">Wysłano</h3><p data-i18n="pipe.s7.d">Dopiero teraz mail wychodzi, CRM się zmienia, plik dociera do klienta.</p></li>
+    </ol>
+
+    <!-- IMAGE-PLACEHOLDER -->
+    <figure class="ph ph--wide">
+      <span class="ph__t">СКРИНШОТ: сквозной pipeline в UI — горизонтальная лента из 7 состояний,
+      подсвечен шаг «Awaiting approval», под лентой две колонки: слева исходный PDF-превью,
+      справа извлечённые поля с confidence и кнопкой «Approve». Ширина 1200×620.</span>
+    </figure>
+  </div>
+</section>
+
+<!-- ==========================================================
+     DEMOS
+     ========================================================== -->
+<section class="sec" id="demos">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="demos.eyebrow">Uruchom sam</p>
+    <h2 class="h2" data-i18n="demos.h2">Sześć modułów. Jeden tor. Bez rejestracji.</h2>
+    <p class="lead lead--wide" data-i18n="demos.lead">Każdy moduł działa samodzielnie lub w połączonym potoku. Przykładowe pliki są wstępnie załadowane — swoje podłączysz tylko gdy chcesz.</p>
+
+    <div class="grid grid--3" id="demoGrid">
+
+      <article class="card card--demo" data-demo="dispatcher">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="route-split" data-tone="accent"
+                title="Иконка: развилка маршрута со стрелками. Цвет: акцент. Смысл: маршрутизация входящих заявок."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d1.t">Dyspozytor zgłoszeń</h3>
+        <p data-i18n="demos.d1.d">Na wejściu — mail lub wiadomość. Na wyjściu — usługa, kontakt, termin, priorytet, lista braków i szkic odpowiedzi.</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: email, form, Telegram · <span data-i18n="demos.out">Wyjście</span>: JSON + task + draft</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/dispatcher" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+      <article class="card card--demo" data-demo="ocr">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="scan-doc" data-tone="accent"
+                title="Иконка: лист документа с рамкой сканирования. Цвет: акцент. Смысл: OCR и извлечение полей."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d2.t">Ekstrakcja dokumentów</h3>
+        <p data-i18n="demos.d2.d">Na wejściu — faktura, CMR, list przewozowy lub umowa. Na wyjściu — typowane pola, kontrole arytmetyczne i pewność dla każdego pola.</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: PDF, scan, photo · <span data-i18n="demos.out">Wyjście</span>: JSON + validation report</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/extraction" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+      <article class="card card--demo" data-demo="rag">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="library-search" data-tone="accent"
+                title="Иконка: полка документов с лупой. Цвет: акцент. Смысл: RAG-поиск по корпоративным знаниям с цитатой."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d3.t">Odpowiedzi ze źródłami</h3>
+        <p data-i18n="demos.d3.d">Zapytaj własne dokumenty. Każda odpowiedź zwraca plik, stronę i fragment — lub wprost «nie potwierdzone w bazie».</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: docs, price lists, SOPs · <span data-i18n="demos.out">Wyjście</span>: answer + citations</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/rag" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+      <article class="card card--demo" data-demo="report">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="file-export" data-tone="accent"
+                title="Иконка: лист со стрелкой экспорта. Цвет: акцент. Смысл: генерация фирменного PDF/КП."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d4.t">Kreator ofert i raportów</h3>
+        <p data-i18n="demos.d4.d">Na wejściu — tabela lub karta zgłoszenia. Na wyjściu — firmowy PDF i szkic maila. Generacja tylko osobnym przyciskiem, nigdy automatyczna.</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: sheet link, request card · <span data-i18n="demos.out">Wyjście</span>: PDF + draft mail</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/reports" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+      <article class="card card--demo" data-demo="crm">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="user-flow" data-tone="accent"
+                title="Иконка: карточка контакта со стрелкой этапа. Цвет: акцент. Смысл: CRM-копилот, следующий шаг сделки."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d5.t">CRM copilot</h3>
+        <p data-i18n="demos.d5.d">Na wejściu — korespondencja, dokumenty, status. Na wyjściu — podsumowanie, następny krok, zadanie i odpowiedź czekająca na zatwierdzenie.</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: lead, thread, files · <span data-i18n="demos.out">Wyjście</span>: summary + next step</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/crm" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+      <article class="card card--demo" data-demo="analyst">
+        <header class="card__h">
+          <span class="ico ico--lg" data-icon="chart-anomaly" data-tone="accent"
+                title="Иконка: график с выделенной точкой-аномалией. Цвет: акцент. Смысл: аналитика таблиц, поиск аномалий."></span>
+          <span class="pill" data-demo-state>—</span>
+        </header>
+        <h3 class="h4" data-i18n="demos.d6.t">Analityk tabel</h3>
+        <p data-i18n="demos.d6.d">Na wejściu — CSV lub arkusz. Na wyjściu — obliczenia, wykresy, oznaczone anomalie i wyjaśnienie prostym językiem.</p>
+        <p class="meta"><span data-i18n="demos.in">Wejście</span>: CSV, XLSX, sheet link · <span data-i18n="demos.out">Wyjście</span>: charts + findings</p>
+        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/analyst" data-i18n="cta.try">Wypróbuj</a>
+      </article>
+
+    </div>
+
+    <p class="note" data-i18n="demos.cold">Demo uruchamiają się na żądanie i zasypiają bez aktywności. Zimny moduł potrzebuje kilku sekund — przycisk pokaże, gdy będzie gotowy.</p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     CONTROL & TRUST
+     ========================================================== -->
+<section class="sec sec--alt" id="control">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="control.eyebrow">Kontrola</p>
+    <h2 class="h2" data-i18n="control.h2">Czego model może dotykać</h2>
+
+    <div class="grid grid--2">
+      <article class="card">
+        <span class="ico ico--lg" data-icon="shield-check" data-tone="accent"
+              title="Иконка: щит с галочкой. Цвет: акцент. Смысл: подтверждение человеком перед внешним действием."></span>
+        <h3 class="h4" data-i18n="control.c1.t">Nic krytycznego nie jest autonomiczne</h3>
+        <p data-i18n="control.c1.d">Wysyłanie maila, zmiana umowy, wystawienie dokumentu — wszystko czeka na konkretną osobę. Model może przygotować, ale nie może sfinalizować.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="fingerprint-doc" data-tone="accent"
+              title="Иконка: документ с отпечатком. Цвет: акцент. Смысл: прослеживаемость: raw-файл, источник, статус."></span>
+        <h3 class="h4" data-i18n="control.c2.t">Wszystko można sprawdzić</h3>
+        <p data-i18n="control.c2.d">Oryginalny plik, surowa ekstrakcja, fragment źródła, status i pewność pozostają widoczne. Wersja czysta nigdy nie nadpisuje surowej.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="mask-eye" data-tone="accent"
+              title="Иконка: глаз с маской/штриховкой. Цвет: акцент. Смысл: маскирование персональных данных перед облачной моделью."></span>
+        <h3 class="h4" data-i18n="control.c3.t">Wrażliwe dane są najpierw maskowane</h3>
+        <p data-i18n="control.c3.d">Lokalna warstwa usuwa dane identyfikujące przed każdym wywołaniem chmurowym i przywraca je po. Dla najsurowszych przypadków ścieżka chmurowa jest wyłączona całkowicie.</p>
+      </article>
+      <article class="card">
+        <span class="ico ico--lg" data-icon="key-rotate" data-tone="accent"
+              title="Иконка: ключ со стрелкой ротации. Цвет: акцент. Смысл: BYOK — ключ клиента, режимы хранения."></span>
+        <h3 class="h4" data-i18n="control.c4.t">Twój klucz, Twój model</h3>
+        <p data-i18n="control.c4.d">Nasz ograniczony klucz demo, Twój własny klucz, Azure OpenAI lub Bedrock, albo punkt końcowy zgodny z OpenAI wewnątrz Twojej sieci.</p>
+      </article>
+    </div>
+
+    <div class="tablewrap">
+      <table class="tbl">
+        <caption class="visually-hidden" data-i18n="control.tblCap">Obsługa klucza według kontekstu</caption>
+        <thead>
+          <tr>
+            <th data-i18n="control.th1">Kontekst</th>
+            <th data-i18n="control.th2">Tryb</th>
+            <th data-i18n="control.th3">Gdzie żyje klucz</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td data-i18n="control.r1a">Publiczne demo</td><td data-i18n="control.r1b">Klucz demo platformy</td><td data-i18n="control.r1c">Oddzielny projekt dostawcy z limitem wydatków</td></tr>
+          <tr><td data-i18n="control.r2a">Zamknięty pilot</td><td data-i18n="control.r2b">Tymczasowy BYOK</td><td data-i18n="control.r2c">Tylko w pamięci izolowanego workera, TTL 30–60 min</td></tr>
+          <tr><td data-i18n="control.r3a">Regularna praca w chmurze</td><td data-i18n="control.r3b">Szyfrowany BYOK</td><td data-i18n="control.r3c">Szyfrowane repozytorium, deszyfrowanie tylko na wywołanie</td></tr>
+          <tr><td data-i18n="control.r4a">Wrażliwe / enterprise</td><td data-i18n="control.r4b">Lokalny łącznik</td><td data-i18n="control.r4c">Nigdy nie opuszcza Twojej infrastruktury</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="note" data-i18n="control.honest">Szczere ograniczenie: klucz wpisany w nasz backend przechodzi przez ten backend. Nie przechowujemy go w czystej postaci, nie udostępniamy frontendowi, nie zapisujemy w logach ani analityce i używamy tylko do dozwolonych przez Ciebie wywołań. Do produkcji zalecamy lokalny łącznik, gdzie klucz w ogóle nie podróżuje.</p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     EXPERIENCE / PROOF
+     ========================================================== -->
+<section class="sec" id="proof">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="proof.eyebrow">Doświadczenie</p>
+    <h2 class="h2" data-i18n="proof.h2">Zrobione, nie narysowane</h2>
+
+    <div class="grid grid--3">
+      <article class="card">
+        <span class="tag" data-i18n="proof.tagClient">Wdrożenie u klienta</span>
+        <h3 class="h4" data-i18n="proof.p1.t">Przyjmowanie dokumentów transportowych</h3>
+        <p data-i18n="proof.p1.d">Faktury, CMR i listy przewozowe dla przesyłek Chiny–UE parsowane do typowanego kontraktu z walidacją, zanim trafią do operatora.</p>
+        <p class="meta" data-i18n="proof.p1.m">Stack: OCR, ekstrakcja pól, walidacja schematu, kolejka ręcznego przeglądu</p>
+        <a class="lnk" href="#" data-href-todo="LINK: /cases/freight-intake" data-i18n="cta.case">Przeczytaj case study</a>
+      </article>
+
+      <article class="card">
+        <span class="tag" data-i18n="proof.tagRef">Własna realizacja</span>
+        <h3 class="h4" data-i18n="proof.p2.t">Odpowiedzi z cytatami</h3>
+        <p data-i18n="proof.p2.d">Wyszukiwanie w wewnętrznych dokumentach, gdzie odpowiedź bez weryfikowalnego źródła jest traktowana jako błąd, a nie kwestia stylu.</p>
+        <p class="meta" data-i18n="proof.p2.m">Stack: chunking, embeddingi, reranking, magazyn wektorowy, kontrakt cytowania</p>
+        <a class="lnk" href="#" href="https://github.com/GG-QandV/Labs_Solutions" data-i18n="cta.repo">Kod na GitHub</a>
+      </article>
+
+      <article class="card">
+        <span class="tag" data-i18n="proof.tagRef">Własna realizacja</span>
+        <h3 class="h4" data-i18n="proof.p3.t">Warstwa pamięci dla agentów</h3>
+        <p data-i18n="proof.p3.d">Mnemostroma — offline sidecar pamięci, który przechowuje kontekst agentów AI lokalnie, bez wychodzenia danych poza host.</p>
+        <p class="meta" data-i18n="proof.p3.m">Stack: lokalne modele ONNX, SQLite WAL, indeks wektorowy, serwer MCP</p>
+        <a class="lnk" href="https://mnemostroma.com/" data-i18n="cta.product">Zobacz produkt</a>
+      </article>
+    </div>
+
+    <p class="note" data-i18n="proof.honest">Karty oznaczone «własna realizacja» to nasze projekty, nie wdrożenia klienckie. Prace klienckie pokazujemy za zgodą klienta; jeśli nazwa jest objęta NDA, zakres i stack są mimo to opisane w pełni i można je omówić na żywo.</p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     HOW WE WORK
+     ========================================================== -->
+<section class="sec sec--alt" id="work">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="work.eyebrow">Format współpracy</p>
+    <h2 class="h2" data-i18n="work.h2">Od demo do czegoś, czym Twój zespół pracuje w poniedziałek</h2>
+
+    <ol class="steps steps--work">
+      <li class="step"><span class="step__n">01</span><h3 class="h4" data-i18n="work.s1.t">Discovery</h3><p data-i18n="work.s1.d">Jeden krótki formularz i jedna rozmowa: proces, wolumeny, systemy, zasady prywatności.</p></li>
+      <li class="step"><span class="step__n">02</span><h3 class="h4" data-i18n="work.s2.t">Audyt</h3><p data-i18n="work.s2.d">Gdzie automatyzacja się zwraca, gdzie nie i jakie są uczciwe scenariusze awarii.</p></li>
+      <li class="step"><span class="step__n">03</span><h3 class="h4" data-i18n="work.s3.t">Pilot</h3><p data-i18n="work.s3.d">Jeden potok na Twoich rzeczywistych dokumentach, mierzony względem obecnego sposobu pracy.</p></li>
+      <li class="step"><span class="step__n">04</span><h3 class="h4" data-i18n="work.s4.t">Integracja</h3><p data-i18n="work.s4.d">Podłączenie do poczty, magazynu, CRM i raportowania — z krokami zatwierdzenia tam, gdzie są potrzebne.</p></li>
+      <li class="step"><span class="step__n">05</span><h3 class="h4" data-i18n="work.s5.t">Przekazanie</h3><p data-i18n="work.s5.d">Instrukcja, szkolenie, monitoring i możliwość utrzymania wszystkiego na własnym serwerze.</p></li>
+      <li class="step"><span class="step__n">06</span><h3 class="h4" data-i18n="work.s6.t">Wsparcie</h3><p data-i18n="work.s6.d">Utrzymanie, nowe typy dokumentów, zmiana modeli, dostosowanie wydajności.</p></li>
+    </ol>
+
+    <p class="note" data-i18n="work.pricing">Większość komponentów jest open-source. Płacisz za analizę, projektowanie, integrację, adaptację i wsparcie — nie za tokeny.</p>
+  </div>
+</section>
+
+<!-- ==========================================================
+     STACK
+     ========================================================== -->
+<section class="sec" id="stack">
+  <div class="wrap">
+    <p class="eyebrow" data-i18n="stack.eyebrow">Pod maską</p>
+    <h2 class="h2" data-i18n="stack.h2">Otwarte komponenty, wymienni dostawcy</h2>
+
+    <ul class="chips">
+      <li class="chip"><span class="ico ico--sm" data-icon="container" data-tone="muted" title="Иконка: контейнер/куб. Цвет: приглушённый. Смысл: Docker."></span>Docker</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="python" data-tone="muted" title="Иконка: логотип-агностик «змейка»/скрипт. Цвет: приглушённый."></span>Python · FastAPI</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="database" data-tone="muted" title="Иконка: цилиндр БД. Цвет: приглушённый. Смысл: PostgreSQL."></span>PostgreSQL</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="vector-dots" data-tone="muted" title="Иконка: точки в пространстве. Цвет: приглушённый. Смысл: векторное хранилище."></span>Qdrant</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="text-scan" data-tone="muted" title="Иконка: строка текста в рамке распознавания. Цвет: приглушённый. Смысл: OCR."></span>OCR</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="router" data-tone="muted" title="Иконка: маршрутизатор со стрелками. Цвет: приглушённый. Смысл: Traefik reverse proxy."></span>Traefik</li>
+      <li class="chip"><span class="ico ico--sm" data-icon="swap" data-tone="muted" title="Иконка: две встречные стрелки. Цвет: приглушённый. Смысл: сменный провайдер модели."></span><span data-i18n="stack.adapter">Adapter modeli</span></li>
+      <li class="chip"><span class="ico ico--sm" data-icon="plug" data-tone="muted" title="Иконка: штекер. Цвет: приглушённый. Смысл: MCP / API для агентов."></span><span data-i18n="stack.api">API dla Twoich agentów</span></li>
+    </ul>
+
+    <!-- IMAGE-PLACEHOLDER -->
+    <figure class="ph ph--wide">
+      <span class="ph__t">СХЕМА: слой данных → Raw store · OCR/Postgres · Vector store · masking/NER →
+      Model adapter → (local endpoint | Azure | Bedrock | cloud API) → audit log.
+      Стиль: тонкие линии, подписи моно-шрифтом, акцентом выделен блок masking. 1200×560.</span>
+    </figure>
+  </div>
+</section>
+
+<!-- ==========================================================
+     FAQ
+     ========================================================== -->
+<section class="sec sec--alt" id="faq">
+  <div class="wrap wrap--narrow">
+    <p class="eyebrow" data-i18n="faq.eyebrow">Pytania, które ludzie naprawdę zadają</p>
+    <h2 class="h2" data-i18n="faq.h2">FAQ</h2>
+
+    <div class="acc">
+      <details class="acc__i">
+        <summary data-i18n="faq.q1">Czy moje dokumenty zostaną użyte do trenowania modelu?</summary>
+        <p data-i18n="faq.a1">Nie. Przesłane pliki w demo są usuwane po krótkim czasie i nigdy nie służą do trenowania. We wdrożeniu przechowywanie i czas retencji określasz Ty, a ścieżka ściśle lokalna pozostawia wszystko w Twojej sieci.</p>
+      </details>
+      <details class="acc__i">
+        <summary data-i18n="faq.q2">Co się stanie, gdy model się pomyli?</summary>
+        <p data-i18n="faq.a2">Błędne pole jest widoczne: niska pewność jest oznaczona, arytmetyka jest sprawdzana w kodzie, a krok zatwierdzenia istnieje właśnie dlatego, że ekstrakcja nigdy nie jest idealna. Odpowiedź bez źródła zwracana jest jako «nie potwierdzone», a nie jako zgadywanie.</p>
+      </details>
+      <details class="acc__i">
+        <summary data-i18n="faq.q3">Czy muszę przejść do chmury?</summary>
+        <p data-i18n="faq.a3">Nie. Te same potoki działają na Twoim serwerze lub na VPS, który kontrolujesz. Model chmurowy to jeden wymienny komponent za adapterem i można go zastąpić lokalnym punktem końcowym.</p>
+      </details>
+      <details class="acc__i">
+        <summary data-i18n="faq.q4">Ile czasu do pierwszego wyniku?</summary>
+        <p data-i18n="faq.a4">Pierwszym kamieniem milowym jest zazwyczaj pilot na jednym typie dokumentów lub jednym kanale zgłoszeń. Audyt podaje uczciwy zakres dla Twoich wolumenów przed rozpoczęciem budowy.</p>
+      </details>
+      <details class="acc__i">
+        <summary data-i18n="faq.q5">Czy nasi agenci mogą wywoływać te narzędzia?</summary>
+        <p data-i18n="faq.a5">Tak. Zarejestrowani użytkownicy otrzymują ograniczony klucz API i schemat OpenAPI do tych samych endpointów, których używa strona. Serwer MCP dla tych samych narzędzi jest w planach.</p>
+      </details>
+      <details class="acc__i">
+        <summary data-i18n="faq.q6">Ile to kosztuje?</summary>
+        <p data-i18n="faq.a6">Audyt i projektowanie mają stały zakres. Budowa i integracja są wyceniane po pipeline po discovery. Większość komponentów jest open-source, więc koszt licencji zwykle nie jest decydującą pozycją.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ==========================================================
+     CONSULT — микро-кабинет: заявка + проверка статуса
+     ========================================================== -->
+<section class="sec sec--cta" id="consult">
+  <div class="wrap wrap--narrow">
+    <p class="eyebrow" data-i18n="consult.eyebrow">Następny krok</p>
+    <h2 class="h2" data-i18n="consult.h2">Przynieś jeden proces. Odbierz prostą odpowiedź.</h2>
+    <p class="lead" data-i18n="consult.lead">Trzydzieści minut bez prezentacji. Opisz proces, który chcesz zautomatyzować, a otrzymasz ocenę realności, uczciwe ryzyka i przybliżony zakres prac.</p>
+
+    <form class="form" id="consultForm" novalidate>
+      <div class="form__row">
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.name">Twoje imię</span>
+          <input class="fld__i" name="name" type="text" autocomplete="name" required maxlength="80">
+        </label>
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.email">Służbowy e-mail</span>
+          <input class="fld__i" name="email" type="email" autocomplete="email" required maxlength="120">
+        </label>
+      </div>
+
+      <div class="form__row">
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.company">Firma</span>
+          <input class="fld__i" name="company" type="text" autocomplete="organization" maxlength="120">
+        </label>
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.industry">Branża</span>
+          <input class="fld__i" name="industry" type="text" maxlength="80"
+                 data-i18n-attr="placeholder:form.industryPh" placeholder="logistyka, hurt, usługi…">
+        </label>
+      </div>
+
+      <label class="fld">
+        <span class="fld__l" data-i18n="form.process">Proces do automatyzacji</span>
+        <textarea class="fld__i fld__i--ta" name="process" rows="4" required maxlength="1200"
+                  data-i18n-attr="placeholder:form.processPh"
+                  placeholder="Co wpływa, kto to przetwarza, co ma wyjść."></textarea>
+      </label>
+
+      <div class="form__row">
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.volume">Wolumen miesięczny</span>
+          <select class="fld__i" name="volume">
+            <option value="" data-i18n="form.choose">Wybierz…</option>
+            <option value="lt100" data-i18n="form.v1">Do 100 dokumentów / zgłoszeń</option>
+            <option value="100-1000" data-i18n="form.v2">100 – 1 000</option>
+            <option value="1000-10000" data-i18n="form.v3">1 000 – 10 000</option>
+            <option value="gt10000" data-i18n="form.v4">Ponad 10 000</option>
+          </select>
+        </label>
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.privacy">Wrażliwość danych</span>
+          <select class="fld__i" name="privacy">
+            <option value="" data-i18n="form.choose">Wybierz…</option>
+            <option value="open" data-i18n="form.p1">Modele chmurowe są OK</option>
+            <option value="masked" data-i18n="form.p2">Chmura dozwolona pod warunkiem maskowania</option>
+            <option value="local" data-i18n="form.p3">Musi pozostać w naszej infrastrukturze</option>
+          </select>
+        </label>
+      </div>
+
+      <label class="fld">
+        <span class="fld__l" data-i18n="form.systems">Używane systemy</span>
+        <input class="fld__i" name="systems" type="text" maxlength="200"
+               data-i18n-attr="placeholder:form.systemsPh" placeholder="CRM, ERP, poczta, magazyn, arkusze…">
+      </label>
+
+      <label class="chk">
+        <input type="checkbox" name="consent" required>
+        <span data-i18n="form.consent">Zgadzam się, że te dane zostaną użyte do przygotowania i przeprowadzenia konsultacji.</span>
+      </label>
+
+      <!-- honeypot: скрыт от людей, заполняется ботами; сервер отклоняет непустое поле -->
+      <div class="hp" aria-hidden="true"><label>Company website<input name="website" type="text" tabindex="-1" autocomplete="off"></label></div>
+      <!-- CAPTCHA-PLACEHOLDER: сюда монтируется Cloudflare Turnstile widget (см. docs/BACKEND_API.md §5) -->
+      <div id="captchaSlot" class="captcha-slot" data-captcha="turnstile"></div>
+
+      <button class="btn btn--primary btn--wide" type="submit" id="consultSubmit" data-i18n="form.submit">Zamów konsultację</button>
+      <p class="form__msg" id="consultMsg" role="status" aria-live="polite"></p>
+    </form>
+
+    <!-- микро-кабинет -->
+    <div class="cabinet">
+      <h3 class="h4" data-i18n="cab.h">Już wysyłałeś zgłoszenie?</h3>
+      <p class="meta" data-i18n="cab.d">Wprowadź numer z e-maila potwierdzającego, aby sprawdzić status.</p>
+      <form class="cabinet__f" id="statusForm" novalidate>
+        <label class="fld">
+          <span class="visually-hidden" data-i18n="cab.ref">Numer zgłoszenia</span>
+          <input class="fld__i" name="ref" type="text" placeholder="LM-2026-XXXXXX" maxlength="20" required>
+        </label>
+        <button class="btn btn--ghost" type="submit" data-i18n="cab.check">Sprawdź status</button>
+      </form>
+      <p class="form__msg" id="statusMsg" role="status" aria-live="polite"></p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ==========================================================
+     FOOTER
+     ========================================================== -->
+<footer class="ftr">
+  <div class="wrap ftr__grid">
+
+    <div class="ftr__brand">
+      <span class="brand__txt">
+        <b class="brand__labs">LABS</b>
+        <span class="brand__of">mnemostroma</span>
+      </span>
+      <p class="meta" data-i18n="ftr.tag">Żywa automatyzacja AI, zbudowana do wglądu.</p>
+    </div>
+
+    <nav class="ftr__col" aria-label="Demos">
+      <h4 class="ftr__h" data-i18n="ftr.demos">Demo</h4>
+      <a href="#" data-href-todo="LINK: /demos/dispatcher" data-i18n="demos.d1.t">Dyspozytor zgłoszeń</a>
+      <a href="#" data-href-todo="LINK: /demos/extraction" data-i18n="demos.d2.t">Ekstrakcja dokumentów</a>
+      <a href="#" data-href-todo="LINK: /demos/rag" data-i18n="demos.d3.t">Odpowiedzi ze źródłami</a>
+      <a href="#" data-href-todo="LINK: /demos/reports" data-i18n="demos.d4.t">Kreator ofert i raportów</a>
+    </nav>
+
+    <nav class="ftr__col" aria-label="Company">
+      <h4 class="ftr__h" data-i18n="ftr.company">Laboratorium</h4>
+      <a href="#work" data-i18n="nav.work">Jak działamy</a>
+      <a href="#control" data-i18n="ftr.security">Bezpieczeństwo i klucze</a>
+      <a href="#" data-href-todo="LINK: /api — страница API для агентов" data-i18n="ftr.api">API dla agentów</a>
+      <a href="https://mnemostroma.com/" data-i18n="ftr.product">Produkt Mnemostroma</a>
+    </nav>
+
+    <div class="ftr__col">
+      <h4 class="ftr__h" data-i18n="ftr.contact">Kontakt</h4>
+      <a href="mailto:contact@labs.mnemostroma.com">contact@labs.mnemostroma.com</a>
+      <a href="https://github.com/GG-QandV/">
+        <span class="ico ico--sm" data-icon="github" data-tone="muted" title="Иконка: GitHub. Цвет: приглушённый."></span>github.com/GG-QandV
+      </a>
+      <a href="#" data-href-todo="LINK: Telegram — https://t.me/&lt;handle&gt;">
+        <span class="ico ico--sm" data-icon="telegram" data-tone="muted" title="Иконка: Telegram. Цвет: приглушённый."></span>Telegram
+      </a>
+      <a class="btn btn--ghost btn--sm ftr__cta" href="#consult" data-i18n="cta.book">Umów konsultację</a>
+    </div>
+  </div>
+
+  <div class="wrap ftr__bar">
+    <p class="meta">© <span id="yr">2026</span> Labs Mnemostroma</p>
+    <div class="ftr__bartools">
+      <div class="seg" role="group" aria-label="Language">
+        <button type="button" class="seg__b" data-lang-set="en" aria-pressed="true">EN</button>
+        <button type="button" class="seg__b" data-lang-set="uk" aria-pressed="false">UA</button>
+        <button type="button" class="seg__b" data-lang-set="pl" aria-pressed="false">PL</button>
+        <button type="button" class="seg__b" data-lang-set="ru" aria-pressed="false">RU</button>
+      </div>
+      <button type="button" class="iconbtn" data-theme-toggle aria-label="Switch theme">
+        <span class="ico ico--sm" data-icon="sun-moon" data-tone="muted" title="Иконка: солнце/луна. Цвет: приглушённый."></span>
+      </button>
+      <a href="#" data-href-todo="LINK: /privacy" data-i18n="ftr.privacy">Prywatność</a>
+      <a href="#" data-href-todo="LINK: /terms" data-i18n="ftr.terms">Warunki</a>
+    </div>
+  </div>
+</footer>
+
+<script src="/assets/js/app.js" defer></script>
+</body>
+</html>
