@@ -1,7 +1,7 @@
 # AI Automation Lab — Архитектура проекта
 
 > Каноничный технический документ. Описывает **фактическую** архитектуру, выведенную
-> из реализованных модулей в `backups/`, и заменяет устаревшие разделы 2–4 исходного
+> из реализованных модулей в `backend/`, и заменяет устаревшие разделы 2–4 исходного
 > [`MASTER_PLAN.md`](MASTER_PLAN.md).
 > Стратегия и позиционирование — в [`MASTER_PLAN.md`](MASTER_PLAN.md) и
 > [`Контекст_ AI Automation Lab _ лендинг живых демо.md`](Контекст_%20AI%20Automation%20Lab%20_%20лендинг%20живых%20демо.md).
@@ -92,7 +92,7 @@ Ubuntu 24.04, Docker + Traefik standalone. (Сравнение тарифов �
 
 ## 4. Control plane — OpsHub
 
-Единый инфраструктурный микробэкенд парка (реализация — `backups/opshub.tar.gz`).
+Единый инфраструктурный микробэкенд парка (реализация — `backend/opshub/`).
 Стек: Python 3.12 + FastAPI + uv, aiosqlite, docker-py, APScheduler. UI — статические HTML/JS.
 
 Функции:
@@ -128,9 +128,9 @@ volumes:     [ /srv/demos/<name>/data:/data ]
 
 ## 5. Модули парка
 
-Все модули уже имеют рабочий срез в `backups/`. Статус реализации — в [`ROADMAP.md`](ROADMAP.md).
+Все модули извлечены из архивов в `backend/<module>/` (готовый код). Статус реализации — в [`ROADMAP.md`](ROADMAP.md).
 
-### 5.1. Landing (`landing/`, реализован в этом репозитории)
+### 5.1. Landing (`landing/`, реализован и развёрнут в этом репозитории)
 Чистый HTML/CSS/JS, ноль зависимостей, отдаётся nginx (статика 64 MB), отдельно от API —
 падение бэкенда не роняет сайт. i18n: английский зашит в `index.html` (для краулера),
 украинский собирается `build/prerender.py` из `i18n/uk.json`; словари работают для мгновенного
@@ -138,32 +138,33 @@ volumes:     [ /srv/demos/<name>/data:/data ]
 останавливающаяся на «Awaiting approval» (тезис оффера: модель готовит, отправляет человек).
 Контракт бэкенда формы — `landing/docs/BACKEND_API.md`. Деплой — `landing/docs/DEPLOY.md`.
 
-### 5.2. OpsHub (`backups/opshub.tar.gz`) — см. §4.
+### 5.2. OpsHub (`backend/opshub/`) — см. §4.
 
-### 5.3. RAG-демо (`backups/rag-demo.tar.gz`)
+### 5.3. RAG-демо (`backend/rag-demo/`)
 FastAPI + SQLite/sqlite-vec + ONNX (embedder e5-small, reranker TinyBERT, NER), LLM/OCR —
 Gemini free tier + DeepSeek опционально. Загрузка документа → чанкинг → эмбеддинги → ответ
 LLM **с обязательными цитатами** (ответ без подтверждённого источника = ошибка). Лимиты
 сессии (файлы/страницы), очистка данных 03:00. Интегрирован с OpsHub (heartbeat, lazy-start).
 Соответствует версии промпта `ПРОМПТ_RAG_ДЕМО_v1.1.md` (после отказа от Coolify).
 
-### 5.4. PDF-отчёты (`backups/pdf-report-demo-vps.tar.gz`)
+### 5.4. PDF-отчёты (`backend/pdf-demo-vps/`)
 Монорепо pnpm+Turborepo. Пользователь вставляет ссылку на публичный Google Sheet → валидация
 структуры/объёма/SSRF → адаптер `sheetsToReportJSON()` → `ReportJSON` (входной контракт, не
 меняется при замене источника) → рендер HTML → PDF через **Playwright + системный Chromium**
 → email (Resend). Очередь **Redis + BullMQ** (2 параллельных рендера, очередь с позицией),
 Caddy/Traefik reverse-proxy, локальное `/data` с cron-очисткой. Соответствует `ПРОМПТ_ДЛЯ_РАЗРАБОТКИ_v3_VPS.md`
-(миграция с serverless Cloudflare — версия `pdf-report-demo.tar.gz` — на self-hosted VPS).
+(миграция с serverless Cloudflare — версия `backend/pdf-demo-base/` — на self-hosted VPS).
 
-### 5.5. STT / Speech Translate (`backups/stt-llm-module.tar.gz` + `docs/speech_translate/`)
+### 5.5. STT / Speech Translate (`backend/stt-mvp/`)
 Локальная транскрибация (whisper.cpp + `ggml-base.bin` multilingual, PipeWire 2 канала,
 встроенный VAD) → SQLite → в облако уходит **только текст** для перевода/редактуры. Три жёстких
 режима: `live_literal` (не менять факты/числа/имена), `live_safe` (убрать только слова-паразиты),
 `post_clean` (чистовая стенограмма с edit_log). Правило целостности: `raw_text` неизменяем.
 Два профиля установки (`APP_PROFILE=desktop|server`) — общий пайплайн, различаются захват звука
 и упаковка (десктоп: PipeWire+systemd; сервер: загрузка файла/браузерный микрофон+Docker+Traefik).
-В `backups/` сейчас только облачный LLM-слой (`app/llm/`), аудио-пайплайн — к реализации.
-Спека — `docs/speech_translate/SPEC_speech_local_MVP.md`.
+В `backend/stt-mvp/` сейчас только облачный LLM-слой (`app/llm/` + `SPEC_llm_endpoint.md`),
+аудио-пайплайн — к реализации. Полное ТЗ на STT-пайплайн — в промптах `docs/анализ_логик_промпт.md`
+и `docs/анализ_логик_промпт_ПАТЧ_v1.1.md` (двойной таргет desktop/server).
 
 ---
 
@@ -195,10 +196,11 @@ Caddy/Traefik reverse-proxy, локальное `/data` с cron-очисткой
 ```text
 Labs_Solutions/
 ├── README.md                       индекс репозитория
-├── .gitignore
+├── .gitignore                      игнорирует __pycache__/, .pytest_cache/, arch/
 │
 ├── docs/                           СПЕКИ, ПРОМПТЫ, СТРАТЕГИЯ (документация)
 │   ├── MASTER_PLAN.md              ◀ исходный стратегический план (source of truth)
+│   ├── ai-automation-master.md     дубликат MASTER_PLAN.md (кандидат на удаление, см. примечание)
 │   ├── Контекст_ AI Automation Lab _ лендинг живых демо.md   производный контекст
 │   ├── ARCHITECTURE.md             ◀ этот файл: каноничная архитектура
 │   ├── ROADMAP.md                  ◀ план работ с чек-листом
@@ -208,41 +210,48 @@ Labs_Solutions/
 │   ├── ПРОМПТ_OPSHUB_v1.md         ТЗ на OpsHub
 │   ├── ПРОМПТ_RAG_ДЕМО_v1.md / _v1.1.md          ТЗ на RAG (v1.1 актуальна)
 │   ├── ПРОМПТ ДЛЯ РАЗРАБОТКИ.md / _v2.md / _v3_VPS.md   ТЗ на PDF (v3_VPS актуальна)
-│   ├── анализ_логик_промпт.md / _ПАТЧ_v1.1.md    аналитика STT
-│   └── speech_translate/
-│       ├── SPEC_speech_local_MVP.md              каноничная спека STT
-│       └── опиши_логику_speech_translate.md      черновик-анализ
+│   └── анализ_логик_промпт.md / _ПАТЧ_v1.1.md    ТЗ на STT (desktop + server)
 │
 ├── landing/                        РЕАЛИЗОВАННЫЙ ЛЕНДИНГ (корень статического сайта)
 │   ├── README.md
 │   ├── index.html                  главная (EN, текст в разметке — SEO)
-│   ├── uk/index.html               укр. версия (генерируется build/prerender.py)
+│   ├── uk/ · pl/ · ru/ index.html  пререндер-версии (build/prerender.py)
 │   ├── assets/
 │   │   ├── css/style.css           дизайн-система, обе темы, адаптив
 │   │   ├── js/theme-init.js        синхронная установка темы/языка (без вспышки)
 │   │   ├── js/app.js               i18n, тема, меню, анимация pipeline, формы
 │   │   ├── fonts/                  (пусто) self-hosted woff2 — DEPLOY.md §5
 │   │   └── icons/                  (пусто) SVG-коллекция — docs/ICONS.md
-│   ├── i18n/en.json, uk.json       все тексты, включая подзаголовки
-│   ├── build/prerender.py          сборка /uk/index.html
+│   ├── i18n/en.json · uk.json · pl.json · ru.json   все тексты (переключатель EN/UA/PL/RU)
+│   ├── build/prerender.py          сборка /uk/, /pl/, /ru/ index.html
 │   ├── robots.txt, sitemap.xml, site.webmanifest
-│   └── docs/
-│       ├── BACKEND_API.md          контракт эндпоинтов формы для бэкенда
-│       ├── DEPLOY.md               деплой Netcup/Traefik/CSP/шрифты/SEO
-│       └── ICONS.md                замена плейсхолдеров иконок
+│   └── docs/                        BACKEND_API.md · DEPLOY.md · ICONS.md
 │
-└── backups/                        СНАПШОТЫ КОДА, синхронные версиям промптов
-    ├── Landing_Labs_fin_v.1_files.zip   исходник лендинга (распакован в landing/)
-    ├── opshub.tar.gz                    control plane (готов)
-    ├── rag-demo.tar.gz                  RAG-демо v1.1 (готов)
-    ├── pdf-report-demo.tar.gz           PDF на Cloudflare (v2, архив)
-    ├── pdf-report-demo-vps.tar.gz       PDF на VPS (v3, актуальный)
-    └── stt-llm-module.tar.gz            STT: только облачный LLM-слой (частично)
+├── backend/                        ИЗВЛЕЧЁННЫЕ ДЕМО-МОДУЛИ (готовый код в git)
+│   ├── opshub/                      control plane парка (FastAPI + SQLite + docker-py)
+│   ├── rag-demo/                    RAG v1.1 (FastAPI + sqlite-vec + ONNX)
+│   ├── pdf-demo-base/               PDF на Cloudflare Workers (v2, референс)
+│   ├── pdf-demo-vps/                PDF на VPS (v3, актуальный — Fastify + BullMQ + Playwright)
+│   └── stt-mvp/                     STT: облачный LLM-слой (app/llm/ + SPEC_llm_endpoint.md)
+│
+├── backups/                        осталась только документация (не архивы)
+│   └── tg-mcp/                      заметки по Telegram-MCP агенту
+│
+├── tests/                          conftest + test_config / test_i18n / test_prerender
+│
+└── arch/                           ЛОКАЛЬНОЕ хранилище исходных архивов (в .gitignore,
+                                    в GitHub не попадает): *.tar.gz / *.zip демо и лендинга
 ```
 
-Каталоги `opshub/`, `rag-demo/`, `pdf-demo/`, `stt-mvp/` **разворачиваются из соответствующих
-архивов `backups/` на VPS при деплое** и не хранятся распакованными в репозитории (кроме `landing/`,
-который реализован как рабочий модуль). Соответствие «архив ↔ версия промпта» зафиксировано в §5 и ROADMAP.
+Ранее модули хранились архивами в `backups/`; теперь они **распакованы в `backend/`** —
+так удобнее контролировать структуру, доки и диффы в git. Исходные архивы держатся только
+локально в `arch/` (в `.gitignore`), чтобы не болтались в GitHub. `landing/` реализован
+как рабочий модуль. Соответствие «модуль ↔ версия промпта» зафиксировано в §5 и ROADMAP.
+
+> **Примечание (рассинхрон от массовой распаковки).** `docs/ai-automation-master.md` —
+> дубликат `docs/MASTER_PLAN.md`; канонична версия `MASTER_PLAN.md`, дубликат стоит удалить.
+> Полная спека STT `SPEC_speech_local_MVP.md` при распаковке была удалена из `docs/speech_translate/`;
+> её содержание покрыто промптами `docs/анализ_логик_промпт*.md` (при необходимости восстановить из git-истории).
 
 ---
 
