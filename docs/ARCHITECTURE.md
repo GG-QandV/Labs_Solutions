@@ -57,22 +57,24 @@ Ubuntu 24.04, Docker + Traefik standalone. (Сравнение тарифов �
                           Traefik standalone
                  (TLS Let's Encrypt, routing по Host)
                                    │
-   ┌───────────────┬───────────────┼───────────────┬────────────────┐
-   │               │               │               │                │
- landing        opshub          rag-demo        pdf-demo         stt-demo
- (nginx,       (control        (FastAPI+       (Fastify+        (FastAPI+
-  статика)      plane,          SQLite+         Redis/BullMQ+    whisper.cpp
-                ВСЕГДА online)   sqlite-vec,     Playwright,      + SQLite,
-                                 ONNX)           локальн. /data)  lazy)
+   ┌────────┬────────┬────────┬────────┬────────┬─────────┐
+   │        │        │        │        │        │         │
+ landing  opshub  tg-mcpd  rag-demo pdf-demo stt-demo  hermes
+ (nginx,  (control (Telegram (FastAPI (Fastify (FastAPI  (оркестратор
+  стат.)   plane,   MTProto- +SQLite  +BullMQ  +whisper  демо-сценария,
+           online)  демон,   +vec+    +Play-   +SQLite,  cloud-LLM,
+                    online)  ONNX)    wright)  lazy)     lazy)
                                    │
         сети Docker:  web (Traefik) + opsnet (internal, до OpsHub)
                                    │
-                  внешние API: LLM-провайдеры (Gemini/DeepSeek/Claude),
-                               Resend (email), Stripe (биллинг)
+       внешние API: LLM-провайдеры (Gemini/DeepSeek/Claude), Resend (email),
+                    Stripe (биллинг), Telegram API (через tg-mcpd)
 ```
 
-**Постоянно в RAM:** только Traefik и OpsHub (инфраструктура, вне лимита «≤3 демо»).
-Бюджет OpsHub — `cpus: 0.3`, `mem_limit: 128m`. Всё остальное — по запросу.
+**Постоянно в RAM:** Traefik, OpsHub и (при включённом Telegram-канале) `tg-mcpd` —
+инфраструктура, вне лимита «≤3 демо». Бюджет OpsHub — `cpus: 0.3`, `mem_limit: 128m`;
+`tg-mcpd` — одно MTProto-соединение, ~`mem_limit: 128m`. Всё остальное — по запросу.
+Hermes-оркестратор — обычное демо-стек (lazy-start + autostop, «спит» в простое).
 
 ### Жизненный цикл демо (управляет OpsHub)
 
@@ -155,16 +157,45 @@ LLM **с обязательными цитатами** (ответ без под
 Caddy/Traefik reverse-proxy, локальное `/data` с cron-очисткой. Соответствует `ПРОМПТ_ДЛЯ_РАЗРАБОТКИ_v3_VPS.md`
 (миграция с serverless Cloudflare — версия `backend/pdf-demo-base/` — на self-hosted VPS).
 
-### 5.5. STT / Speech Translate (`backend/stt-mvp/`)
+### 5.5. STT / Speech Translate — «one-on-one dialogues» (`backend/stt-mvp/` + отдельный репо)
 Локальная транскрибация (whisper.cpp + `ggml-base.bin` multilingual, PipeWire 2 канала,
 встроенный VAD) → SQLite → в облако уходит **только текст** для перевода/редактуры. Три жёстких
 режима: `live_literal` (не менять факты/числа/имена), `live_safe` (убрать только слова-паразиты),
 `post_clean` (чистовая стенограмма с edit_log). Правило целостности: `raw_text` неизменяем.
 Два профиля установки (`APP_PROFILE=desktop|server`) — общий пайплайн, различаются захват звука
 и упаковка (десктоп: PipeWire+systemd; сервер: загрузка файла/браузерный микрофон+Docker+Traefik).
-В `backend/stt-mvp/` сейчас только облачный LLM-слой (`app/llm/` + `SPEC_llm_endpoint.md`),
-аудио-пайплайн — к реализации. Полное ТЗ на STT-пайплайн — в промптах `docs/анализ_логик_промпт.md`
-и `docs/анализ_логик_промпт_ПАТЧ_v1.1.md` (двойной таргет desktop/server).
+
+**Реализация модуля живёт в отдельном репозитории — [`GG-QandV/one-on-one_dialogues`](https://github.com/GG-QandV/one-on-one_dialogues)**
+(собран локально). В `backend/stt-mvp/` здесь — только облачный LLM-слой (`app/llm/` + `SPEC_llm_endpoint.md`)
+как срез для парка. Полное ТЗ на STT-пайплайн — в промптах `docs/анализ_логик_промпт.md`
+и `docs/анализ_логик_промпт_ПАТЧ_v1.1.md`; полная спека `SPEC_speech_local_MVP.md` — локально в `arch/`
+(в git не хранится). Детальное исследование репозитория — по мере интеграции в парк.
+
+### 5.6. Hermes-оркестратор + Telegram-канал (кандидат, обоснование ниже)
+Демонстратор/оркестратор ограниченного сценария (роль «Hermes» из `Контекст_…md`): проговаривает
+шаг, вызывает разрешённые API-инструменты демо (dispatcher → OCR → RAG → PDF), показывает
+structured result и **останавливается перед критичными действиями** (human-in-the-loop). Два внешних
+кирпича, оба лёгкие, потому что вся LLM-нагрузка уходит в облако (без локальной модели/GPU):
+
+- **Telegram-канал — `tg-mcp` v2 (`tg-mcpd`)** ([`GG-QandV/tg-mcp`](https://github.com/GG-QandV/tg-mcp),
+  доки — `backups/tg-mcp/`): Python-демон с одним постоянным MTProto-соединением (Telethon) + лёгкие
+  stateless-прокси (один на агента/топик) через Unix-socket IPC, systemd, авто-reconnect, rate-limit
+  против FloodWait. Даёт агенту «руки» в Telegram (48 инструментов) — клиент общается с демо прямо в чате.
+- **Агент — Hermes (trimmed)** ([`NousResearch/hermes-agent`](https://github.com/NousResearch/hermes-agent),
+  MIT): ставится через **`uv`** (совпадает с конвенцией проекта), **model-agnostic — без локальной LLM/GPU**
+  (Nous Portal / OpenRouter / OpenAI / свой endpoint → в нашем случае BYOK-провайдер парка), «спит» в простое.
+  Урезанная форма: CLI-оркестратор без встроенного messaging-gateway (Telegram подключается через `tg-mcpd`),
+  без лишних MCP; skill-система задаёт фиксированные этапы демо-сценария с JSON-контрактами инструментов.
+
+**Вердикт по ограничениям ВПС (Netcup 1000 G12, 8 GB, «≤3 демо-стека»): реализуемо.**
+`tg-mcpd` — always-on инфра-демон уровня OpsHub (одно соединение, ~128 MB, вне лимита «≤3 демо»).
+Hermes — обычный демо-стек с lazy-start + autostop (нативно «спит» без сессии), одна LLM-сессия за раз,
+инференс в облаке ⇒ CPU/RAM хоста почти не растут. Совместимо с моделью безопасности (§6): маскирование
+перед облачным LLM, BYOK, стоп перед значимыми действиями. Лицензии: hermes-agent — MIT (коммерчески
+безопасно с указанием авторства); Telethon/tg-mcp — проверить перед публичным запуском. Связка с §5.5:
+Hermes может использовать `one-on-one_dialogues` как голосовой слой (речь клиента → текст → сценарий).
+Ценность для лендинга: живой диалог с автоматизацией прямо в Telegram — сильный крючок для клиента.
+Статус — кандидат; план подключения — в [`ROADMAP.md`](ROADMAP.md) (Этап 7a).
 
 ---
 
@@ -200,7 +231,6 @@ Labs_Solutions/
 │
 ├── docs/                           СПЕКИ, ПРОМПТЫ, СТРАТЕГИЯ (документация)
 │   ├── MASTER_PLAN.md              ◀ исходный стратегический план (source of truth)
-│   ├── ai-automation-master.md     дубликат MASTER_PLAN.md (кандидат на удаление, см. примечание)
 │   ├── Контекст_ AI Automation Lab _ лендинг живых демо.md   производный контекст
 │   ├── ARCHITECTURE.md             ◀ этот файл: каноничная архитектура
 │   ├── ROADMAP.md                  ◀ план работ с чек-листом
@@ -239,19 +269,24 @@ Labs_Solutions/
 │
 ├── tests/                          conftest + test_config / test_i18n / test_prerender
 │
-└── arch/                           ЛОКАЛЬНОЕ хранилище исходных архивов (в .gitignore,
-                                    в GitHub не попадает): *.tar.gz / *.zip демо и лендинга
+└── arch/                           ЛОКАЛЬНОЕ хранилище (в .gitignore, в GitHub не попадает):
+                                    *.tar.gz / *.zip демо и лендинга + SPEC_speech_local_MVP.md
 ```
+
+**Внешние репозитории (не в этом дереве):**
+`GG-QandV/one-on-one_dialogues` — реализация STT/speech-модуля (§5.5);
+`GG-QandV/tg-mcp` — Telegram-MCP демон (§5.6, доки-срез в `backups/tg-mcp/`);
+`NousResearch/hermes-agent` — база для Hermes-оркестратора (§5.6, MIT).
 
 Ранее модули хранились архивами в `backups/`; теперь они **распакованы в `backend/`** —
 так удобнее контролировать структуру, доки и диффы в git. Исходные архивы держатся только
 локально в `arch/` (в `.gitignore`), чтобы не болтались в GitHub. `landing/` реализован
 как рабочий модуль. Соответствие «модуль ↔ версия промпта» зафиксировано в §5 и ROADMAP.
 
-> **Примечание (рассинхрон от массовой распаковки).** `docs/ai-automation-master.md` —
-> дубликат `docs/MASTER_PLAN.md`; канонична версия `MASTER_PLAN.md`, дубликат стоит удалить.
-> Полная спека STT `SPEC_speech_local_MVP.md` при распаковке была удалена из `docs/speech_translate/`;
-> её содержание покрыто промптами `docs/анализ_логик_промпт*.md` (при необходимости восстановить из git-истории).
+> **Примечание.** Полная спека STT `SPEC_speech_local_MVP.md` была удалена из `docs/speech_translate/`
+> при массовой распаковке; сохранена локально в `arch/` и в git-истории. Её содержание покрыто
+> промптами `docs/анализ_логик_промпт*.md`. Дубликат `docs/ai-automation-master.md` удалён —
+> канонична версия `docs/MASTER_PLAN.md`.
 
 ---
 
