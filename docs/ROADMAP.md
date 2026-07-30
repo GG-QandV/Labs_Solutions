@@ -1,22 +1,24 @@
 # AI Automation Lab — Roadmap и чек-лист
 
-> План работ, синхронизированный с фактическим состоянием `backups/` и реализованным
+> План работ, синхронизированный с фактическим состоянием `backend/` и реализованным
 > `landing/`. Заменяет идею roadmap из [`MASTER_PLAN.md`](MASTER_PLAN.md) §5 (та писалась
 > под устаревший стек Coolify/Postgres/Qdrant). Архитектура — [`ARCHITECTURE.md`](ARCHITECTURE.md).
 
-Легенда: ✅ готово · 🟡 частично (есть срез в `backups/`) · ⬜ не начато
+Легенда: ✅ готово · 🟡 частично (код извлечён в `backend/`) · ⬜ не начато
 
 ---
 
 ## 0. Сводка статуса модулей
 
-| Модуль | Статус | Источник | Что осталось |
+Исходные архивы распакованы в `backend/` (код в git); сами архивы — локально в `arch/` (в `.gitignore`).
+
+| Модуль | Статус | Код | Что осталось |
 |---|---|---|---|
-| Лендинг | 🟡 фронт готов, разложен в `landing/` | `Landing_Labs_fin_v.1_files.zip` | шрифты, иконки, бэкенд формы, домен/почта |
-| OpsHub | 🟡 код готов | `opshub.tar.gz` | деплой на VPS, basic-auth пользователи |
-| RAG-демо | 🟡 код готов (v1.1) | `rag-demo.tar.gz` | ONNX-модели, интеграция в парк, страница демо |
-| PDF-отчёты | 🟡 код готов (v3_VPS) | `pdf-report-demo-vps.tar.gz` | Redis/Playwright на VPS, Resend-ключ, страница демо |
-| STT/Speech | 🟡 только LLM-слой | `stt-llm-module.tar.gz` | whisper.cpp + PipeWire + аудио-пайплайн + UI |
+| Лендинг | 🟡 фронт готов (EN/UA/PL/RU) в `landing/` | `landing/` | шрифты, иконки, бэкенд формы, домен/почта |
+| OpsHub | 🟡 код готов | `backend/opshub/` | деплой на VPS, basic-auth пользователи |
+| RAG-демо | 🟡 код готов (v1.1) | `backend/rag-demo/` | ONNX-модели, интеграция в парк, страница демо |
+| PDF-отчёты | 🟡 код готов (v3_VPS) | `backend/pdf-demo-vps/` (референс — `pdf-demo-base/`) | Redis/Playwright на VPS, Resend-ключ, страница демо |
+| STT/Speech | 🟡 только LLM-слой | `backend/stt-mvp/` | whisper.cpp + PipeWire + аудио-пайплайн + UI |
 | Диспетчер заявок | ⬜ | — (описан в Контексте) | весь модуль |
 | CRM-copilot | ⬜ | — | весь модуль |
 | CSV/XLSX-аналитик | ⬜ | — | весь модуль |
@@ -65,12 +67,11 @@
 
 OpsHub должен работать до запуска любого демо (он управляет их жизненным циклом).
 
-- [ ] Развернуть архив `backups/opshub.tar.gz` в `/srv/opshub`
+- [ ] Развернуть `backend/opshub/` в `/srv/opshub`
 - [ ] Создать docker-сети `opsnet` (internal) и `web` (Traefik)
 - [ ] `docker compose up -d`; volume `/srv/opshub/data:/data`
 - [ ] Traefik-роут `ops.solutions.dpdns.org` → opshub:8700, basic-auth (bcrypt, users в SQLite)
 - [ ] Задать секрет `OPSHUB_KEY` в `.env` парка
-- [ ] Убрать из архива случайно закоммиченные `__pycache__/*.pyc` перед деплоем
 - [ ] Smoke: убить процесс в демо → oom/die виден на дашборде; 30 мин без heartbeat → автостоп; попытка 4-го демо → отказ
 
 ---
@@ -79,7 +80,7 @@ OpsHub должен работать до запуска любого демо (
 
 Материальный, понятный руководителю результат; код готов (v3_VPS).
 
-- [ ] Развернуть `backups/pdf-report-demo-vps.tar.gz` по конвенциям парка (labels/env/mem_limit + drop-in клиент OpsHub)
+- [ ] Развернуть `backend/pdf-demo-vps/` по конвенциям парка (labels/env/mem_limit + drop-in клиент OpsHub)
 - [ ] Redis + BullMQ, Playwright + системный Chromium (Docker), лимит 2 параллельных рендера
 - [ ] Ключ Resend для email; локальное `/data` + cron-очистка
 - [ ] Traefik-роут `pdf.solutions.dpdns.org`; страница демо на лендинге, снять `data-href-todo`
@@ -91,7 +92,7 @@ OpsHub должен работать до запуска любого демо (
 
 Демонстрирует работу с корпоративными знаниями; код готов (v1.1).
 
-- [ ] Развернуть `backups/rag-demo.tar.gz`; скачать ONNX-модели (embedder e5-small, reranker TinyBERT, NER)
+- [ ] Развернуть `backend/rag-demo/`; скачать ONNX-модели (embedder e5-small, reranker TinyBERT, NER)
 - [ ] SQLite + sqlite-vec; лимиты сессии (файлы/страницы), очистка 03:00
 - [ ] LLM: Gemini free tier (+ DeepSeek опц.); **ответ только с подтверждённым источником**
 - [ ] Интеграция в OpsHub (heartbeat, lazy-start, «warming up» при холодном старте)
@@ -111,7 +112,7 @@ OpsHub должен работать до запуска любого демо (
 
 ## Этап 6 — STT / Speech Translate (полный модуль)
 
-Сейчас в `backups/` только облачный LLM-слой; нужно ядро.
+Сейчас в `backend/stt-mvp/` только облачный LLM-слой; нужно ядро.
 
 - [ ] whisper.cpp + `ggml-base.bin` multilingual, встроенный VAD/streaming
 - [ ] PipeWire (2 канала) для профиля `desktop`; загрузка файла + браузерный микрофон для `server`
