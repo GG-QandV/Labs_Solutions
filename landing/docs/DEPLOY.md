@@ -156,7 +156,7 @@ inline-обработчика, а тема инициализируется от
 
 ## 5. Шрифты
 
-Файлы не входят в пакет — положить в `public/assets/fonts/`:
+**Статус: шрифты уже закоммичены в репо** (`landing/assets/fonts/*.woff2`, коммит `e60a85e`) — отдельно скачивать не нужно, папка входит в пакет.
 
 | Файл | Шрифт | Лицензия | Роль |
 |:--|:--|:--|:--|
@@ -164,7 +164,7 @@ inline-обработчика, а тема инициализируется от
 | `Inter-Variable.woff2` | Inter (variable) | OFL | основной текст |
 | `JetBrainsMono-Variable.woff2` | JetBrains Mono (variable) | OFL | подписи, состояния, JSON |
 
-Порядок действий:
+Порядок действий при **пересборке** (например, смена версии шрифта):
 
 1. Скачать variable-версии с Google Fonts / GitHub проектов.
 2. **Сабсеттинг обязателен** — латиница + кириллица + украинские ґєії:
@@ -177,6 +177,18 @@ inline-обработчика, а тема инициализируется от
    Результат — обычно 30–60 KB на шрифт вместо 200+ KB.
 3. Не подключать Google Fonts по CDN: это третья сторона в CSP, лишний RTT и вопрос по GDPR.
 4. Если файлов нет — сайт не ломается: в CSS прописан системный fallback-стек.
+
+**Источники исходников** (архивы лежат в `backups/фонты-шрифты/`, не в git): `Inter-4.1.zip` (→ `web/InterVariable.woff2`), `Archivo-VariableFont_wdth,wght.ttf`, `JetBrainsMono[wght].ttf`.
+
+## 5.1. ONNX-модели RAG (не в git)
+
+`backend/rag-demo` использует 3 ONNX-модели (`multilingual-e5-small`, `distilbert-ner`, `tinybert-rerank`). **В репо не коммитятся** — тянутся при сборке образа:
+
+```bash
+MODELS_DIR=/models python backend/rag-demo/scripts_download_models.py
+```
+
+Источник — HuggingFace (`Xenova/*`). Без шага запуска скрипта RAG-демо не поднимется (`/health` → `models_loaded=false`).
 
 ---
 
