@@ -34,4 +34,4 @@ Without weights the service still starts and reports `models.embedder=false` in 
 ## Data lifecycle
 Daily wipe at 03:00 (files, chunks, vectors, anonymous sessions); a 15-minute warning banner
 with a one-time "Postpone 1 hour". Registered users' data is kept 7 days.
-DeepSeek can replace Gemini for answers (`LLM_PROVIDER=deepseek`) but has no vision — OCR is then disabled.
+opencode zen (MiMo V2.5 Free) can replace Gemini for answers (`LLM_PROVIDER=zen`) but has no vision — OCR is then disabled.

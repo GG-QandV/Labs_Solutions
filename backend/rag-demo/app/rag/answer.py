@@ -68,8 +68,8 @@ def build_prompt(question: str, hits: list[dict[str, Any]]) -> str:
 
 
 async def ask_llm(prompt: str) -> str:
-    if config.LLM_PROVIDER == "deepseek":
-        return await _deepseek(prompt)
+    if config.LLM_PROVIDER == "zen":
+        return await _zen(prompt)
     return await _gemini(prompt)
 
 
@@ -89,12 +89,12 @@ async def _gemini(prompt: str) -> str:
     ).strip()
 
 
-async def _deepseek(prompt: str) -> str:
+async def _zen(prompt: str) -> str:
     async with httpx.AsyncClient(timeout=60) as c:
         r = await c.post(
-            "https://api.deepseek.com/chat/completions",
-            headers={"authorization": f"Bearer {config.DEEPSEEK_API_KEY}"},
-            json={"model": "deepseek-chat", "messages": [{"role": "user", "content": prompt}]},
+            config.ZEN_BASE_URL,
+            headers={"authorization": f"Bearer {config.ZEN_API_KEY}"},
+            json={"model": config.ZEN_MODEL, "messages": [{"role": "user", "content": prompt}]},
         )
         r.raise_for_status()
         return r.json()["choices"][0]["message"]["content"].strip()

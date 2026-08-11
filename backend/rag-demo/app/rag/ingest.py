@@ -65,7 +65,7 @@ def needs_ocr(pages: list[tuple[int, str]], kind: str) -> list[int]:
 
 async def ocr_pages(path: str, page_numbers: list[int]) -> dict[int, str]:
     """zerox approach: render page -> PNG -> Gemini vision -> markdown text.
-    Gemini only: DeepSeek has no vision, so OCR is unavailable under LLM_PROVIDER=deepseek."""
+    Gemini only: opencode zen (MiMo) has no vision, so OCR is unavailable under LLM_PROVIDER=zen."""
     if not page_numbers:
         return {}
     if config.LLM_PROVIDER != "gemini" or not config.GEMINI_API_KEY:

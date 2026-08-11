@@ -39,7 +39,7 @@
 ## LLM и OCR (внешние API)
 
 - **Основной провайдер: Google Gemini, free tier** (только Flash/Flash-Lite; лимиты по источникам расходятся — от 250 до 1500 запросов/день на Flash, 10–15 RPM; при 429 — экспоненциальный backoff). Ключ — переменная окружения `GEMINI_API_KEY`.
-- **Ответы на вопросы**: Gemini Flash. Конфигом переключается на DeepSeek (`deepseek-chat`, OpenAI-совместимый endpoint, `DEEPSEEK_API_KEY`) — DeepSeek дешевле при платном использовании, но **не имеет vision** и для OCR непригоден.
+- **Ответы на вопросы**: Gemini Flash. Конфигом переключается на opencode zen (`mimo-v2.5-free`, OpenAI-совместимый endpoint `https://opencode.ai/zen/v1/chat/completions`, `OPENCODE_ZEN_API_KEY`) — но **не имеет vision** и для OCR непригоден.
 - **OCR сканированных страниц**: подход zerox (getomni-ai/zerox / форк GG-QandV/ocr-pipeline) — страница PDF → изображение → vision-запрос Gemini Flash → markdown. Только для страниц без текстового слоя.
 - Текстовые документы извлекаются **локально**: PDF — PyMuPDF, DOCX — python-docx, TXT — как есть. XLSX не поддерживается в демо (сокращённый вариант).
 - Промпт LLM обязан содержать правило: «Если ответа нет в переданных фрагментах — скажи, что в документах не найдено подтверждения. Не придумывай». Ответ — с citations в формате `[filename, p.N]`.
@@ -113,7 +113,7 @@ coolify: healthcheck GET /health (модели загружены, sqlite-vec д
 ## Деплой (Traefik + OpsHub)
 
 1. На хосте уже работают Traefik (сети `web`) и OpsHub (сеть `opsnet`).
-2. `/srv/demos/rag-demo/.env`: `GEMINI_API_KEY`, `RESEND_API_KEY`, `OPSHUB_KEY`, опц. `DEEPSEEK_API_KEY`.
+2. `/srv/demos/rag-demo/.env`: `GEMINI_API_KEY`, `RESEND_API_KEY`, `OPSHUB_KEY`, опц. `OPENCODE_ZEN_API_KEY`.
 3. `git clone` → `docker compose up -d --build`; labels Traefik → `rag.solutions.dpdns.org`, DNS A-запись в Cloudflare.
 4. ONNX-веса скачиваются на этапе сборки образа (слой кэшируется), в git не коммитятся.
 5. Первый запуск: контейнер регистрируется в OpsHub (`POST /api/register`), появляется на дашборде с кнопками start/stop/restart.
