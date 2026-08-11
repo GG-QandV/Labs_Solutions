@@ -45,7 +45,6 @@
 - [ ] Cloudflare API Token (`Zone → DNS → Edit`, `Zone → Zone → Read`, зона `mnemostroma.com`) для DNS-01 Traefik
 - [ ] SSL/TLS режим зоны: `Full (strict)`
 - [ ] Завести ящик `contact@labs.mnemostroma.com` + MX/SPF/DKIM
-- [ ] Настроить DNS `labs.mnemostroma.com` (Cloudflare) → VPS
 - [ ] Отдать статику через nginx-контейнер за Traefik (TLS Let's Encrypt), CSP из DEPLOY.md
 - [ ] Пересобрать украинскую версию после правок: `python3 build/prerender.py`
 
