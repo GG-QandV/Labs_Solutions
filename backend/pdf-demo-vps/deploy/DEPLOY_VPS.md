@@ -5,7 +5,7 @@ Ubuntu 24.04, Docker + Compose, ufw (80/443/SSH), fail2ban, SSH keys only.
 ```bash
 docker network create web || true
 docker network create opsnet || true
-docker compose -f infra/traefik/docker-compose.yml up -d    # if Traefik not running yet
+docker compose -f /srv/traefik/docker-compose.yml up -d    # if Traefik not running yet; copy infra/traefik/docker-compose.yml + dynamic/ from the repo
 ```
 Cloudflare DNS: A record `pdf.labs.mnemostroma.com` -> VPS IP (proxy ON keeps CF as CDN/WAF;
 Let's Encrypt DNS-01 challenge via `CF_DNS_API_TOKEN` in `/srv/traefik/.env`,
