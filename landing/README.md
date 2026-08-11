@@ -58,7 +58,7 @@ python3 -m http.server 8080     # открыть http://localhost:8080
 
 | Плейсхолдер | Как найти | Чем заменить |
 |:--|:--|:--|
-| Иконки | `grep -n 'class="ico' index.html` | SVG из локальной коллекции, `docs/ICONS.md` |
+| ~~Иконки~~ | — | **встроены** (32 svg × 4 языка), `docs/ICONS.md` |
 | Изображения | `grep -n 'ph__t' index.html` | 2 схемы/скриншота + og-cover |
 | Ссылки | `grep -n 'data-href-todo' index.html` | реальные URL страниц демо, кейсов, Telegram, privacy/terms |
 | Кейсы в секции «Track record» | `proof.p1…p3` в `i18n/*.json` | реальные проекты; метки «client deployment» / «reference implementation» расставить честно |

@@ -134,6 +134,14 @@ p{margin:0 0 1em}
 .ico--sm{width:1.55rem;height:1.55rem;font-size:6px;border-radius:6px}
 .ico--lg{width:3rem;height:3rem;font-size:9px;margin-bottom:1rem}
 .ico--brand{width:2rem;height:2rem;font-size:6px}
+svg.ico{border:0;padding:0;width:auto;height:2.4rem}
+svg.ico--sm{height:1.55rem;border-radius:0}
+svg.ico--lg{height:3rem}
+svg.ico--brand{height:2rem;border-radius:0}
+.ico--sun{display:none}
+.ico--moon{display:block}
+[data-theme="light"] .ico--sun{display:block}
+[data-theme="light"] .ico--moon{display:none}
 
 /* ---------- Плейсхолдеры изображений -------------------------------- */
 .ph{
