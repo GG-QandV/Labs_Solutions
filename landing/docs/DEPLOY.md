@@ -47,6 +47,8 @@ services:
       - "traefik.http.routers.site.rule=Host(`labs.mnemostroma.com`)"
       - "traefik.http.routers.site.entrypoints=websecure"
       - "traefik.http.routers.site.tls.certresolver=le"
+      - "traefik.http.routers.site.tls.domains[0].main=labs.mnemostroma.com"
+      - "traefik.http.routers.site.tls.domains[0].sans=*.labs.mnemostroma.com"
       - "traefik.http.routers.site.middlewares=sec-headers@file,site-ratelimit@file"
       - "traefik.http.services.site.loadbalancer.server.port=80"
 
@@ -110,40 +112,7 @@ server {
 
 ## 4. Заголовки безопасности (Traefik file-provider)
 
-```yaml
-# /srv/traefik/dynamic/middlewares.yml
-http:
-  middlewares:
-    sec-headers:
-      headers:
-        frameDeny: true
-        contentTypeNosniff: true
-        referrerPolicy: "strict-origin-when-cross-origin"
-        stsSeconds: 31536000
-        stsIncludeSubdomains: true
-        stsPreload: true
-        permissionsPolicy: "camera=(), microphone=(), geolocation=(), interest-cohort=()"
-        customResponseHeaders:
-          X-Robots-Tag: ""       # оставить пустым, страницы индексируются
-          Content-Security-Policy: >-
-            default-src 'self';
-            script-src 'self' https://challenges.cloudflare.com;
-            frame-src https://challenges.cloudflare.com;
-            style-src 'self';
-            font-src 'self';
-            img-src 'self' data:;
-            connect-src 'self';
-            form-action 'self';
-            base-uri 'self';
-            frame-ancestors 'none';
-            object-src 'none';
-            upgrade-insecure-requests
-
-    site-ratelimit:
-      rateLimit: { average: 60, burst: 120, period: 1m }
-    api-ratelimit:
-      rateLimit: { average: 20, burst: 40, period: 1m }
-```
+Полный файл middleware живёт в репозитории: `infra/traefik/dynamic/middlewares.yml` (деплой — в `/srv/traefik/dynamic/middlewares.yml`). Там же `noindex` и `demo-ratelimit` для демо-поддоменов.
 
 **Важно:** CSP без `'unsafe-inline'` в `script-src` работает только потому, что в разметке нет ни одного
 inline-обработчика, а тема инициализируется отдельным файлом `theme-init.js`. Если добавите inline-скрипт —
