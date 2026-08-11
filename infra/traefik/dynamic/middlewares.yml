@@ -10,7 +10,6 @@ http:
         stsPreload: true
         permissionsPolicy: "camera=(), microphone=(), geolocation=(), interest-cohort=()"
         customResponseHeaders:
-          X-Robots-Tag: ""       # оставить пустым, страницы индексируются
           Content-Security-Policy: >-
             default-src 'self';
             script-src 'self' https://challenges.cloudflare.com;
