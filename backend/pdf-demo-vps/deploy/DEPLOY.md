@@ -1,5 +1,8 @@
 # Deploy: solutions.dpdns.org (Cloudflare Free plan)
 
+> АРХИВ. Cloudflare-вариант (Workers/Pages), не используется на VPS.
+> Актуальный деплой — `DEPLOY_VPS.md` в этой же папке.
+
 ## 0. Prerequisites
 - Cloudflare account with the zone `solutions.dpdns.org` added (Free plan is enough).
 - Resend account (free: 100 emails/day).

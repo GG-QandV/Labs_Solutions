@@ -5,11 +5,11 @@ Ubuntu 24.04, Docker + Compose, ufw (80/443/SSH), fail2ban, SSH keys only.
 ```bash
 docker network create web || true
 docker network create opsnet || true
-docker compose -f deploy/traefik-compose.yml up -d     # if Traefik not running yet
+docker compose -f infra/traefik/docker-compose.yml up -d    # if Traefik not running yet
 ```
-Cloudflare DNS: A record solutions.dpdns.org -> VPS IP (proxy ON keeps CF as CDN/WAF;
-for Let's Encrypt HTTP-challenge either set SSL mode "Full" after first issuance,
-or temporarily grey-cloud the record during the first certificate request).
+Cloudflare DNS: A record `pdf.labs.mnemostroma.com` -> VPS IP (proxy ON keeps CF as CDN/WAF;
+Let's Encrypt DNS-01 challenge via `CF_DNS_API_TOKEN` in `/srv/traefik/.env`,
+wildcard `*.labs.mnemostroma.com` from the `site` router covers this host).
 
 ## 1. Secrets
 `/srv/demos/pdf-demo/.env`:
@@ -17,7 +17,7 @@ or temporarily grey-cloud the record during the first certificate request).
 RESEND_API_KEY=...
 OPSHUB_KEY=...        # same shared key as the OpsHub stack
 ```
-Resend: verify solutions.dpdns.org (SPF/DKIM records in Cloudflare DNS).
+Resend: verify `labs.mnemostroma.com` (SPF/DKIM records in Cloudflare DNS).
 
 ## 2. Deploy
 ```bash
@@ -27,7 +27,7 @@ docker compose -f deploy/docker-compose.yml --env-file /srv/demos/pdf-demo/.env 
 Update = `git pull && docker compose ... up -d --build` (or a GitHub Action doing the same over SSH).
 
 ## 3. Smoke checklist
-1. https://solutions.dpdns.org -> Start demo session -> timer.
+1. https://pdf.labs.mnemostroma.com -> Start demo session -> timer.
 2. Public test Sheet -> Check access -> validation report (rows/images/hidden warning).
 3. Break an image URL -> BROKEN_IMAGE + upload button -> upload PNG -> resolved.
 4. Email + A4/Legal -> Generate -> validating -> rendering -> sending -> Sent; PDF arrives.
