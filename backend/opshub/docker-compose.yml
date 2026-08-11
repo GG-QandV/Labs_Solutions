@@ -19,8 +19,9 @@ services:
     networks: [web, opsnet]
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.opshub.rule=Host(`ops.solutions.dpdns.org`)"
+      - "traefik.http.routers.opshub.rule=Host(`ops.labs.mnemostroma.com`)"
       - "traefik.http.routers.opshub.entrypoints=websecure"
+      - "traefik.http.routers.opshub.middlewares=sec-headers@file,noindex@file"
       - "traefik.http.routers.opshub.tls.certresolver=le"
       - "traefik.http.services.opshub.loadbalancer.server.port=8700"
 

@@ -1,5 +1,7 @@
 # Deploy: solutions.dpdns.org (Cloudflare Free plan)
 
+> АРХИВ. Cloudflare-вариант, не используется. Актуальный деплой — `backend/pdf-demo-vps/deploy/`.
+
 ## 0. Prerequisites
 - Cloudflare account with the zone `solutions.dpdns.org` added (Free plan is enough).
 - Resend account (free: 100 emails/day).

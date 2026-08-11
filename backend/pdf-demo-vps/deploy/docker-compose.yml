@@ -9,7 +9,7 @@ services:
     mem_limit: 2560m               # fleet convention: enables cgroup OOM protection
     cpus: 2.0
     environment:
-      - PUBLIC_BASE_URL=https://solutions.dpdns.org
+      - PUBLIC_BASE_URL=https://pdf.labs.mnemostroma.com
       - RESEND_API_KEY=${RESEND_API_KEY}
       - OPSHUB_URL=http://opshub:8700
       - OPSHUB_KEY=${OPSHUB_KEY}
@@ -21,8 +21,9 @@ services:
     labels:
       - "demo=true"                                    # OpsHub discovery
       - "traefik.enable=true"
-      - "traefik.http.routers.pdfdemo.rule=Host(`solutions.dpdns.org`)"
+      - "traefik.http.routers.pdfdemo.rule=Host(`pdf.labs.mnemostroma.com`)"
       - "traefik.http.routers.pdfdemo.entrypoints=websecure"
+      - "traefik.http.routers.pdfdemo.middlewares=sec-headers@file,noindex@file,demo-ratelimit@file"
       - "traefik.http.routers.pdfdemo.tls.certresolver=le"
       - "traefik.http.services.pdfdemo.loadbalancer.server.port=8080"
 
