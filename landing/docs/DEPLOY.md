@@ -47,8 +47,6 @@ services:
       - "traefik.http.routers.site.rule=Host(`labs.mnemostroma.com`)"
       - "traefik.http.routers.site.entrypoints=websecure"
       - "traefik.http.routers.site.tls.certresolver=le"
-      - "traefik.http.routers.site.tls.domains[0].main=labs.mnemostroma.com"
-      - "traefik.http.routers.site.tls.domains[0].sans=*.labs.mnemostroma.com"
       - "traefik.http.routers.site.middlewares=sec-headers@file,site-ratelimit@file"
       - "traefik.http.services.site.loadbalancer.server.port=80"
 
