@@ -41,7 +41,7 @@
 - [ ] Секция «Track record»: вписать реальные кейсы (`proof.p1…p3` в `i18n/*.json`), честно расставить метки «client deployment» / «reference implementation»
 
 **Инфраструктура**
-- [ ] Создать 6 A-записей в Cloudflare (`labs`, `rag.labs`, `pdf.labs`, `ops.labs`, `stt.labs`, `dispatcher.labs`) → IP VPS; `ops.labs` — DNS only, остальные Proxied
+- [ ] Создать 6 A-записей в Cloudflare (`labs`, `rag-labs`, `pdf-labs`, `ops-labs`, `stt-labs`, `dispatcher-labs`) → IP VPS; `ops-labs` — DNS only, остальные Proxied
 - [ ] Cloudflare API Token (`Zone → DNS → Edit`, `Zone → Zone → Read`, зона `mnemostroma.com`) для DNS-01 Traefik
 - [ ] SSL/TLS режим зоны: `Full (strict)`
 - [ ] Завести ящик `contact@labs.mnemostroma.com` + MX/SPF/DKIM
@@ -74,7 +74,7 @@ OpsHub должен работать до запуска любого демо (
 - [ ] Развернуть `backend/opshub/` в `/srv/opshub`
 - [ ] Создать docker-сети `opsnet` (internal) и `web` (Traefik)
 - [ ] `docker compose up -d`; volume `/srv/opshub/data:/data`
-- [ ] Traefik-роут `ops.labs.mnemostroma.com` → opshub:8700, basic-auth (bcrypt, users в SQLite)
+- [ ] Traefik-роут `ops-labs.mnemostroma.com` → opshub:8700, basic-auth (bcrypt, users в SQLite)
 - [ ] Задать секрет `OPSHUB_KEY` в `.env` парка
 - [ ] Smoke: убить процесс в демо → oom/die виден на дашборде; 30 мин без heartbeat → автостоп; попытка 4-го демо → отказ
 
@@ -105,7 +105,7 @@ OpsHub должен работать до запуска любого демо (
 - [ ] Развернуть `backend/pdf-demo-vps/` по конвенциям парка (labels/env/mem_limit + drop-in клиент OpsHub)
 - [ ] Redis + BullMQ, Playwright + системный Chromium (Docker), лимит 2 параллельных рендера
 - [ ] Ключ Resend для email; локальное `/data` + cron-очистка
-- [ ] Traefik-роут `pdf.labs.mnemostroma.com`; страница демо на лендинге, снять `data-href-todo`
+- [ ] Traefik-роут `pdf-labs.mnemostroma.com`; страница демо на лендинге, снять `data-href-todo`
 - [ ] Smoke: публичный Google Sheet → валидация/SSRF → ReportJSON → PDF → email
 
 ---
@@ -120,7 +120,7 @@ OpsHub должен работать до запуска любого демо (
 - [ ] Очередь: локальный Redis + BullMQ (уже в парке, §5.4); для MVP слить classification-worker в API (2–3 контейнера на демо-слот)
 - [ ] Каналы MVP: Telegram Bot-webhook (**туннель через Cloudflare Worker**) + REST + форма лендинга; Twilio/WhatsApp отключить
 - [ ] LLM: Gemini free tier (как в RAG); маскирование PII перед облаком (§6)
-- [ ] Интеграция OpsHub (labels/mem_limit/heartbeat/lazy-start); Traefik-роут `dispatcher.labs.mnemostroma.com`
+- [ ] Интеграция OpsHub (labels/mem_limit/heartbeat/lazy-start); Traefik-роут `dispatcher-labs.mnemostroma.com`
 - [ ] Страница демо на лендинге, снять `data-href-todo` для «Request dispatcher»; человек подтверждает черновик ответа (human-in-the-loop)
 - [ ] Smoke: сообщение в Telegram/форму → классификация → карточка заявки с приоритетом + черновик ответа в дашборде
 
@@ -134,7 +134,7 @@ OpsHub должен работать до запуска любого демо (
 - [ ] SQLite + sqlite-vec; лимиты сессии (файлы/страницы), очистка 03:00
 - [ ] LLM: Gemini free tier (+ DeepSeek опц.); **ответ только с подтверждённым источником**
 - [ ] Интеграция в OpsHub (heartbeat, lazy-start, «warming up» при холодном старте)
-- [ ] Traefik-роут `rag.labs.mnemostroma.com`; страница демо на лендинге
+- [ ] Traefik-роут `rag-labs.mnemostroma.com`; страница демо на лендинге
 
 ---
 

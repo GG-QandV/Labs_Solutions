@@ -11,7 +11,7 @@
 - `backend/rag-demo/app/config.py:39` — `MAIL_FROM` → `rag@labs.mnemostroma.com`
 - `backend/pdf-demo-vps/packages/email-sender/src/index.ts:10` — `from` → `reports@labs.mnemostroma.com`
 - `backend/pdf-demo-base/packages/email-sender/src/index.ts:10` — архивный модуль, трогать только при необходимости
-- `backend/pdf-demo-vps/apps/server/src/index.ts:19` — дефолт `PUBLIC_BASE_URL` → `https://pdf.labs.mnemostroma.com`
+- `backend/pdf-demo-vps/apps/server/src/index.ts:19` — дефолт `PUBLIC_BASE_URL` → `https://pdf-labs.mnemostroma.com`
 
 **Порядок:**
 1. Верифицировать `labs.mnemostroma.com` в Resend (MX/SPF/DKIM/DMARC из §3.1 TASK).

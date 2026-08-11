@@ -41,11 +41,11 @@ Ubuntu 24.04, Docker + Traefik standalone. (Сравнение тарифов �
 |:--|:--|:--|:--|
 | `labs.mnemostroma.com` | лендинг (nginx `site`) | 80 | публичный, индексируется |
 | `labs.mnemostroma.com/api/` | `site-api` (форма) | 8000 | публичный, path-роут — уже задан, не менять |
-| `rag.labs.mnemostroma.com` | RAG-демо | 8080 | публичный, `noindex` |
-| `pdf.labs.mnemostroma.com` | PDF-отчёты | 8080 | публичный, `noindex` |
-| `stt.labs.mnemostroma.com` | STT-демо | 8080 | зарезервировано, контейнера пока нет |
-| `dispatcher.labs.mnemostroma.com` | диспетчер заявок | 8080 | зарезервировано, контейнера пока нет |
-| `ops.labs.mnemostroma.com` | OpsHub-дашборд | 8700 | basic-auth, `noindex`, **не публиковать нигде** |
+| `rag-labs.mnemostroma.com` | RAG-демо | 8080 | публичный, `noindex` |
+| `pdf-labs.mnemostroma.com` | PDF-отчёты | 8080 | публичный, `noindex` |
+| `stt-labs.mnemostroma.com` | STT-демо | 8080 | зарезервировано, контейнера пока нет |
+| `dispatcher-labs.mnemostroma.com` | диспетчер заявок | 8080 | зарезервировано, контейнера пока нет |
+| `ops-labs.mnemostroma.com` | OpsHub-дашборд | 8700 | basic-auth, `noindex`, **не публиковать нигде** |
 
 **Резерв (не удалять, DNS не настраивать):** зона `solutions.dpdns.org` — staging и аварийный откат.
 
@@ -112,7 +112,7 @@ Hermes-оркестратор — обычное демо-стек (lazy-start +
 - **Метрики** — docker stats (mem/cpu) + размер `/data` каждого демо; спарклайны 24 ч,
   суммарный RAM всех демо против бюджета хоста.
 - **Launcher** — start/stop/restart через docker SDK, правило «≤3», автостоп, плановый рестарт.
-- **Дашборд** — `ops.labs.mnemostroma.com`, basic-auth, сетка сервисов + лента 50 последних ошибок.
+- **Дашборд** — `ops-labs.mnemostroma.com`, basic-auth, сетка сервисов + лента 50 последних ошибок.
 
 Схема БД OpsHub (SQLite WAL, единственный владелец файла): `services`, `logs`, `events`,
 `metrics`, `users`. Ротация: logs/events > 30 дней, metrics > 7 дней, VACUUM еженедельно.
