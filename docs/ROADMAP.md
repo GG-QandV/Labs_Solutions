@@ -41,7 +41,7 @@
 - [ ] Секция «Track record»: вписать реальные кейсы (`proof.p1…p3` в `i18n/*.json`), честно расставить метки «client deployment» / «reference implementation»
 
 **Инфраструктура**
-- [ ] Создать 6 A-записей в Cloudflare (`labs`, `rag-labs`, `pdf-labs`, `ops-labs`, `stt-labs`, `dispatcher-labs`) → IP VPS; `ops-labs` — DNS only, остальные Proxied
+- [ ] Создать 6 A-записей в Cloudflare (`labs`, `rag-labs`, `pdf-labs`, `ops-labs`, `stt-labs`, `dispatcher-labs`) → IP VPS; все шесть Proxied (ops-labs — целиком из кэша, Cache Rule)
 - [ ] Cloudflare API Token (`Zone → DNS → Edit`, `Zone → Zone → Read`, зона `mnemostroma.com`) для DNS-01 Traefik
 - [ ] SSL/TLS режим зоны: `Full (strict)`
 - [ ] Завести ящик `contact@labs.mnemostroma.com` + MX/SPF/DKIM
