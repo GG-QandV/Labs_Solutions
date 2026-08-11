@@ -15,7 +15,7 @@ docker network create web || true
 cp .env.example .env   # set OPSHUB_KEY, ADMIN_PASSWORD
 docker compose up -d --build
 ```
-Dashboard: https://ops.labs.mnemostroma.com (basic auth).
+Dashboard: https://ops-labs.mnemostroma.com (basic auth).
 
 ## Fleet convention (every demo compose)
 ```yaml

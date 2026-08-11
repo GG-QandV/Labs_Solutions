@@ -66,7 +66,7 @@ Full-stack платформа приёма и AI-классификации кл
   (можно слить воркер в backend-процесс для MVP) + `frontend`.
 - Конвенции OpsHub: labels `demo=true`, `mem_limit`, `restart: on-failure`, env `OPSHUB_URL/KEY/SERVICE`,
   сети `web`+`opsnet`, healthcheck `/health`, drop-in `opshub_client` + heartbeat, lazy-start/autostop.
-- Traefik-роут `dispatcher.labs.mnemostroma.com`.
+- Traefik-роут `dispatcher-labs.mnemostroma.com`.
 - Каналы MVP: Telegram Bot-webhook (**туннель через Cloudflare Worker**, см. §5.6) + REST + форма лендинга.
 
 ### 3.3. Демо-режим и «визуальная реализуемость»

@@ -7,7 +7,7 @@ services:
     mem_limit: 2048m             # cgroup OOM protection (primary leak defence)
     cpus: 2.0
     environment:
-      - PUBLIC_BASE_URL=https://rag.labs.mnemostroma.com
+      - PUBLIC_BASE_URL=https://rag-labs.mnemostroma.com
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY:-}
@@ -21,7 +21,7 @@ services:
     labels:
       - "demo=true"
       - "traefik.enable=true"
-      - "traefik.http.routers.rag.rule=Host(`rag.labs.mnemostroma.com`)"
+      - "traefik.http.routers.rag.rule=Host(`rag-labs.mnemostroma.com`)"
       - "traefik.http.routers.rag.entrypoints=websecure"
       - "traefik.http.routers.rag.middlewares=sec-headers@file,noindex@file,demo-ratelimit@file"
       - "traefik.http.routers.rag.tls.certresolver=le"
