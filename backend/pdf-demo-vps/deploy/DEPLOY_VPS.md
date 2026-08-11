@@ -7,9 +7,10 @@ docker network create web || true
 docker network create opsnet || true
 docker compose -f /srv/traefik/docker-compose.yml up -d    # if Traefik not running yet; copy infra/traefik/docker-compose.yml + dynamic/ from the repo
 ```
-Cloudflare DNS: A record `pdf.labs.mnemostroma.com` -> VPS IP (proxy ON keeps CF as CDN/WAF;
-Let's Encrypt DNS-01 challenge via `CF_DNS_API_TOKEN` in `/srv/traefik/.env`,
-wildcard `*.labs.mnemostroma.com` from the `site` router covers this host).
+Cloudflare DNS: A record `pdf-labs.mnemostroma.com` -> VPS IP (proxy ON keeps CF as CDN/WAF).
+TLS: Traefik issues a per-host Let's Encrypt certificate via DNS-01
+(`CF_DNS_API_TOKEN` in `/srv/traefik/.env`). No wildcard is used — Cloudflare Universal SSL
+covers only one subdomain level, which is why hosts are flat (`pdf-labs`, not `pdf.labs`).
 
 ## 1. Secrets
 `/srv/demos/pdf-demo/.env`:
@@ -27,7 +28,7 @@ docker compose -f deploy/docker-compose.yml --env-file /srv/demos/pdf-demo/.env 
 Update = `git pull && docker compose ... up -d --build` (or a GitHub Action doing the same over SSH).
 
 ## 3. Smoke checklist
-1. https://pdf.labs.mnemostroma.com -> Start demo session -> timer.
+1. https://pdf-labs.mnemostroma.com -> Start demo session -> timer.
 2. Public test Sheet -> Check access -> validation report (rows/images/hidden warning).
 3. Break an image URL -> BROKEN_IMAGE + upload button -> upload PNG -> resolved.
 4. Email + A4/Legal -> Generate -> validating -> rendering -> sending -> Sent; PDF arrives.
