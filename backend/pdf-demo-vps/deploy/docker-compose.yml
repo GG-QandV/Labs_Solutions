@@ -21,6 +21,7 @@ services:
     labels:
       - "demo=true"                                    # OpsHub discovery
       - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.http.routers.pdfdemo.rule=Host(`pdf-labs.mnemostroma.com`)"
       - "traefik.http.routers.pdfdemo.entrypoints=websecure"
       - "traefik.http.routers.pdfdemo.middlewares=sec-headers@file,noindex@file,demo-ratelimit@file"

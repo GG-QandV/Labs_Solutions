@@ -23,6 +23,7 @@ services:
     labels:
       - "demo=true"
       - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.http.routers.rag.rule=Host(`rag-labs.mnemostroma.com`)"
       - "traefik.http.routers.rag.entrypoints=websecure"
       - "traefik.http.routers.rag.middlewares=sec-headers@file,noindex@file,demo-ratelimit@file"

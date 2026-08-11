@@ -19,6 +19,7 @@ services:
     networks: [web, opsnet]
     labels:
       - "traefik.enable=true"
+      - "traefik.docker.network=web"
       - "traefik.http.routers.opshub.rule=Host(`ops-labs.mnemostroma.com`)"
       - "traefik.http.routers.opshub.entrypoints=websecure"
       - "traefik.http.routers.opshub.middlewares=sec-headers@file,noindex@file"
