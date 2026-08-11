@@ -26,8 +26,8 @@ JSON-схема ответа в промпте генерируется из в�
 
 ## Провайдеры (env)
 
-LLM_PROVIDER=openai|gemini; openai-совместимый (DeepSeek по умолчанию:
-LLM_BASE_URL=https://api.deepseek.com, LLM_MODEL=deepseek-chat) или Gemini
+LLM_PROVIDER=openai|gemini; openai-совместимый (opencode zen по умолчанию:
+LLM_BASE_URL=https://opencode.ai/zen/v1, LLM_MODEL=mimo-v2.5-free) или Gemini
 (GEMINI_MODEL=gemini-2.5-flash, responseMimeType=application/json).
 Backoff: 1s/2s, максимум 3 попытки, retryable только 429/5xx/network.
 LogRedactor маскирует ключи (sk-*, AIza*, Bearer) до записи любого лога.

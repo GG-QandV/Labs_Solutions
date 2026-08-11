@@ -3,7 +3,7 @@
 Everything above this module (translate/summary endpoints) speaks a single contract:
     await complete(system_prompt, user_content, *, api_key=None) -> str
 Provider choice and transport details live only here. Supported:
-  - openai-compatible (DeepSeek, OpenAI, OpenRouter, local proxies) — LLM_BASE_URL + LLM_MODEL
+  - openai-compatible (opencode zen, OpenAI, OpenRouter, local proxies) — LLM_BASE_URL + LLM_MODEL
   - gemini — Google Generative Language API
 BYOK: a per-session key (RAM-only, see BYOK spec) overrides the server key per call.
 Retries: exponential backoff, max 3 attempts, never infinite (per the base prompt).
@@ -22,8 +22,8 @@ import httpx
 log = logging.getLogger("llm.provider")
 
 PROVIDER = os.environ.get("LLM_PROVIDER", "openai")  # openai (=openai-compatible) | gemini
-BASE_URL = os.environ.get("LLM_BASE_URL", "https://api.deepseek.com")
-MODEL = os.environ.get("LLM_MODEL", "deepseek-chat")
+BASE_URL = os.environ.get("LLM_BASE_URL", "https://opencode.ai/zen/v1")
+MODEL = os.environ.get("LLM_MODEL", "mimo-v2.5-free")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
 SERVER_KEY = os.environ.get("TRANSLATE_API_KEY", "")
 TIMEOUT = float(os.environ.get("LLM_TIMEOUT_SECONDS", "45"))
