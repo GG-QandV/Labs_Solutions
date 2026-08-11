@@ -11,7 +11,8 @@ services:
       - GEMINI_API_KEY=${GEMINI_API_KEY}
       - RESEND_API_KEY=${RESEND_API_KEY}
       - OPENCODE_ZEN_API_KEY=${OPENCODE_ZEN_API_KEY:-}
-      - ZEN_MODEL=${ZEN_MODEL:-mimo-v2.5-free}
+      - LLM_MODEL=${LLM_MODEL:-mimo-v2.5-free}
+      - LLM_BASE_URL=${LLM_BASE_URL:-https://opencode.ai/zen/v1}
       - LLM_PROVIDER=${LLM_PROVIDER:-gemini}
       - OPSHUB_URL=http://opshub:8700
       - OPSHUB_KEY=${OPSHUB_KEY}

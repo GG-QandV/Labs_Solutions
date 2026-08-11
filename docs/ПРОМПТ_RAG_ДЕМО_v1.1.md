@@ -39,7 +39,7 @@
 ## LLM и OCR (внешние API)
 
 - **Основной провайдер: Google Gemini, free tier** (только Flash/Flash-Lite; лимиты по источникам расходятся — от 250 до 1500 запросов/день на Flash, 10–15 RPM; при 429 — экспоненциальный backoff). Ключ — переменная окружения `GEMINI_API_KEY`.
-- **Ответы на вопросы**: Gemini Flash. Конфигом переключается на opencode zen (`mimo-v2.5-free`, OpenAI-совместимый endpoint `https://opencode.ai/zen/v1/chat/completions`, `OPENCODE_ZEN_API_KEY`) — но **не имеет vision** и для OCR непригоден.
+- **Ответы на вопросы**: Gemini Flash. Конфигом переключается на opencode zen (`LLM_PROVIDER=zen`, модель `LLM_MODEL=mimo-v2.5-free`, OpenAI-совместимый endpoint `LLM_BASE_URL=https://opencode.ai/zen/v1` + `/chat/completions` в коде, `OPENCODE_ZEN_API_KEY`) — но **не имеет vision** и для OCR непригоден.
 - **OCR сканированных страниц**: подход zerox (getomni-ai/zerox / форк GG-QandV/ocr-pipeline) — страница PDF → изображение → vision-запрос Gemini Flash → markdown. Только для страниц без текстового слоя.
 - Текстовые документы извлекаются **локально**: PDF — PyMuPDF, DOCX — python-docx, TXT — как есть. XLSX не поддерживается в демо (сокращённый вариант).
 - Промпт LLM обязан содержать правило: «Если ответа нет в переданных фрагментах — скажи, что в документах не найдено подтверждения. Не придумывай». Ответ — с citations в формате `[filename, p.N]`.
