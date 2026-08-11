@@ -1,0 +1,37 @@
+http:
+  middlewares:
+    sec-headers:
+      headers:
+        frameDeny: true
+        contentTypeNosniff: true
+        referrerPolicy: "strict-origin-when-cross-origin"
+        stsSeconds: 31536000
+        stsIncludeSubdomains: true
+        stsPreload: true
+        permissionsPolicy: "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+        customResponseHeaders:
+          X-Robots-Tag: ""       # оставить пустым, страницы индексируются
+          Content-Security-Policy: >-
+            default-src 'self';
+            script-src 'self' https://challenges.cloudflare.com;
+            frame-src https://challenges.cloudflare.com;
+            style-src 'self';
+            font-src 'self';
+            img-src 'self' data:;
+            connect-src 'self';
+            form-action 'self';
+            base-uri 'self';
+            frame-ancestors 'none';
+            object-src 'none';
+            upgrade-insecure-requests
+
+    site-ratelimit:
+      rateLimit: { average: 60, burst: 120, period: 1m }
+    api-ratelimit:
+      rateLimit: { average: 20, burst: 40, period: 1m }
+    noindex:
+      headers:
+        customResponseHeaders:
+          X-Robots-Tag: "noindex, nofollow"
+    demo-ratelimit:
+      rateLimit: { average: 30, burst: 60, period: 1m }
