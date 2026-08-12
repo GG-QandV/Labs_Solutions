@@ -27,7 +27,7 @@ register_admin(app)
 
 # allowed demo slugs -> container name (whitelist, never from request)
 DEMO_MAP = {
-    "dispatcher": "dispatcher",
+    "dispatcher": "dispatcher-api",
     "ocr": "ocr",
     "rag": "rag-demo",
     "report": "pdf-demo",
