@@ -1,0 +1,85 @@
+# AI request dispatcher — demo stack (vendored from Rahilralu/FlowDesk-AI, MIT)
+# Fleet conventions: OpsHub labels, mem_limit, lazy-start/autostop, Traefik routing.
+services:
+
+  dispatcher-api:
+    build: ./backend
+    container_name: dispatcher-api
+    restart: on-failure           # fleet convention: native OOM auto-restart
+    mem_limit: 512m
+    cpus: 0.8
+    environment:
+      - PORT=8080
+      - NODE_ENV=production
+      - DATABASE_URL=file:/data/dispatcher.db
+      - REDIS_URL=redis://dispatcher-redis:6379
+      - FRONTEND_URL=https://dispatcher-labs.mnemostroma.com
+      - GEMINI_API_KEY=${GEMINI_API_KEY}
+      - JWT_ACCESS_SECRET=${JWT_ACCESS_SECRET}
+      - JWT_REFRESH_SECRET=${JWT_REFRESH_SECRET}
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN:-}
+      - TELEGRAM_WEBHOOK_SECRET=${TELEGRAM_WEBHOOK_SECRET:-}
+      - SEED_ADMIN_EMAIL=${SEED_ADMIN_EMAIL:-demo@labs.mnemostroma.com}
+      - SEED_ADMIN_PASSWORD=${SEED_ADMIN_PASSWORD}
+      # AUDIT.md §3.4 — one switch instead of two competing workers
+      - WORKER_INLINE=true
+      - OPSHUB_URL=http://opshub:8700
+      - OPSHUB_KEY=${OPSHUB_KEY}
+      - OPSHUB_SERVICE=dispatcher
+    volumes:
+      - /srv/demos/dispatcher/data:/data
+    depends_on:
+      dispatcher-redis:
+        condition: service_healthy
+    networks: [dispatchernet, opsnet]
+    labels:
+      - "demo=true"
+      - "traefik.enable=false"    # reached only through dispatcher-web (nginx)
+
+  dispatcher-redis:
+    image: redis:7-alpine
+    container_name: dispatcher-redis
+    restart: on-failure
+    mem_limit: 128m
+    cpus: 0.2
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--maxmemory", "96mb", "--maxmemory-policy", "noeviction"]
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    networks: [dispatchernet]
+    labels:
+      - "demo=true"
+
+  dispatcher-web:
+    build:
+      context: ./frontend
+      args:
+        # Relative base: the browser talks to this origin only, nginx proxies
+        # inward. No CORS, no second Traefik router on the same Host.
+        VITE_API_URL: /api
+        VITE_SOCKET_URL: ""
+    container_name: dispatcher-web
+    restart: on-failure
+    mem_limit: 128m
+    cpus: 0.3
+    depends_on: [dispatcher-api]
+    networks: [web, dispatchernet, opsnet]
+    labels:
+      - "demo=true"
+      - "traefik.enable=true"
+      - "traefik.docker.network=web"   # multi-network container: pin the one Traefik shares
+      - "traefik.http.routers.dispatcher.rule=Host(`dispatcher-labs.mnemostroma.com`)"
+      - "traefik.http.routers.dispatcher.entrypoints=websecure"
+      - "traefik.http.routers.dispatcher.middlewares=sec-headers@file,noindex@file,demo-ratelimit@file"
+      - "traefik.http.routers.dispatcher.tls.certresolver=le"
+      - "traefik.http.services.dispatcher.loadbalancer.server.port=80"
+
+networks:
+  web:
+    external: true
+  opsnet:
+    external: true
+  dispatchernet:
+    name: dispatchernet

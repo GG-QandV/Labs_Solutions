@@ -1,0 +1,102 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String          @id @default(cuid())
+  email          String          @unique
+  password       String
+  name           String
+  role           String          @default("ADMIN")   // ADMIN | AGENT
+  createdAt      DateTime        @default(now())
+  refreshTokens  RefreshToken[]
+  requestEvents  RequestEvent[]
+  internalNotes  InternalNote[]
+
+  @@index([email])
+}
+
+model RefreshToken {
+  id         String   @id @default(cuid())
+  token      String   @unique
+  userId     String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
+}
+
+model CustomerRequest {
+  id               String            @id @default(cuid())
+  message          String
+  source           String            @default("WEB")     // WEB | TELEGRAM | EMAIL | API
+  customerName     String
+  customerEmail    String?
+  customerPhone    String?
+  status           String            @default("NEW")     // NEW | QUEUED | PROCESSING | CLASSIFIED | RESOLVED | FAILED
+  categorySnapshot String?
+  prioritySnapshot String?           // LOW | MEDIUM | HIGH
+  idempotencyKey   String?           @unique
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+  aiClassification AiClassification?
+  requestEvents    RequestEvent[]
+  internalNotes    InternalNote[]
+
+  @@index([status])
+  @@index([prioritySnapshot])
+  @@index([categorySnapshot])
+  @@index([createdAt])
+}
+
+model AiClassification {
+  id         String          @id @default(cuid())
+  requestId  String          @unique
+  provider   String          @default("gemini")
+  category   String
+  priority   String          // LOW | MEDIUM | HIGH
+  summary    String
+  confidence Float
+  reason     String
+  rawOutput  String
+  errorState String?
+  createdAt  DateTime        @default(now())
+  request    CustomerRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+}
+
+model RequestEvent {
+  id         String          @id @default(cuid())
+  requestId  String
+  eventType  String
+  oldValue   String?
+  newValue   String?
+  actorId    String?
+  metadata   String?
+  createdAt  DateTime        @default(now())
+  request    CustomerRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  actor      User?           @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([requestId])
+  @@index([createdAt])
+}
+
+model InternalNote {
+  id         String          @id @default(cuid())
+  requestId  String
+  authorId   String
+  body       String
+  createdAt  DateTime        @default(now())
+  request    CustomerRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  author     User            @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
+}
