@@ -221,8 +221,8 @@ async def demos():
     except Exception as e:  # noqa: BLE001
         log.warning("opshub overview failed: %s", e)
     return [
-        {"slug": slug, "state": states[name], "url": f"/demos/{slug}" if states[name] != "soon" else None}
-        for slug, name in DEMO_MAP.items()
+        {"slug": slug, "state": states[slug], "url": f"/demos/{slug}" if states[slug] != "soon" else None}
+        for slug, _name in DEMO_MAP.items()
     ]
 
 
