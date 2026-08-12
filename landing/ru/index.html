@@ -23,8 +23,9 @@
 <meta property="og:url" content="https://labs.mnemostroma.com/ru/">
 <meta property="og:title" data-i18n-attr="content:meta.title" content="Labs Mnemostroma — живая AI-автоматизация, которую можно запустить до покупки">
 <meta property="og:description" data-i18n-attr="content:meta.description" content="Рабочие AI-конвейеры для документов, заявок и CRM. Запустите демо на своих данных, увидьте каждый источник и уровень уверенности, а подпись человека остаётся обязательной перед любой отправкой.">
-<!-- PLACEHOLDER-IMAGE: og-cover 1200x630 — тёмно-фиолетовый фон, слева wordmark LABS, справа pipeline-лента с подсвеченным оранжевым шагом "Awaiting approval" -->
 <meta property="og:image" content="https://labs.mnemostroma.com/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="600">
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="theme-color" content="#14101E" media="(prefers-color-scheme: dark)">
@@ -236,9 +237,7 @@
 
     <!-- IMAGE-PLACEHOLDER -->
     <figure class="ph ph--wide">
-      <span class="ph__t">СКРИНШОТ: сквозной pipeline в UI — горизонтальная лента из 7 состояний,
-      подсвечен шаг «Awaiting approval», под лентой две колонки: слева исходный PDF-превью,
-      справа извлечённые поля с confidence и кнопкой «Approve». Ширина 1200×620.</span>
+      <span class="ph__t">Pipeline in the UI — 7 states, current step «Awaiting approval» highlighted; under the ribbon: source PDF preview on the left, extracted fields with confidence and an «Approve» button on the right. Screenshot pending.</span>
     </figure>
   </div>
 </section>
@@ -284,7 +283,7 @@
         <h3 class="h4" data-i18n="demos.d3.t">Ответы с источниками</h3>
         <p data-i18n="demos.d3.d">Вопросы к своим документам. Каждый ответ возвращает файл, страницу и фрагмент — или прямо «не подтверждено в базе».</p>
         <p class="meta"><span data-i18n="demos.in">Вход</span>: docs, price lists, SOPs · <span data-i18n="demos.out">Выход</span>: answer + citations</p>
-        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/rag" data-i18n="cta.try">Попробовать</a>
+        <a class="btn btn--ghost btn--sm" href="https://rag-labs.mnemostroma.com" data-i18n="cta.try">Попробовать</a>
       </article>
 
       <article class="card card--demo" data-demo="report">
@@ -295,7 +294,7 @@
         <h3 class="h4" data-i18n="demos.d4.t">Конструктор предложений и отчётов</h3>
         <p data-i18n="demos.d4.d">На входе — таблица или карточка заявки. На выходе — фирменный PDF и черновик письма. Генерация только отдельной кнопкой, никогда автоматически.</p>
         <p class="meta"><span data-i18n="demos.in">Вход</span>: sheet link, request card · <span data-i18n="demos.out">Выход</span>: PDF + draft mail</p>
-        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/reports" data-i18n="cta.try">Попробовать</a>
+        <a class="btn btn--ghost btn--sm" href="https://pdf-labs.mnemostroma.com" data-i18n="cta.try">Попробовать</a>
       </article>
 
       <article class="card card--demo" data-demo="crm">
@@ -402,7 +401,7 @@
         <h3 class="h4" data-i18n="proof.p2.t">Ответы с цитатами</h3>
         <p data-i18n="proof.p2.d">Поиск по внутренним документам, где ответ без проверяемого источника считается ошибкой, а не стилистикой.</p>
         <p class="meta" data-i18n="proof.p2.m">Стек: чанкинг, эмбеддинги, реранкинг, векторное хранилище, контракт цитирования</p>
-        <a class="lnk" href="#" href="https://github.com/GG-QandV/Labs_Solutions" data-i18n="cta.repo">Код на GitHub</a>
+        <a class="lnk" href="https://github.com/GG-QandV/Labs_Solutions" data-i18n="cta.repo">Код на GitHub</a>
       </article>
 
       <article class="card">
@@ -460,9 +459,7 @@
 
     <!-- IMAGE-PLACEHOLDER -->
     <figure class="ph ph--wide">
-      <span class="ph__t">СХЕМА: слой данных → Raw store · OCR/Postgres · Vector store · masking/NER →
-      Model adapter → (local endpoint | Azure | Bedrock | cloud API) → audit log.
-      Стиль: тонкие линии, подписи моно-шрифтом, акцентом выделен блок masking. 1200×560.</span>
+      <span class="ph__t">Data flow: Raw store · OCR/Postgres · Vector store · masking/NER → Model adapter → (local endpoint | Azure | Bedrock | cloud API) → audit log. Diagram pending.</span>
     </figure>
   </div>
 </section>
@@ -520,20 +517,41 @@
           <input class="fld__i" name="name" type="text" autocomplete="name" required maxlength="80">
         </label>
         <label class="fld">
-          <span class="fld__l" data-i18n="form.email">Рабочая почта</span>
-          <input class="fld__i" name="email" type="email" autocomplete="email" required maxlength="120">
+          <span class="fld__l" data-i18n="form.contact">Telegram (необязательно)</span>
+          <input class="fld__i" name="contact_telegram" type="text" autocomplete="off" maxlength="80" placeholder="@username">
         </label>
       </div>
 
       <div class="form__row">
         <label class="fld">
+          <span class="fld__l" data-i18n="form.email">Рабочая почта</span>
+          <input class="fld__i" name="email" type="email" autocomplete="email" required maxlength="120">
+        </label>
+        <label class="fld">
           <span class="fld__l" data-i18n="form.company">Компания</span>
           <input class="fld__i" name="company" type="text" autocomplete="organization" maxlength="120">
         </label>
+      </div>
+
+      <div class="form__row">
         <label class="fld">
-          <span class="fld__l" data-i18n="form.industry">Отрасль</span>
-          <input class="fld__i" name="industry" type="text" maxlength="80"
-                 data-i18n-attr="placeholder:form.industryPh" placeholder="логистика, опт, услуги…">
+          <span class="fld__l" data-i18n="form.service">Сервис</span>
+          <select class="fld__i" name="service">
+            <option value="" data-i18n="form.choose">Выберите…</option>
+            <option value="rag">RAG answers with sources</option>
+            <option value="pdf">PDF report builder</option>
+            <option value="dispatcher">Request dispatcher</option>
+            <option value="extraction">Document extraction</option>
+            <option value="crm">CRM copilot</option>
+            <option value="analyst">Table analyst</option>
+            <option value="other" data-i18n="form.other">Другое / не определился</option>
+          </select>
+        </label>
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.slot">Удобное время</span>
+          <select class="fld__i" name="slot_id" id="slotSelect">
+            <option value="" data-i18n="form.choose">Выберите…</option>
+          </select>
         </label>
       </div>
 
@@ -542,34 +560,6 @@
         <textarea class="fld__i fld__i--ta" name="process" rows="4" required maxlength="1200"
                   data-i18n-attr="placeholder:form.processPh"
                   placeholder="Что приходит, кто это обрабатывает, что должно получиться на выходе."></textarea>
-      </label>
-
-      <div class="form__row">
-        <label class="fld">
-          <span class="fld__l" data-i18n="form.volume">Объём в месяц</span>
-          <select class="fld__i" name="volume">
-            <option value="" data-i18n="form.choose">Выберите…</option>
-            <option value="lt100" data-i18n="form.v1">До 100 документов / заявок</option>
-            <option value="100-1000" data-i18n="form.v2">100 – 1 000</option>
-            <option value="1000-10000" data-i18n="form.v3">1 000 – 10 000</option>
-            <option value="gt10000" data-i18n="form.v4">Более 10 000</option>
-          </select>
-        </label>
-        <label class="fld">
-          <span class="fld__l" data-i18n="form.privacy">Чувствительность данных</span>
-          <select class="fld__i" name="privacy">
-            <option value="" data-i18n="form.choose">Выберите…</option>
-            <option value="open" data-i18n="form.p1">Облачные модели приемлемы</option>
-            <option value="masked" data-i18n="form.p2">Облако разрешено при условии маскирования</option>
-            <option value="local" data-i18n="form.p3">Должно оставаться на нашей инфраструктуре</option>
-          </select>
-        </label>
-      </div>
-
-      <label class="fld">
-        <span class="fld__l" data-i18n="form.systems">Используемые системы</span>
-        <input class="fld__i" name="systems" type="text" maxlength="200"
-               data-i18n-attr="placeholder:form.systemsPh" placeholder="CRM, ERP, почта, хранилище, таблицы…">
       </label>
 
       <label class="chk">
@@ -622,8 +612,8 @@
       <h4 class="ftr__h" data-i18n="ftr.demos">Демо</h4>
       <a href="#" data-href-todo="LINK: /demos/dispatcher" data-i18n="demos.d1.t">Диспетчер заявок</a>
       <a href="#" data-href-todo="LINK: /demos/extraction" data-i18n="demos.d2.t">Извлечение данных из документов</a>
-      <a href="#" data-href-todo="LINK: /demos/rag" data-i18n="demos.d3.t">Ответы с источниками</a>
-      <a href="#" data-href-todo="LINK: /demos/reports" data-i18n="demos.d4.t">Конструктор предложений и отчётов</a>
+      <a href="https://rag-labs.mnemostroma.com" data-i18n="demos.d3.t">Ответы с источниками</a>
+      <a href="https://pdf-labs.mnemostroma.com" data-i18n="demos.d4.t">Конструктор предложений и отчётов</a>
     </nav>
 
     <nav class="ftr__col" aria-label="Company">

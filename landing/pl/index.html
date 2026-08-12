@@ -23,8 +23,9 @@
 <meta property="og:url" content="https://labs.mnemostroma.com/pl/">
 <meta property="og:title" data-i18n-attr="content:meta.title" content="Labs Mnemostroma — żywa automatyzacja AI, którą możesz uruchomić przed zakupem">
 <meta property="og:description" data-i18n-attr="content:meta.description" content="Działające potoki AI dla dokumentów, zgłoszeń i CRM. Uruchom demo na własnych danych, zobacz każde źródło i poziom pewności, a podpis człowieka pozostaje obowiązkowy przed każdym wysłaniem.">
-<!-- PLACEHOLDER-IMAGE: og-cover 1200x630 — тёмно-фиолетовый фон, слева wordmark LABS, справа pipeline-лента с подсвеченным оранжевым шагом "Awaiting approval" -->
 <meta property="og:image" content="https://labs.mnemostroma.com/assets/og-cover.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="600">
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="theme-color" content="#14101E" media="(prefers-color-scheme: dark)">
@@ -236,9 +237,7 @@
 
     <!-- IMAGE-PLACEHOLDER -->
     <figure class="ph ph--wide">
-      <span class="ph__t">СКРИНШОТ: сквозной pipeline в UI — горизонтальная лента из 7 состояний,
-      подсвечен шаг «Awaiting approval», под лентой две колонки: слева исходный PDF-превью,
-      справа извлечённые поля с confidence и кнопкой «Approve». Ширина 1200×620.</span>
+      <span class="ph__t">Pipeline in the UI — 7 states, current step «Awaiting approval» highlighted; under the ribbon: source PDF preview on the left, extracted fields with confidence and an «Approve» button on the right. Screenshot pending.</span>
     </figure>
   </div>
 </section>
@@ -284,7 +283,7 @@
         <h3 class="h4" data-i18n="demos.d3.t">Odpowiedzi ze źródłami</h3>
         <p data-i18n="demos.d3.d">Zapytaj własne dokumenty. Każda odpowiedź zwraca plik, stronę i fragment — lub wprost «nie potwierdzone w bazie».</p>
         <p class="meta"><span data-i18n="demos.in">Wejście</span>: docs, price lists, SOPs · <span data-i18n="demos.out">Wyjście</span>: answer + citations</p>
-        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/rag" data-i18n="cta.try">Wypróbuj</a>
+        <a class="btn btn--ghost btn--sm" href="https://rag-labs.mnemostroma.com" data-i18n="cta.try">Wypróbuj</a>
       </article>
 
       <article class="card card--demo" data-demo="report">
@@ -295,7 +294,7 @@
         <h3 class="h4" data-i18n="demos.d4.t">Kreator ofert i raportów</h3>
         <p data-i18n="demos.d4.d">Na wejściu — tabela lub karta zgłoszenia. Na wyjściu — firmowy PDF i szkic maila. Generacja tylko osobnym przyciskiem, nigdy automatyczna.</p>
         <p class="meta"><span data-i18n="demos.in">Wejście</span>: sheet link, request card · <span data-i18n="demos.out">Wyjście</span>: PDF + draft mail</p>
-        <a class="btn btn--ghost btn--sm" href="#" data-href-todo="LINK: /demos/reports" data-i18n="cta.try">Wypróbuj</a>
+        <a class="btn btn--ghost btn--sm" href="https://pdf-labs.mnemostroma.com" data-i18n="cta.try">Wypróbuj</a>
       </article>
 
       <article class="card card--demo" data-demo="crm">
@@ -402,7 +401,7 @@
         <h3 class="h4" data-i18n="proof.p2.t">Odpowiedzi z cytatami</h3>
         <p data-i18n="proof.p2.d">Wyszukiwanie w wewnętrznych dokumentach, gdzie odpowiedź bez weryfikowalnego źródła jest traktowana jako błąd, a nie kwestia stylu.</p>
         <p class="meta" data-i18n="proof.p2.m">Stack: chunking, embeddingi, reranking, magazyn wektorowy, kontrakt cytowania</p>
-        <a class="lnk" href="#" href="https://github.com/GG-QandV/Labs_Solutions" data-i18n="cta.repo">Kod na GitHub</a>
+        <a class="lnk" href="https://github.com/GG-QandV/Labs_Solutions" data-i18n="cta.repo">Kod na GitHub</a>
       </article>
 
       <article class="card">
@@ -460,9 +459,7 @@
 
     <!-- IMAGE-PLACEHOLDER -->
     <figure class="ph ph--wide">
-      <span class="ph__t">СХЕМА: слой данных → Raw store · OCR/Postgres · Vector store · masking/NER →
-      Model adapter → (local endpoint | Azure | Bedrock | cloud API) → audit log.
-      Стиль: тонкие линии, подписи моно-шрифтом, акцентом выделен блок masking. 1200×560.</span>
+      <span class="ph__t">Data flow: Raw store · OCR/Postgres · Vector store · masking/NER → Model adapter → (local endpoint | Azure | Bedrock | cloud API) → audit log. Diagram pending.</span>
     </figure>
   </div>
 </section>
@@ -520,20 +517,41 @@
           <input class="fld__i" name="name" type="text" autocomplete="name" required maxlength="80">
         </label>
         <label class="fld">
-          <span class="fld__l" data-i18n="form.email">Służbowy e-mail</span>
-          <input class="fld__i" name="email" type="email" autocomplete="email" required maxlength="120">
+          <span class="fld__l" data-i18n="form.contact">Telegram (opcjonalnie)</span>
+          <input class="fld__i" name="contact_telegram" type="text" autocomplete="off" maxlength="80" placeholder="@username">
         </label>
       </div>
 
       <div class="form__row">
         <label class="fld">
+          <span class="fld__l" data-i18n="form.email">Służbowy e-mail</span>
+          <input class="fld__i" name="email" type="email" autocomplete="email" required maxlength="120">
+        </label>
+        <label class="fld">
           <span class="fld__l" data-i18n="form.company">Firma</span>
           <input class="fld__i" name="company" type="text" autocomplete="organization" maxlength="120">
         </label>
+      </div>
+
+      <div class="form__row">
         <label class="fld">
-          <span class="fld__l" data-i18n="form.industry">Branża</span>
-          <input class="fld__i" name="industry" type="text" maxlength="80"
-                 data-i18n-attr="placeholder:form.industryPh" placeholder="logistyka, hurt, usługi…">
+          <span class="fld__l" data-i18n="form.service">Usługa</span>
+          <select class="fld__i" name="service">
+            <option value="" data-i18n="form.choose">Wybierz…</option>
+            <option value="rag">RAG answers with sources</option>
+            <option value="pdf">PDF report builder</option>
+            <option value="dispatcher">Request dispatcher</option>
+            <option value="extraction">Document extraction</option>
+            <option value="crm">CRM copilot</option>
+            <option value="analyst">Table analyst</option>
+            <option value="other" data-i18n="form.other">Inne / nie wiem</option>
+          </select>
+        </label>
+        <label class="fld">
+          <span class="fld__l" data-i18n="form.slot">Preferowany czas</span>
+          <select class="fld__i" name="slot_id" id="slotSelect">
+            <option value="" data-i18n="form.choose">Wybierz…</option>
+          </select>
         </label>
       </div>
 
@@ -542,34 +560,6 @@
         <textarea class="fld__i fld__i--ta" name="process" rows="4" required maxlength="1200"
                   data-i18n-attr="placeholder:form.processPh"
                   placeholder="Co wpływa, kto to przetwarza, co ma wyjść."></textarea>
-      </label>
-
-      <div class="form__row">
-        <label class="fld">
-          <span class="fld__l" data-i18n="form.volume">Wolumen miesięczny</span>
-          <select class="fld__i" name="volume">
-            <option value="" data-i18n="form.choose">Wybierz…</option>
-            <option value="lt100" data-i18n="form.v1">Do 100 dokumentów / zgłoszeń</option>
-            <option value="100-1000" data-i18n="form.v2">100 – 1 000</option>
-            <option value="1000-10000" data-i18n="form.v3">1 000 – 10 000</option>
-            <option value="gt10000" data-i18n="form.v4">Ponad 10 000</option>
-          </select>
-        </label>
-        <label class="fld">
-          <span class="fld__l" data-i18n="form.privacy">Wrażliwość danych</span>
-          <select class="fld__i" name="privacy">
-            <option value="" data-i18n="form.choose">Wybierz…</option>
-            <option value="open" data-i18n="form.p1">Modele chmurowe są OK</option>
-            <option value="masked" data-i18n="form.p2">Chmura dozwolona pod warunkiem maskowania</option>
-            <option value="local" data-i18n="form.p3">Musi pozostać w naszej infrastrukturze</option>
-          </select>
-        </label>
-      </div>
-
-      <label class="fld">
-        <span class="fld__l" data-i18n="form.systems">Używane systemy</span>
-        <input class="fld__i" name="systems" type="text" maxlength="200"
-               data-i18n-attr="placeholder:form.systemsPh" placeholder="CRM, ERP, poczta, magazyn, arkusze…">
       </label>
 
       <label class="chk">
@@ -622,8 +612,8 @@
       <h4 class="ftr__h" data-i18n="ftr.demos">Demo</h4>
       <a href="#" data-href-todo="LINK: /demos/dispatcher" data-i18n="demos.d1.t">Dyspozytor zgłoszeń</a>
       <a href="#" data-href-todo="LINK: /demos/extraction" data-i18n="demos.d2.t">Ekstrakcja dokumentów</a>
-      <a href="#" data-href-todo="LINK: /demos/rag" data-i18n="demos.d3.t">Odpowiedzi ze źródłami</a>
-      <a href="#" data-href-todo="LINK: /demos/reports" data-i18n="demos.d4.t">Kreator ofert i raportów</a>
+      <a href="https://rag-labs.mnemostroma.com" data-i18n="demos.d3.t">Odpowiedzi ze źródłami</a>
+      <a href="https://pdf-labs.mnemostroma.com" data-i18n="demos.d4.t">Kreator ofert i raportów</a>
     </nav>
 
     <nav class="ftr__col" aria-label="Company">

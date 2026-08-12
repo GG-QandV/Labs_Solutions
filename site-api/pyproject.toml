@@ -1,0 +1,15 @@
+[project]
+name = "site-api"
+version = "0.1.0"
+description = "Labs site backend: consultation booking, slots, demo states"
+requires-python = ">=3.12"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.32",
+  "aiosqlite>=0.20",
+  "httpx>=0.27",
+  "pydantic[email]>=2.7",
+]
+
+[tool.uv]
+package = false

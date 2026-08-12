@@ -180,6 +180,25 @@ function initConsultForm() {
   if (!form) return;
   const out = document.getElementById('consultMsg');
   const btn = document.getElementById('consultSubmit');
+  const slotSel = document.getElementById('slotSelect');
+
+  // load free slots
+  (async () => {
+    try {
+      const r = await fetch(`${API}/slots`, { headers: { 'Accept': 'application/json' } });
+      if (!r.ok) return;
+      const slots = await r.json();
+      for (const s of slots) {
+        const opt = document.createElement('option');
+        opt.value = String(s.id);
+        const d = new Date(s.starts_at * 1000);
+        opt.textContent = d.toLocaleString(i18n.lang === 'uk' ? 'uk-UA' : 'en-GB', {
+          weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit'
+        });
+        slotSel.appendChild(opt);
+      }
+    } catch (e) { /* slots optional */ }
+  })();
 
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
@@ -191,12 +210,11 @@ function initConsultForm() {
     const payload = {
       name: (fd.get('name') || '').toString().trim(),
       email: (fd.get('email') || '').toString().trim(),
+      contact_telegram: (fd.get('contact_telegram') || '').toString().trim() || null,
       company: (fd.get('company') || '').toString().trim(),
-      industry: (fd.get('industry') || '').toString().trim(),
+      service: (fd.get('service') || '').toString().trim() || null,
       process: (fd.get('process') || '').toString().trim(),
-      volume: fd.get('volume') || null,
-      privacy: fd.get('privacy') || null,
-      systems: (fd.get('systems') || '').toString().trim(),
+      slot_id: fd.get('slot_id') ? Number(fd.get('slot_id')) : null,
       locale: i18n.lang,
       page: location.pathname,
       captcha_token: window.__captchaToken || null
