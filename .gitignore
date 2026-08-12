@@ -4,3 +4,6 @@ arch/
 backups/
 docs/gitignore/
 **/.env
+
+docs/тестовый_дизайн/
+landing/docs/тестовый_дизайн/
