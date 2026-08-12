@@ -258,6 +258,19 @@
     "lead": "Trzydzieści minut bez prezentacji. Opisz proces, który chcesz zautomatyzować, a otrzymasz ocenę realności, uczciwe ryzyka i przybliżony zakres prac."
   },
   "form": {
+    "industry": "Branża",
+    "industryPh": "logistyka, hurt, usługi…",
+    "volume": "Miesięczny wolumen",
+    "v1": "Do 100 dokumentów / zgłoszeń",
+    "v2": "100 – 1 000",
+    "v3": "1 000 – 10 000",
+    "v4": "Ponad 10 000",
+    "privacy": "Wrażliwość danych",
+    "p1": "Modele chmurowe są OK",
+    "p2": "Chmura, jeśli dane są zanonimizowane",
+    "p3": "Musi zostać w naszej infrastrukturze",
+    "systems": "Używane systemy",
+    "systemsPh": "CRM, ERP, poczta, przechowywanie, arkusze…",
     "name": "Twoje imię",
     "email": "Służbowy e-mail",
     "company": "Firma",
@@ -302,5 +315,9 @@
     "contact": "Kontakt",
     "privacy": "Prywatność",
     "terms": "Warunki"
+  },
+  "stage2": {
+    "h": "Kilka szczegółów (opcjonalnie)",
+    "note": "Zapytamy o to dopiero po pierwszej rozmowie."
   }
 }
