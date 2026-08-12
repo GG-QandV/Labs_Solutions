@@ -16,6 +16,7 @@
   "dependencies": {
     "@google/generative-ai": "^0.24.1",
     "@prisma/client": "^6.19.3",
+    "axios": "^1.7.9",
     "bcryptjs": "^3.0.3",
     "bullmq": "^5.77.6",
     "cookie-parser": "^1.4.7",
