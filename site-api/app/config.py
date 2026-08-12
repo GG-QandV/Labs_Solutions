@@ -12,7 +12,9 @@ MAIL_FROM = os.environ.get("MAIL_FROM", "Labs <hello@labs.mnemostroma.com>")
 
 # OpsHub integration (server-to-server, opsnet network)
 OPSHUB_URL = os.environ.get("OPSHUB_URL", "http://opshub:8700")
-OPSHUB_KEY = os.environ.get("OPSHUB_KEY", "")
+OPSHUB_KEY = os.environ.get("OPSHUB_KEY", "")            # X-OpsHub-Key for /api/register|log|heartbeat
+OPSHUB_ADMIN_LOGIN = os.environ.get("OPSHUB_ADMIN_LOGIN", "")
+OPSHUB_ADMIN_PASSWORD = os.environ.get("OPSHUB_ADMIN_PASSWORD", "")  # Basic Auth for /api/overview|services
 
 # Security
 IP_HASH_SALT = os.environ.get("IP_HASH_SALT", "")  # HMAC salt; empty -> hashing disabled (dev only)

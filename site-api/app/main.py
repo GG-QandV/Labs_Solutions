@@ -199,17 +199,25 @@ async def list_slots(request: Request):
 
 
 # ---------- demos ----------
+def _opshub_auth() -> dict[str, str]:
+    """Basic Auth for OpsHub control endpoints (overview, services)."""
+    if config.OPSHUB_ADMIN_LOGIN and config.OPSHUB_ADMIN_PASSWORD:
+        return {"authorization": "Basic " + base64.b64encode(
+            f"{config.OPSHUB_ADMIN_LOGIN}:{config.OPSHUB_ADMIN_PASSWORD}".encode()).decode()}
+    return {"x-opshub-key": config.OPSHUB_KEY}
+
+
 @app.get("/api/v1/demos")
 async def demos():
     states = {"dispatcher": "soon", "ocr": "soon", "rag": "soon", "report": "soon", "crm": "soon", "analyst": "soon"}
     try:
         async with httpx.AsyncClient(timeout=5) as c:
-            r = await c.get(f"{config.OPSHUB_URL}/api/overview",
-                            headers={"x-opshub-key": config.OPSHUB_KEY})
+            r = await c.get(f"{config.OPSHUB_URL}/api/overview", headers=_opshub_auth())
             if r.status_code == 200:
                 for s in r.json().get("services", []):
-                    if s["name"] in DEMO_MAP.values():
-                        states[s["name"]] = "ready" if s["state"] == "running" else "down"
+                    for slug, container in DEMO_MAP.items():
+                        if container == s["name"]:
+                            states[slug] = "ready" if s["state"] == "running" else "down"
     except Exception as e:  # noqa: BLE001
         log.warning("opshub overview failed: %s", e)
     return [
@@ -232,7 +240,7 @@ async def wake(slug: str, request: Request):
         async with httpx.AsyncClient(timeout=10) as c:
             r = await c.post(
                 f"{config.OPSHUB_URL}/api/services/{container}/start",
-                headers={"x-opshub-key": config.OPSHUB_KEY},
+                headers=_opshub_auth(),
             )
             if r.status_code == 409:
                 raise HTTPException(409, "Another demo is warming up, try in a moment", detail="capacity")
