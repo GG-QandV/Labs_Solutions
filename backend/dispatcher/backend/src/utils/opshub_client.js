@@ -6,6 +6,7 @@ import { appendFileSync, existsSync, readFileSync, rmSync } from 'node:fs';
 const URL_BASE = process.env.OPSHUB_URL ?? '';
 const KEY = process.env.OPSHUB_KEY ?? '';
 const SERVICE = process.env.OPSHUB_SERVICE ?? 'dispatcher';
+const CONTAINER = process.env.OPSHUB_CONTAINER ?? 'dispatcher-api'; // real docker name (compose)
 const BUFFER_FILE = '/tmp/opshub-buffer.ndjson';
 const enabled = URL_BASE !== '';
 
@@ -35,7 +36,7 @@ async function flushBuffer() {
 
 export async function opshubRegister() {
   await post('/api/register', {
-    service: SERVICE, container_name: SERVICE, url_health: '/health'
+    service: SERVICE, container_name: CONTAINER, url_health: '/health'
   });
   await flushBuffer();
 }
