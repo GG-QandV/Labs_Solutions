@@ -7,6 +7,9 @@ import { requireAdmin, requireAgentOrAdmin } from '../middleware/roleChecker.js'
 const router = express.Router();
 
 
+// PUBLIC intake — no auth (clients, form, webhook entry)
+router.post('/', createRequestLimiter, handleCreateRequest);
+
 // AGENT + ADMIN
 router.get('/', authenticate_token, requireAgentOrAdmin, handleGetRequests);
 router.get('/events', authenticate_token, requireAdmin, handleGetEvents);
