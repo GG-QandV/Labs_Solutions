@@ -218,7 +218,7 @@ async def demos():
             if r.status_code == 200:
                 for s in r.json().get("services", []):
                     for slug, container in DEMO_MAP.items():
-                        if container == s["name"]:
+                        if container == s.get("container") or container == s["name"]:
                             states[slug] = "ready" if s["state"] == "running" else "down"
     except Exception as e:  # noqa: BLE001
         log.warning("opshub overview failed: %s", e)
