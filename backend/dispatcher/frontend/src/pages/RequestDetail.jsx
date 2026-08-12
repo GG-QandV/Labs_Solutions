@@ -50,9 +50,9 @@ export default function RequestDetail() {
       } catch (err) {
         if (err.response?.status === 403) {
           showToast('You do not have permission to view this request.', 'error');
-          setTimeout(() => navigate('/'), 2000);
+          setTimeout(() => navigate('/dashboard'), 2000);
         } else {
-          navigate('/');
+          navigate('/dashboard');
         }
       } finally {
         setLoading(false);
@@ -122,7 +122,7 @@ export default function RequestDetail() {
     setDeleting(true);
     try {
       await api.delete(`/requests/${id}`);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       if (err.response?.status === 403) {
         showToast('Only admins can delete requests.', 'error');
@@ -163,7 +163,7 @@ export default function RequestDetail() {
 
       <header className="glass-panel border-b border-white/5 px-8 py-5 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-6">
-          <button onClick={() => navigate('/')} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group">
+          <button onClick={() => navigate('/dashboard')} className="w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 text-gray-400 hover:text-white hover:bg-white/10 transition-all hover:scale-105 active:scale-95 group">
             <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>

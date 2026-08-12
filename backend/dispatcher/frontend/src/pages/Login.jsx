@@ -21,7 +21,7 @@ export default function Login() {
       const decoded = jwtDecode(res.data.accessToken);
       setCurrentUserId(decoded.id);
       setCurrentUserRole(decoded.role);
-      navigate('/');
+      navigate('/dashboard');
     } catch (err) {
       const status = err.response?.status;
       if (status === 403) {
