@@ -25,6 +25,17 @@ log = logging.getLogger("site")
 app = FastAPI(title="Labs Site API", docs_url=None, redoc_url=None)
 register_admin(app)
 
+
+@app.middleware("http")
+async def no_store(request, call_next):
+    """API responses must never be cached — neither by Cloudflare nor by the
+    browser. A stale /api/v1/demos cached with max-age=14400 (old Cache
+    Everything rule) kept showing 'down' for hours in normal tabs."""
+    from starlette.responses import Response
+    resp: Response = await call_next(request)
+    resp.headers["Cache-Control"] = "no-store"
+    return resp
+
 # allowed demo slugs -> container name (whitelist, never from request)
 DEMO_MAP = {
     "dispatcher": "dispatcher-api",
