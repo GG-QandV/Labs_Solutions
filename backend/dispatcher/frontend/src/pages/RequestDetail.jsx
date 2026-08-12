@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api, { currentUserId, currentUserRole } from '../api/axios';
+import { useI18n } from '../i18n';
 
 const statusColor = {
   NEW: 'bg-gray-500/10 text-gray-400',
@@ -24,6 +25,7 @@ const timeAgo = (date) => {
 const getInitials = (name) => name?.split(' ').map(n => n[0]).join('').toUpperCase() || '?';
 
 export default function RequestDetail() {
+  const { t } = useI18n();
   const { id } = useParams();
   const navigate = useNavigate();
   const [request, setRequest] = useState(null);
@@ -169,7 +171,7 @@ export default function RequestDetail() {
             </svg>
           </button>
           <div>
-            <h1 className="text-white font-bold text-xl tracking-tight">Request Details</h1>
+            <h1 className="text-white font-bold text-xl tracking-tight">{t('rd.details')}</h1>
             <p className="text-gray-500 text-xs font-mono mt-0.5 tracking-wider uppercase">ID: {request?.id?.slice(-12)}</p>
           </div>
         </div>
@@ -237,26 +239,26 @@ export default function RequestDetail() {
               <div className="w-10 h-10 bg-white/5 rounded-xl flex items-center justify-center text-gray-400 border border-white/5">
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg>
               </div>
-              <h2 className="text-white font-semibold text-lg">Customer Profile</h2>
+              <h2 className="text-white font-semibold text-lg">{t('rd.profile')}</h2>
             </div>
             <div className="grid grid-cols-2 gap-y-6 gap-x-4">
               <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Name</p>
+                <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.name')}</p>
                 <p className="text-white font-medium truncate">{request?.customerName}</p>
               </div>
               <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Source</p>
+                <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.source')}</p>
                 <p className="text-white font-medium capitalize flex items-center gap-2">{request?.source}</p>
               </div>
               {request?.customerEmail && (
                 <div className="bg-black/20 rounded-xl p-4 border border-white/5 col-span-2">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Email</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.email')}</p>
                   <p className="text-violet-400 font-medium truncate hover:text-violet-300 transition-colors cursor-pointer">{request.customerEmail}</p>
                 </div>
               )}
               {request?.customerPhone && (
                 <div className="bg-black/20 rounded-xl p-4 border border-white/5 col-span-2">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Phone</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.phone')}</p>
                   <p className="text-white font-medium">{request.customerPhone}</p>
                 </div>
               )}
@@ -271,16 +273,16 @@ export default function RequestDetail() {
                 <div className="w-10 h-10 bg-violet-500/20 rounded-xl flex items-center justify-center text-violet-400 border border-violet-500/30 shadow-[0_0_15px_rgba(139,92,246,0.3)]">
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
                 </div>
-                <h2 className="text-violet-300 font-semibold text-lg">AI Intelligence</h2>
+                <h2 className="text-violet-300 font-semibold text-lg">{t('rd.ai')}</h2>
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-6 relative z-10">
                 <div className="bg-black/40 rounded-xl p-4 border border-white/5">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Predicted Category</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.category')}</p>
                   <p className="text-white font-medium capitalize">{ai.category}</p>
                 </div>
                 <div className="bg-black/40 rounded-xl p-4 border border-white/5">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">Confidence</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-1">{t('rd.conf')}</p>
                   <div className="flex items-center gap-3">
                     <span className="text-white font-bold">{Math.round(ai.confidence * 100)}%</span>
                     <div className="flex-1 h-1.5 bg-black/50 rounded-full overflow-hidden">
@@ -292,11 +294,11 @@ export default function RequestDetail() {
 
               <div className="space-y-4 relative z-10">
                 <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">Summary</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">{t('rd.summary')}</p>
                   <p className="text-gray-300 text-sm leading-relaxed">{ai.summary}</p>
                 </div>
                 <div className="bg-black/20 rounded-xl p-4 border border-white/5">
-                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">Reasoning</p>
+                  <p className="text-gray-500 text-[10px] font-bold uppercase tracking-wider mb-2">{t('rd.reason')}</p>
                   <p className="text-gray-300 text-sm leading-relaxed">{ai.reason}</p>
                 </div>
               </div>
@@ -304,7 +306,7 @@ export default function RequestDetail() {
           ) : (
             <div className="glass-card rounded-3xl p-8 fade-in flex flex-col items-center justify-center text-center opacity-50" style={{ animationDelay: '150ms' }}>
               <svg className="w-12 h-12 text-gray-600 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" /></svg>
-              <p className="text-white font-medium">No AI classification available</p>
+              <p className="text-white font-medium">{t('rd.noai')}</p>
             </div>
           )}
         </div>
@@ -313,8 +315,8 @@ export default function RequestDetail() {
         <div className="glass-card rounded-3xl p-8 fade-in" style={{ animationDelay: '200ms' }}>
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div>
-              <h2 className="text-white font-semibold text-lg mb-1">Resolution Status</h2>
-              <p className="text-gray-500 text-sm">Update the progress of this request</p>
+              <h2 className="text-white font-semibold text-lg mb-1">{t('rd.priority')}</h2>
+              <p className="text-gray-500 text-sm">{t('rd.progress')}</p>
             </div>
             <div className="flex gap-3">
               <div className="relative min-w-[200px]">
@@ -356,7 +358,7 @@ export default function RequestDetail() {
             <div className="flex-1 space-y-4 mb-6 overflow-y-auto custom-scrollbar max-h-[400px] pr-2">
               {request?.internalNotes?.length === 0 ? (
                 <div className="text-center py-10 bg-black/20 rounded-2xl border border-white/5 border-dashed">
-                  <p className="text-gray-500 text-sm">No internal notes yet. Add one below.</p>
+                  <p className="text-gray-500 text-sm">{t('rd.notes')}</p>
                 </div>
               ) : (
                 request?.internalNotes?.map((n) => (
@@ -434,7 +436,7 @@ export default function RequestDetail() {
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 text-sm text-center py-4">No events recorded.</p>
+              <p className="text-gray-500 text-sm text-center py-4">{t('rd.events')}</p>
             )}
           </div>
         </div>

@@ -1,10 +1,12 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
+import { useI18n } from '../i18n';
 
 const formatEventLabel = (eventType) => eventType.replace(/_/g, ' ');
 
 export default function AuditLog() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -44,9 +46,9 @@ export default function AuditLog() {
               <div>
                 <h1 className="text-white font-bold text-2xl tracking-tight flex items-center gap-3">
                   Audit Log
-                  <span className="bg-violet-500/20 text-violet-400 text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md border border-violet-500/20 font-bold">Admin Only</span>
+                  <span className="bg-violet-500/20 text-violet-400 text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-md border border-violet-500/20 font-bold">{t('audit.admin')}</span>
                 </h1>
-                <p className="text-gray-400 text-sm font-medium mt-1">Immutable timeline of system actions and modifications.</p>
+                <p className="text-gray-400 text-sm font-medium mt-1">{t('audit.title')}</p>
               </div>
             </div>
             
@@ -84,8 +86,8 @@ export default function AuditLog() {
                 <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mb-4">
                   <svg className="w-8 h-8 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
-                <p className="text-white font-medium text-lg">No audit events found</p>
-                <p className="text-gray-500 text-sm mt-1">System activity will appear here.</p>
+                <p className="text-white font-medium text-lg">{t('audit.empty')}</p>
+                <p className="text-gray-500 text-sm mt-1">{t('audit.hint')}</p>
               </div>
             ) : (
               <div className="space-y-4">
@@ -107,14 +109,14 @@ export default function AuditLog() {
                       
                       <div className="lg:text-right flex flex-col gap-2">
                         <div className="inline-flex items-center lg:justify-end gap-2 text-sm">
-                          <span className="text-gray-500">Request:</span>
+                          <span className="text-gray-500">{t('audit.request')}</span>
                           <span className="bg-white/5 px-2 py-1 rounded border border-white/5 text-gray-300 font-mono text-xs cursor-pointer hover:bg-white/10 transition-colors" onClick={() => navigate(`/requests/${event.requestId}`)}>
                             #{event.requestId.slice(-8)}
                           </span>
                         </div>
                         {event.actor?.name && (
                           <div className="inline-flex items-center lg:justify-end gap-2 text-sm">
-                            <span className="text-gray-500">Actor:</span>
+                            <span className="text-gray-500">{t('audit.actor')}</span>
                             <span className="text-violet-300 font-medium flex items-center gap-1.5">
                               <div className="w-4 h-4 bg-violet-500/20 rounded-full flex items-center justify-center text-[8px] font-bold text-violet-400">{event.actor.name[0]}</div>
                               {event.actor.name}

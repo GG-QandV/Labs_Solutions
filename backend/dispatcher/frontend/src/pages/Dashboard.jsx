@@ -2,6 +2,8 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import api, { clearAccessToken, currentUserRole } from '../api/axios';
 import { useSocket } from '../hooks/useSocket';
+import { useI18n } from '../i18n';
+import LangSwitch from '../components/LangSwitch';
 
 const priorityColor = {
   HIGH: 'bg-red-500/10 text-red-400 border-red-500/20',
@@ -39,6 +41,7 @@ const timeAgo = (date) => {
 };
 
 export default function Dashboard() {
+  const { t } = useI18n();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [requests, setRequests] = useState([]);
@@ -171,14 +174,15 @@ export default function Dashboard() {
               </svg>
             </div>
             <div>
-              <span className="font-bold text-white text-lg tracking-tight">FlowDesk AI</span>
-              <p className="text-[10px] text-violet-400 font-medium uppercase tracking-widest">Enterprise</p>
+              <span className="font-bold text-white text-lg tracking-tight">{t('brand')}</span>
+              <p className="text-[10px] text-violet-400 font-medium uppercase tracking-widest">{t('login.tag')}</p>
             </div>
+            <div className="ml-auto"><LangSwitch /></div>
           </div>
         </div>
 
         <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto custom-scrollbar relative z-10">
-          <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-widest px-3 mb-4 mt-2">Navigation</p>
+          <p className="text-[11px] text-gray-500 font-semibold uppercase tracking-widest px-3 mb-4 mt-2">{t('dash.nav')}</p>
           {navItems.map((item) => (
             <button
               key={item.label}
@@ -221,8 +225,8 @@ export default function Dashboard() {
               </svg>
             </button>
             <div>
-              <h1 className="text-white font-bold text-xl tracking-tight">Overview</h1>
-              <p className="text-gray-400 text-xs font-medium mt-0.5">Real-time intelligence dashboard</p>
+              <h1 className="text-white font-bold text-xl tracking-tight">{t('dash.overview')}</h1>
+              <p className="text-gray-400 text-xs font-medium mt-0.5">{t('dash.intel')}</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
@@ -231,7 +235,7 @@ export default function Dashboard() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
               </div>
-              <span className="text-gray-300 text-xs font-medium">System Online</span>
+              <span className="text-gray-300 text-xs font-medium">{t('dash.system')}</span>
             </div>
             <div className="h-6 w-px bg-white/10 hidden sm:block" />
             <span className={`text-xs font-bold uppercase tracking-wider px-3 py-1.5 rounded-lg border ${currentUserRole === 'ADMIN'
@@ -318,8 +322,8 @@ export default function Dashboard() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
                   </svg>
                 </div>
-                <p className="text-white font-medium text-lg">No requests found</p>
-                <p className="text-gray-500 text-sm mt-2">Try adjusting your filters or wait for new requests.</p>
+                <p className="text-white font-medium text-lg">{t('dash.empty')}</p>
+                <p className="text-gray-500 text-sm mt-2">{t('dash.emptyD')}</p>
               </div>
             ) : (
               <div className="grid gap-4">
@@ -367,7 +371,7 @@ export default function Dashboard() {
 
                       {r.aiClassification?.confidence && (
                         <div className="md:w-32 shrink-0 md:text-right bg-black/20 p-3 rounded-xl border border-white/5">
-                          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-2">AI Confidence</p>
+                          <p className="text-gray-400 text-[10px] font-bold uppercase tracking-wider mb-2">{t('dash.ai')}</p>
                           <div className="flex items-center md:justify-end gap-2 mb-1.5">
                             <span className="text-white font-semibold text-sm">{Math.round(r.aiClassification.confidence * 100)}%</span>
                           </div>

@@ -2,8 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import api, { setAccessToken, setCurrentUserId, setCurrentUserRole } from '../api/axios';
+import { useI18n } from '../i18n';
+import LangSwitch from '../components/LangSwitch';
 
 export default function Login() {
+  const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -25,11 +28,11 @@ export default function Login() {
     } catch (err) {
       const status = err.response?.status;
       if (status === 403) {
-        setError('Your account does not have permission to access this panel.');
+        setError(t('login.error403'));
       } else if (status === 401) {
-        setError('Invalid email or password. Please try again.');
+        setError(t('login.error401'));
       } else {
-        setError('Something went wrong. Please try again later.');
+        setError(t('login.error'));
       }
     } finally {
       setLoading(false);
@@ -41,6 +44,7 @@ export default function Login() {
       {/* Background decorations */}
       <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-violet-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none pulse-glow" />
       <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-fuchsia-600/20 rounded-full blur-[120px] mix-blend-screen pointer-events-none" />
+      <div className="absolute top-4 right-4 z-20"><LangSwitch /></div>
 
       <div className="w-full max-w-md relative z-10 fade-in">
         <div className="text-center mb-10">
@@ -49,16 +53,16 @@ export default function Login() {
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13 10V3L4 14h7v7l9-11h-7z" />
             </svg>
           </div>
-          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 mb-2">FlowDesk AI</h1>
-          <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">Enterprise Request Intelligence</p>
+          <h1 className="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-white/60 mb-2">{t('brand')}</h1>
+          <p className="text-gray-400 text-sm font-medium tracking-wide uppercase">{t('login.tag')}</p>
         </div>
 
         <div className="glass-panel rounded-3xl p-8 shadow-2xl relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-b from-white/[0.04] to-transparent pointer-events-none" />
           
           <div className="relative z-10">
-            <h2 className="text-xl font-semibold text-white mb-2">Welcome Back</h2>
-            <p className="text-gray-400 text-sm mb-8">Sign in to access your dashboard</p>
+            <h2 className="text-xl font-semibold text-white mb-2">{t('login.welcome')}</h2>
+            <p className="text-gray-400 text-sm mb-8">{t('login.sub')}</p>
 
             {error && (
               <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm rounded-xl px-4 py-3 mb-6 flex items-start gap-3 fade-in">
@@ -71,7 +75,7 @@ export default function Login() {
 
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider ml-1">Email</label>
+                <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider ml-1">{t('login.email')}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-violet-400 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -90,7 +94,7 @@ export default function Login() {
               </div>
 
               <div className="space-y-1.5">
-                <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider ml-1">Password</label>
+                <label className="block text-xs font-semibold text-gray-300 uppercase tracking-wider ml-1">{t('login.password')}</label>
                 <div className="relative group">
                   <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-gray-500 group-focus-within:text-violet-400 transition-colors">
                     <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -129,7 +133,7 @@ export default function Login() {
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
                     </svg>
                   ) : (
-                    <>Sign In <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></>
+                    <>{t('login.signin')} <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg></>
                   )}
                 </span>
               </button>
