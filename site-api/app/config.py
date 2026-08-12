@@ -21,6 +21,10 @@ IP_HASH_SALT = os.environ.get("IP_HASH_SALT", "")  # HMAC salt; empty -> hashing
 CAPTCHA_ENABLED = os.environ.get("CAPTCHA_ENABLED", "false").lower() in ("1", "true", "yes")
 TURNSTILE_SECRET = os.environ.get("TURNSTILE_SECRET", "")
 
+# Admin panel (/admin) — Basic Auth
+ADMIN_LOGIN = os.environ.get("SITE_ADMIN_LOGIN", "admin")
+ADMIN_PASSWORD = os.environ.get("SITE_ADMIN_PASSWORD", "")  # empty -> admin disabled (fail closed)
+
 # Rate limits (per contract)
 CONSULT_LIMIT_IP = 3          # POST /consult per hour per IP
 CONSULT_LIMIT_EMAIL = 1       # per 30 min globally per email

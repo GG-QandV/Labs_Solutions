@@ -91,6 +91,15 @@ class DB:
         self.conn.commit()
         return cur.lastrowid
 
+    def list_slots(self) -> list[dict[str, Any]]:
+        rows = self.conn.execute("SELECT * FROM slots ORDER BY starts_at").fetchall()
+        return [dict(r) for r in rows]
+
+    def delete_slot(self, slot_id: int) -> bool:
+        cur = self.conn.execute("DELETE FROM slots WHERE id = ? AND status IN ('open','held')", (slot_id,))
+        self.conn.commit()
+        return cur.rowcount == 1
+
     # ---------- consult_requests ----------
     def create_request(self, fields: dict[str, Any]) -> int:
         cols = ", ".join(fields.keys())
@@ -117,6 +126,20 @@ class DB:
             (email, cutoff),
         ).fetchone()
         return row is not None
+
+    def list_requests(self, limit: int = 50) -> list[dict[str, Any]]:
+        rows = self.conn.execute(
+            "SELECT * FROM consult_requests ORDER BY id DESC LIMIT ?", (limit,)
+        ).fetchall()
+        return [dict(r) for r in rows]
+
+    def set_request_status(self, ref: str, status: str, next_step: str | None = None) -> bool:
+        cur = self.conn.execute(
+            "UPDATE consult_requests SET status = ?, next_step = COALESCE(?, next_step), updated_at = ? WHERE ref = ?",
+            (status, next_step, int(time.time()), ref),
+        )
+        self.conn.commit()
+        return cur.rowcount == 1
 
     # ---------- counters (rate limits) ----------
     def bump(self, key: str, limit: int, window_seconds: int) -> tuple[bool, int]:

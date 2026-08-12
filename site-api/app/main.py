@@ -16,12 +16,14 @@ from fastapi import FastAPI, HTTPException, Request
 from pydantic import BaseModel, EmailStr, Field
 
 from . import config
+from .admin import register as register_admin
 from .db import db
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("site")
 
 app = FastAPI(title="Labs Site API", docs_url=None, redoc_url=None)
+register_admin(app)
 
 # allowed demo slugs -> container name (whitelist, never from request)
 DEMO_MAP = {
