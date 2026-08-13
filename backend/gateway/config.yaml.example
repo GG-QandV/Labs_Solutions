@@ -1,10 +1,10 @@
 # ASP-A2A gateway — конфиг для парка Labs.
 # Источник: github.com/GG-QandV/ASP-A2A_gateway (config.example.yaml).
-# Копировать в /srv/gateway/config.yaml и заполнить токены.
+# Копировать в /srv/gateway/config.yaml и проверить public_url.
 #
-# ВАЖНО: TCP-порт слушает 127.0.0.1 — шлюз НЕ терминирует TLS, наружу
-# токены пойдут открытым текстом. Публично отдаётся только HTTP-порт
-# через Traefik (см. systemd/README).
+# ВАЖНО: TCP-порт слушает 127.0.0.1 — шлюз НЕ терминирует TLS, снаружи
+# токены пошли бы открытым текстом. Публично отдаётся только HTTP-порт
+# через Traefik (traefik-dynamic.yml).
 
 listen: "127.0.0.1:8347"      # TCP: ACP-клиенты (локально/по SSH-туннелю)
 http_listen: "127.0.0.1:8348" # HTTP: A2A-клиенты, наружу — только через Traefik
@@ -13,29 +13,47 @@ http_listen: "127.0.0.1:8348" # HTTP: A2A-клиенты, наружу — то�
 # Должен совпадать с доменом Traefik, иначе карточка невалидна по A2A-спеке.
 public_url: "https://gw-labs.mnemostroma.com"
 
-# Пустой токен → ошибка старта. Генерировать: openssl rand -hex 24
+# Пустой токен → ошибка старта. Генерирует install.sh в /srv/gateway/env.
 tokens:
   - "{env:GW_TOKEN_MAIN}"     # {env:X} с отсутствующей переменной → ошибка старта
   - "{env:GW_TOKEN_DEMO}"     # отдельный токен для agents-demo
 
-# --- Два агента на хосте (stdio; gatewayd спавнит их как дочерние процессы) ---
-# ACP включается ПОДКОМАНДОЙ `acp` — не флагом. Бинари ставит install.sh.
+# --- Два агента на хосте ---------------------------------------------------
+# gatewayd спавнит их как ДОЧЕРНИЕ stdio-процессы. ACP включается подкомандой
+# `acp`, не флагом.
+#
+# Оба — hermes, но с РАЗНЫМИ HOME: hermes держит конфиг, провайдера, модель и
+# ключи в $HOME/.hermes, поэтому разные HOME = разные модели. Независимость на
+# уровне модели и есть смысл демо: два агента на одной модели с одним промптом
+# дают коррелированные ошибки и обесценивают сверку.
+# Модель каждому задаётся отдельно, см. install-agents.sh.
 agents:
-  # Агент A демо «сверка документов» — читает оригинал.
-  hermes-main:
+  # Агент A — читает оригинал.
+  hermes-a:
     transport: stdio
     command: ["hermes", "acp"]
-    cwd: "/srv/gateway/workspaces/hermes"
-
-  # Агент B — читает перевод. Другая реализация => независимость извлечения
-  # (в этом смысл демо: два агента не должны разделять реализацию и промпт).
-  claurst-main:
-    transport: stdio
-    command: ["claurst", "acp"]
-    cwd: "/srv/gateway/workspaces/claurst"
+    cwd: "/srv/gateway/workspaces/hermes-a"
     env:
-      CLAURST_DISABLE_MODELS_FETCH: "1"   # не ходить за списком моделей
-      CLAURST_SHARE_NO_OPEN: "1"          # не открывать браузер на хосте
+      HOME: "/srv/gateway/workspaces/hermes-a"
+
+  # Агент B — читает перевод. Другая модель/провайдер.
+  hermes-b:
+    transport: stdio
+    command: ["hermes", "acp"]
+    cwd: "/srv/gateway/workspaces/hermes-b"
+    env:
+      HOME: "/srv/gateway/workspaces/hermes-b"
+
+  # Третий агент другой реализации — раскомментировать, если подключён claurst
+  # (sudo CLAURST_BIN=/путь/к/claurst ./install-agents.sh). Его дистрибутив не
+  # публичный, автоматически не ставится.
+  # claurst-main:
+  #   transport: stdio
+  #   command: ["claurst", "acp"]
+  #   cwd: "/srv/gateway/workspaces/claurst"
+  #   env:
+  #     CLAURST_DISABLE_MODELS_FETCH: "1"   # не ходить за списком моделей
+  #     CLAURST_SHARE_NO_OPEN: "1"          # не открывать браузер на хосте
 
 task_store_dir: "/srv/gateway/tasks"
 task_retention_days: 7        # фоновая уборка завершённых задач раз в час

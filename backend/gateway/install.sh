@@ -40,6 +40,12 @@ install -d -o "$GW_USER" -g "$GW_USER" -m 0755 "$GW_HOME" "$GW_HOME/bin" "$GW_HO
 # --- 3. Сборка gatewayd ----------------------------------------------------
 if [ -d "$SRC/.git" ]; then
   log "обновляю исходники: $SRC"; git -C "$SRC" pull --ff-only
+elif [ -f "$SRC/Cargo.toml" ]; then
+  # Офлайн-бандл: исходники распакованы из zip, без .git — берём как есть.
+  log "использую готовые исходники: $SRC (без git)"
+elif [ -f "$HERE/../ASP-A2A_gateway/Cargo.toml" ]; then
+  SRC=$(cd "$HERE/../ASP-A2A_gateway" && pwd)
+  log "использую исходники из бандла: $SRC"
 else
   log "клонирую $REPO_URL → $SRC"; install -d "$(dirname "$SRC")"; git clone "$REPO_URL" "$SRC"
 fi
@@ -50,24 +56,11 @@ log "cargo build --release --workspace"
 install -o "$GW_USER" -g "$GW_USER" -m 0755 "$SRC/target/release/gatewayd" "$GW_HOME/bin/gatewayd"
 
 # --- 4. Два агента ---------------------------------------------------------
-# ACP-режим включается ПОДКОМАНДОЙ `acp`, не флагом (проверено на живых бинарях).
-missing=0
-for a in hermes claurst; do
-  if p=$(command -v "$a" 2>/dev/null); then
-    ln -sfn "$p" "$GW_HOME/bin/$a"; log "агент $a → $p"
-  else
-    printf '\033[0;33m!\033[0m агент %s не найден в PATH\n' "$a"; missing=1
-  fi
-done
-if [ "$missing" -eq 1 ]; then
-  cat <<'EOF'
-
-Поставить недостающих агентов и повторить запуск:
-  hermes : curl -fsSL https://hermes-agent.nousresearch.com/install.sh | bash
-  claurst: по инструкции поставщика (нужна подкоманда `claurst acp`, проверено на 0.1.7)
-Бинарь должен быть виден в PATH root'а — install.sh симлинкует его в /srv/gateway/bin,
-откуда его берёт systemd-юнит (его PATH задан явно).
-EOF
+if [ "${SKIP_AGENTS:-0}" = "1" ]; then
+  log "SKIP_AGENTS=1 — установка агентов пропущена"
+else
+  log "установка агентов (install-agents.sh)"
+  "$HERE/install-agents.sh"
 fi
 
 # --- 5. Конфиг и секреты (не перезаписываются) -----------------------------
