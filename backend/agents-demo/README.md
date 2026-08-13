@@ -90,33 +90,71 @@ nginx буферизует поток и пошаговость исчезает
 
 Со стороны Cloudflare — два правила, оба **точечные**, не на весь хост.
 
-**1. Cache Rules** (Caching → Cache Rules) → *Cache eligibility: Bypass cache*:
+### Правило 1 — Bypass cache для потока
 
-```
-http.host eq "agents-labs.mnemostroma.com"
-and (starts_with(http.request.uri.path, "/api/") or http.request.uri.path eq "/health")
-```
+**Caching → Cache Rules → Create rule.** В визуальном билдере поля заполняются по отдельности,
+значения — **без кавычек**:
 
-Матчить нужно по **хосту + пути**, а не по full URI: `http.request.full_uri` содержит
-query-строку, а у нас `/api/stream?lang=uk&mode=cached` — параметры меняются при каждом
-переключении языка и режима, и правило на равенстве full URI просто не сработает.
-
-Байпасить **весь** хост тоже не надо: демо — статика (`index.html`, `app.js`, `style.css`),
-её кэш на периферии полезен. Обходить кэш должны только поток и health.
-
-Зона общая (`mnemostroma.com`) на все демо, поэтому без `http.host` правило накроет и
-`rag-labs`, и `pdf-labs` — отсюда явный хост в условии.
-
-> По умолчанию Cloudflare не кэширует JSON/`text/event-stream` без расширения в пути,
-> так что правило — страховка: оно фиксирует намерение и защищает от будущего
-> «Cache Everything» на зоне.
-
-**2. Configuration Rules** (Rules → Configuration Rules) — на том же выражении по хосту:
-
-| Настройка | Зачем |
+| Шаг | Что выбрать |
 |---|---|
-| **Rocket Loader: Off** | откладывает и переписывает JS, ломая инициализацию `EventSource` |
-| **Auto Minify / Brotli** — проверить | сжатие потоковых ответов добавляет буферизацию |
+| Rule name | `agents-demo SSE bypass` |
+| Field | **Hostname** |
+| Operator | **equals** |
+| Value | `agents-labs.mnemostroma.com` |
+| → **And** → Field | **URI Path** |
+| Operator | **starts with** |
+| Value | `/api/` |
+| Then → Cache eligibility | **Bypass cache** |
+
+→ **Deploy**. Всё, одно правило из двух условий через `And` — скобки и `or` в билдере не нужны.
+
+**Как читаются части выражения в билдере** (частая ошибка — вписать их текстом в Value):
+
+| В выражении | Field | Operator | Value |
+|---|---|---|---|
+| `starts_with(http.request.uri.path, "/api/")` | URI Path | **starts with** | `/api/` |
+| `http.request.uri.path eq "/health"` | URI Path | **equals** | `/health` |
+| `http.host eq "agents-labs.mnemostroma.com"` | Hostname | **equals** | `agents-labs.mnemostroma.com` |
+
+`starts_with(...)` — это не текст для поля, а сам оператор в выпадающем списке; кавычки в
+Value **не ставятся**. Если вставить строку целиком, билдер её не примет.
+
+Если хочется закрыть ещё и `/health` — это **отдельное** правило с теми же двумя условиями,
+только `URI Path` **equals** `/health`. Смешивать `And` и `Or` в одном правиле билдер рисует
+плохо, а выигрыша нет.
+
+Готовое выражение (вкладка **Edit expression**, если билдер не устраивает):
+
+```
+(http.host eq "agents-labs.mnemostroma.com" and starts_with(http.request.uri.path, "/api/"))
+```
+
+### Правило 2 — выключить Rocket Loader
+
+**Rules → Configuration Rules → Create rule** (это другой тип правил, не Cache Rules):
+
+| Шаг | Что выбрать |
+|---|---|
+| Field / Operator / Value | **Hostname** / **equals** / `agents-labs.mnemostroma.com` |
+| Then the settings are | **Rocket Loader → Off** |
+
+Он откладывает и переписывает JS, ломая инициализацию `EventSource`. Заодно там же проверить
+минификацию/сжатие, если включены на зоне.
+
+### Если в аккаунте только Page Rules (legacy)
+
+Там выражений нет вообще — только URL-маска, поэтому шаги другие:
+
+**Rules → Page Rules → Create Page Rule**
+
+| Поле | Значение |
+|---|---|
+| URL | `agents-labs.mnemostroma.com/api/*` |
+| Setting | **Cache Level → Bypass** |
+| — | Save and Deploy |
+
+Rocket Loader там же выключается отдельной настройкой в том же правиле (**Rocket Loader → Off**).
+Page Rules считаются от корня хоста, звёздочка обязательна — без неё совпадёт только `/api`.
 
 Отдельно — **таймаут простоя ~100 с**: у Cloudflare проксированное соединение без трафика
 закрывается ошибкой 524. На шаге «ожидание подтверждения» человек думает дольше, поэтому
