@@ -1,0 +1,42 @@
+[Unit]
+Description=ASP-A2A gateway (ACP <-> A2A) for Labs demo park
+Documentation=https://github.com/GG-QandV/ASP-A2A_gateway
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=gateway
+Group=gateway
+WorkingDirectory=/srv/gateway
+
+# Токены и ключи агентов. chmod 0600, владелец gateway. Не коммитить.
+EnvironmentFile=/srv/gateway/env
+
+# PATH нужен явно: gatewayd спавнит агентов (hermes/claurst) как дочерние
+# процессы и ищет их в PATH юнита, а не в PATH логин-шелла.
+Environment=PATH=/srv/gateway/bin:/usr/local/bin:/usr/bin:/bin
+Environment=HOME=/srv/gateway
+
+ExecStart=/srv/gateway/bin/gatewayd /srv/gateway/config.yaml
+
+Restart=on-failure
+RestartSec=5s
+
+# Бюджет: сам шлюз лёгкий, потолок держит спавн агентов (2 stdio-процесса).
+MemoryHigh=1200M
+MemoryMax=1500M
+
+# stdout агента должен быть настоящим pipe — gatewayd поднимает его через
+# Stdio::piped() сам, поэтому journal здесь безопасен.
+StandardOutput=journal
+StandardError=journal
+
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ProtectHome=read-only
+ReadWritePaths=/srv/gateway
+
+[Install]
+WantedBy=multi-user.target

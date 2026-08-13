@@ -106,7 +106,7 @@
   },
   "demos": {
     "eyebrow": "Run it yourself",
-    "h2": "Six modules. One track. No sign-up to look.",
+    "h2": "Seven modules. One track. No sign-up to look.",
     "lead": "Each module works standalone or chained into the full run. Sample files are preloaded — bring your own only when you want to.",
     "in": "In",
     "out": "Out",
@@ -134,6 +134,10 @@
     "d6": {
       "t": "Table analyst",
       "d": "CSV or spreadsheet in — calculations, charts, flagged anomalies and a plain-language explanation out."
+    },
+    "d7": {
+      "t": "Cross-document check",
+      "d": "Two versions of one document in — amounts, dates and figures extracted independently from each, then matched. Every mismatch keeps its source line."
     }
   },
   "demoState": {

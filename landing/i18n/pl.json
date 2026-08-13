@@ -106,7 +106,7 @@
   },
   "demos": {
     "eyebrow": "Uruchom sam",
-    "h2": "Sześć modułów. Jeden tor. Bez rejestracji.",
+    "h2": "Siedem modułów. Jeden tor. Bez rejestracji.",
     "lead": "Każdy moduł działa samodzielnie lub w połączonym potoku. Przykładowe pliki są wstępnie załadowane — swoje podłączysz tylko gdy chcesz.",
     "in": "Wejście",
     "out": "Wyjście",
@@ -134,6 +134,10 @@
     "d6": {
       "t": "Analityk tabel",
       "d": "Na wejściu — CSV lub arkusz. Na wyjściu — obliczenia, wykresy, oznaczone anomalie i wyjaśnienie prostym językiem."
+    },
+    "d7": {
+      "t": "Porównanie dwóch dokumentów",
+      "d": "Dwie wersje jednego dokumentu na wejściu — kwoty, daty i liczby wyodrębniane niezależnie z każdej, następnie zestawiane. Każda rozbieżność zachowuje wiersz źródłowy."
     }
   },
   "demoState": {

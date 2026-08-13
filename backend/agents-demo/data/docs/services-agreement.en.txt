@@ -1,0 +1,16 @@
+SERVICES AGREEMENT (extract)
+Parties: Northwind Logistics Ltd. (Client) and Baltic Freight Systems OU (Contractor).
+Fictional parties. Used for demonstration only.
+
+3. FEES
+3.1 The total contract amount is USD 48,000 (forty-eight thousand US dollars),
+    exclusive of VAT.
+3.2 The Client shall pay each invoice within 30 (thirty) calendar days from the
+    date of receipt.
+
+4. LATE PAYMENT
+4.1 In the event of late payment, the Client shall pay a penalty of 0.1% of the
+    outstanding amount for each day of delay.
+
+5. TERM
+5.1 This Agreement enters into force on 1 March 2026 and remains valid for 12 months.

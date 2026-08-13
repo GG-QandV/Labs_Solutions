@@ -44,6 +44,7 @@ DEMO_MAP = {
     "report": "pdf-demo",
     "crm": "crm",
     "analyst": "analyst",
+    "agents": "agents-demo",
 }
 SERVICE_CHOICES = ("rag", "pdf", "dispatcher", "extraction", "crm", "analyst", "other")
 
@@ -222,7 +223,8 @@ def _opshub_auth() -> dict[str, str]:
 
 @app.get("/api/v1/demos")
 async def demos():
-    states = {"dispatcher": "soon", "ocr": "soon", "rag": "soon", "report": "soon", "crm": "soon", "analyst": "soon"}
+    # Источник правды — DEMO_MAP: иначе новый слаг ломает ответ KeyError'ом ниже.
+    states = {slug: "soon" for slug in DEMO_MAP}
     try:
         async with httpx.AsyncClient(timeout=5) as c:
             r = await c.get(f"{config.OPSHUB_URL}/api/overview", headers=_opshub_auth())

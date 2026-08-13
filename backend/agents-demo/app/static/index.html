@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Cross-document check — LABS mnemostroma</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="hdr">
+  <a class="brand" href="https://labs.mnemostroma.com/">
+    <b>LABS</b><span>mnemostroma</span>
+  </a>
+  <div class="seg" role="group" aria-label="Language">
+    <button type="button" class="seg__b" data-lang="en" aria-pressed="true">EN</button>
+    <button type="button" class="seg__b" data-lang="uk" aria-pressed="false">UA</button>
+    <button type="button" class="seg__b" data-lang="pl" aria-pressed="false">PL</button>
+    <button type="button" class="seg__b" data-lang="ru" aria-pressed="false">RU</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1 class="h1" data-s="h1">Two versions of one document. Checked independently.</h1>
+  <p class="lead" data-s="lead">Agent A reads the original, agent B reads the translation.
+     Neither knows about the other. The arbiter compares what they extracted — every
+     mismatch keeps its source line.</p>
+
+  <!-- Тот же семишаговый трек, что и у остальных демо парка -->
+  <ol class="track" id="track">
+    <li data-stage="received">Received</li>
+    <li data-stage="extracted">Extracted</li>
+    <li data-stage="verified">Verified</li>
+    <li data-stage="matched">Matched</li>
+    <li data-stage="drafted">Drafted</li>
+    <li data-stage="awaiting_approval">Awaiting approval</li>
+    <li data-stage="sent">Sent</li>
+  </ol>
+
+  <div class="bar">
+    <button class="btn btn--primary" id="start" data-s="start">Run the check</button>
+    <button class="btn btn--ghost" id="live" hidden data-s="live">Live run</button>
+    <span class="mode" id="mode"></span>
+  </div>
+
+  <section class="grid">
+    <article class="pane" data-panel="a">
+      <h2 class="pane__h" id="title-a">agent A · original (EN)</h2>
+      <pre class="term" id="term-a"></pre>
+    </article>
+    <article class="pane" data-panel="b">
+      <h2 class="pane__h" id="title-b">agent B · translation (UK)</h2>
+      <pre class="term" id="term-b"></pre>
+    </article>
+    <article class="pane pane--arb" data-panel="arbiter">
+      <h2 class="pane__h" id="title-arbiter">arbiter · cross-check</h2>
+      <pre class="term" id="term-arbiter"></pre>
+    </article>
+  </section>
+
+  <section class="gate" id="gate" hidden>
+    <p id="gate-text"></p>
+    <button class="btn btn--primary" id="approve"></button>
+  </section>
+
+  <section class="verdict" id="verdict" hidden>
+    <h2 id="verdict-title"></h2>
+    <p id="verdict-text"></p>
+    <table class="rows" id="rows"></table>
+  </section>
+
+  <p class="foot" id="foot"></p>
+</main>
+
+<script src="/app.js"></script>
+</body>
+</html>

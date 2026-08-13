@@ -1,0 +1,26 @@
+# Traefik file-provider: публикация HTTP-порта шлюза наружу.
+# Шлюз живёт на хосте (systemd), а не в Docker, поэтому docker-labels
+# неприменимы — кладём в каталог dynamic-конфигов Traefik
+# (обычно /srv/traefik/dynamic/, провайдер file + watch: true).
+#
+# Наружу отдаётся ТОЛЬКО http_listen (8348). TCP 8347 остаётся на 127.0.0.1:
+# шлюз не терминирует TLS, снаружи токены пошли бы открытым текстом.
+
+http:
+  routers:
+    aspgateway:
+      rule: "Host(`gw-labs.mnemostroma.com`)"
+      entryPoints: [websecure]
+      service: aspgateway
+      middlewares: [sec-headers@file, noindex@file, demo-ratelimit@file]
+      tls:
+        certResolver: le
+
+  services:
+    aspgateway:
+      loadBalancer:
+        servers:
+          # docker0/bridge-адрес хоста. Проверить: ip -4 addr show docker0
+          # Альтернатива — host.docker.internal при host-gateway в Traefik.
+          - url: "http://172.17.0.1:8348"
+        passHostHeader: true
