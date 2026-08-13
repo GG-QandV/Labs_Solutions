@@ -1,188 +1,116 @@
-# Задание агенту: установить ASP-A2A шлюз и двух ACP-агентов на хост
+# Задание агенту: поставить ASP-A2A шлюз и агентов на хост из готовых бинарников
 
-Исполнителю: работать по шагам, **после каждого шага выполнять блок «Проверка»**.
-Не переходить к следующему шагу, если проверка не прошла. Не импровизировать с
-командами установки — если шаг падает, остановиться и отчитаться (формат в конце).
+Ничего не собирать и не компилировать на хосте. Бинари собраны локально и лежат в `bin/`.
+Задача — разложить, настроить, проверить.
 
-**Цель:** на VPS парка поднят `asp-gateway.service`, который по HTTPS отдаёт двух
-независимых ACP-агентов (`hermes-a`, `hermes-b`) демо-модулю `agents`.
-
-**Вход:** архив `asp-gateway-deploy.zip` (исходники шлюза + деплой-кит).
-**Доступ:** root/sudo на хосте, работающий Traefik парка.
+**Результат:** `asp-gateway.service` поднят, по HTTPS отдаёт двух независимых
+ACP-агентов (`hermes-a`, `hermes-b`) для демо-модуля `agents`.
 
 ---
 
-## Шаг 0. Преконтроль
+## 0. Подготовить бинари
+
+Положить в `deploy/bin/` рядом с `install.sh`:
+
+| Файл | Обязателен |
+|---|---|
+| `gatewayd` | да |
+| `hermes` | да (хотя бы один агент) |
+| `claurst` | нет |
 
 ```bash
-cat /etc/os-release | head -2
-rustc --version || echo "НЕТ RUST"
-free -m | head -2
-df -h / | tail -1
-docker ps --format '{{.Names}}' | head
+chmod +x deploy/bin/*
 ```
 
-**Проверка.** Нужно: Ubuntu 24.04, `rustc >= 1.80`, свободной RAM ≥ 2 GB, диска ≥ 5 GB,
-в списке контейнеров виден Traefik.
-
-**Если нет Rust:**
-```bash
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-. "$HOME/.cargo/env" && rustc --version
-```
-
-**Если `rustc` старее 1.80** — `rustup update stable`. Ставить старый шлюз на старом
-компиляторе не пытаться: зависимости требуют 1.80+.
-
-Системные пакеты:
-```bash
-apt-get update && apt-get install -y pkg-config libssl-dev build-essential curl git unzip
-```
+**Требование:** бинари собраны под архитектуру хоста (обычно `x86_64` Linux). `install.sh`
+проверит это сам и остановится, если не совпадает.
 
 ---
 
-## Шаг 1. Распаковать бандл
+## 1. Установка
 
 ```bash
-mkdir -p /opt/asp && cd /opt/asp
-unzip -o ~/asp-gateway-deploy.zip
-cd asp-gateway-deploy
-ls
+sudo ./deploy/install.sh
 ```
 
-**Проверка.** Видны `INSTALL.md`, `deploy/`, `ASP-A2A_gateway/`.
-`ASP-A2A_gateway/Cargo.toml` существует — иначе бандл битый, остановиться.
+Скрипт: проверяет бинари (архитектура + `ldd`), заводит пользователя `gateway`, копирует
+бинари в `/srv/gateway/bin`, создаёт каталоги и два `HOME` для агентов, кладёт
+`config.yaml`, генерирует токены в `/srv/gateway/env` (0600), ставит systemd-юнит.
+Повторный запуск не перезаписывает `config.yaml` и `env`.
+
+**Проверка:**
+```bash
+ls -l /srv/gateway/bin/                    # gatewayd + агенты
+sudo stat -c '%a %U' /srv/gateway/env      # 600 gateway
+systemctl is-enabled asp-gateway           # enabled
+```
+
+**Если install.sh упал на проверке бинарника** (чужая архитектура или нехватка библиотек) —
+не подменять библиотеки на хосте и не ставить компилятор. Пересобрать бинарь на машине с
+той же ОС либо статически (musl) и повторить.
 
 ---
 
-## Шаг 2. Установка шлюза (без агентов)
+## 2. Домен
 
-Ставим сначала **только шлюз** — чтобы отделить ошибки сборки Rust от ошибок установки агентов.
+В `/srv/gateway/config.yaml` привести `public_url` к реальному домену шлюза.
 
-```bash
-sudo SKIP_AGENTS=1 ./deploy/install.sh
-```
+> Не косметика: `public_url` уходит в `AgentCard.url` (`.well-known/agent.json`). Не совпадёт
+> с доменом Traefik — карточка невалидна по A2A-спеке, клиенты пойдут не туда.
 
-Сборка занимает несколько минут (`cargo build --release`).
-
-**Проверка.**
-```bash
-ls -l /srv/gateway/bin/gatewayd          # бинарь на месте
-ls -l /srv/gateway/config.yaml           # конфиг создан
-sudo stat -c '%a %U' /srv/gateway/env    # должно быть: 600 gateway
-systemctl is-enabled asp-gateway         # enabled
-```
-
-**Стоп-условие.** Если `cargo build` упал — не чинить исходники руками. Сохранить
-последние 30 строк вывода и отчитаться.
+**Проверка:** `grep public_url /srv/gateway/config.yaml`, DNS-запись на этот домен есть.
 
 ---
 
-## Шаг 3. Домен и `public_url`
+## 3. Разные модели агентам — обязательно
 
-Открыть `/srv/gateway/config.yaml`, привести `public_url` к реальному домену шлюза
-(по умолчанию `https://gw-labs.mnemostroma.com`).
-
-> Это не косметика: `public_url` уходит в `AgentCard.url` (`.well-known/agent.json`).
-> Если он не совпадает с доменом Traefik, карточка невалидна по A2A-спеке и A2A-клиенты
-> будут ходить не туда.
-
-**Проверка.** `grep public_url /srv/gateway/config.yaml` — домен совпадает с тем, что
-будет в Traefik-роутере (шаг 6). DNS A-запись на этот домен существует.
-
----
-
-## Шаг 4. Установка агентов
-
-```bash
-sudo ./deploy/install-agents.sh
-```
-
-Скрипт ставит `hermes` официальным установщиком **от пользователя `gateway`** (не от root)
-и создаёт два изолированных `HOME`.
-
-**Проверка.**
-```bash
-ls -l /srv/gateway/bin/hermes                       # симлинк на бинарь
-ls -ld /srv/gateway/workspaces/hermes-a /srv/gateway/workspaces/hermes-b
-sudo -u gateway /srv/gateway/bin/hermes --version || true
-```
-
-**Если установщик hermes упал** — повторить один раз (сетевая флуктуация). Если падает
-снова, отчитаться с выводом; **не** ставить hermes от root и не менять владельца `/srv/gateway`.
-
-`claurst` не ставится автоматически (дистрибутив не публичный). Если бинарь есть:
-```bash
-sudo CLAURST_BIN=/путь/к/claurst ./deploy/install-agents.sh
-# затем раскомментировать блок claurst-main в /srv/gateway/config.yaml
-```
-
----
-
-## Шаг 5. Разные модели агентам — обязательный шаг
-
-Два агента существуют ради **независимости** извлечения. Если у обоих одна модель и один
-промпт, они ошибаются одинаково и сверка документов теряет смысл. Задать **разные**
-провайдер/модель:
+Два агента нужны ради **независимости** извлечения. Одна модель и один промпт на обоих =
+одинаковые ошибки, сверка документов теряет смысл.
 
 ```bash
 sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-a /srv/gateway/bin/hermes model
 sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-b /srv/gateway/bin/hermes model
 ```
 
-Ключи вводятся внутри каждого `HOME` и попадают в `$HOME/.hermes` — **не** в общий
+Ключи вводятся внутри каждого `HOME` и остаются в `$HOME/.hermes` — **не** в общий
 `/srv/gateway/env` и **не** в `config.yaml`.
 
-**Проверка.** Конфиги разошлись и модели различаются:
-```bash
-sudo -u gateway diff -q /srv/gateway/workspaces/hermes-a/.hermes/config.yaml \
-                        /srv/gateway/workspaces/hermes-b/.hermes/config.yaml \
-  && echo "ВНИМАНИЕ: конфиги идентичны — модели не разведены"
-```
-(Путь к конфигу может отличаться в версии hermes — тогда сверить вывод `hermes model`
-в каждом `HOME` глазами.)
+**Проверка:** в выводе `hermes model` для `hermes-a` и `hermes-b` разные модели/провайдеры.
 
 ---
 
-## Шаг 6. Публикация через Traefik
+## 4. Публикация через Traefik
 
-Шлюз живёт на хосте, а не в Docker, поэтому docker-labels неприменимы — нужен file-provider.
+Шлюз на хосте, а не в Docker — labels неприменимы, нужен file-provider:
 
 ```bash
 sudo cp deploy/traefik-dynamic.yml /srv/traefik/dynamic/asp-gateway.yml
 ```
 
-Проверить в файле:
-- `Host(...)` совпадает с `public_url` из шага 3;
-- адрес бэкенда — реальный адрес хоста со стороны контейнера Traefik:
-  ```bash
-  ip -4 addr show docker0 | awk '/inet /{print $2}'   # обычно 172.17.0.1/16
-  ```
-  Если каталог dynamic-конфигов другой — положить туда, где у Traefik `providers.file`.
-
-**Проверка.** В логах Traefik нет ошибок парсинга, роутер появился:
+Сверить в файле: `Host(...)` = `public_url` из шага 2; адрес бэкенда — реальный адрес хоста
+со стороны Traefik:
 ```bash
-docker logs --tail 30 <traefik-container> | grep -i -E "error|asp"
+ip -4 addr show docker0 | awk '/inet /{print $2}'    # обычно 172.17.0.1
 ```
+
+**Проверка:** в логах Traefik нет ошибок парсинга конфига.
 
 ---
 
-## Шаг 7. Запуск и проверка живости
+## 5. Запуск и проверка
 
 ```bash
 sudo systemctl restart asp-gateway
 sudo systemctl status asp-gateway --no-pager
 ```
 
-**Проверка 1 — процесс жив:**
+**5.1 — шлюз жив** (агентов не поднимает, годится для мониторинга):
 ```bash
 curl -so /dev/null -w '%{http_code}\n' \
   http://127.0.0.1:8348/agents/x/.well-known/agent.json    # ожидается 401
 ```
-`401` = HTTP-транспорт поднят. Токен здесь **не передавать**: запрос с токеном вызывает
-спавн агента, для healthcheck это недопустимо.
 
-**Проверка 2 — агенты реально поднимаются** (это уже спавнит агента, дольше):
+**5.2 — агенты реально стартуют** (это спавнит агента, выполняется один раз, не в мониторинге):
 ```bash
 TOKEN=$(sudo awk -F= '/GW_TOKEN_DEMO/{print $2}' /srv/gateway/env)
 for a in hermes-a hermes-b; do
@@ -191,10 +119,10 @@ for a in hermes-a hermes-b; do
     "http://127.0.0.1:8348/agents/$a/.well-known/agent.json"
 done
 ```
-Ожидается `200` для обоих. `503` = агент настроен, но не поднимается (смотреть
-`journalctl -u asp-gateway -n 50`). `404` = опечатка в `agent_id`.
+Ожидается `200` у обоих. `503` — агент настроен, но не поднимается (`journalctl -u asp-gateway -n 50`).
+`404` — опечатка в `agent_id` в конфиге.
 
-**Проверка 3 — снаружи по HTTPS:**
+**5.3 — снаружи:**
 ```bash
 curl -so /dev/null -w '%{http_code}\n' https://<домен>/agents/x/.well-known/agent.json   # 401
 ```
@@ -203,24 +131,22 @@ curl -so /dev/null -w '%{http_code}\n' https://<домен>/agents/x/.well-known
 
 ## Чего делать нельзя
 
-- **Не публиковать TCP-порт 8347 наружу.** Шлюз не терминирует TLS, токен идёт первой
-  строкой открытым текстом. Только `127.0.0.1` / SSH-туннель.
-- **Не менять `listen`/`http_listen` на `0.0.0.0`**, если порт не закрыт файрволом.
-- **Не класть ключи LLM** в `/srv/gateway/env` или `config.yaml` — их место в
-  `$HOME/.hermes` конкретного агента.
-- **Не использовать healthcheck с токеном** — он поднимает агента на каждой проверке.
-- **Не строить многоходовые диалоги** через `contextId`: в upstream направление 4
-  (A2A→ACP) на втором `message/send` виснет до таймаута. Каждый запрос — новая сессия.
+- **Не публиковать TCP 8347 наружу** — шлюз не терминирует TLS, токен идёт первой строкой
+  открытым текстом. Только `127.0.0.1` / SSH-туннель.
+- **Не класть ключи LLM** в `/srv/gateway/env` или `config.yaml` — их место в `$HOME/.hermes` агента.
+- **Не ставить healthcheck с токеном** — он спавнит агента на каждой проверке. Для мониторинга только 5.1.
+- **Не строить multi-turn по `contextId`** — в upstream направление A2A→ACP виснет на втором
+  `message/send`. Каждый запрос — новая сессия (для сверки документов этого достаточно).
 
 ---
 
-## Отчёт по завершении
+## Отчёт
 
-1. Версии: `rustc --version`, `hermes --version`, коммит шлюза (`git -C <src> rev-parse --short HEAD` или «из бандла»).
-2. Результаты проверок шага 7 (три кода ответа).
-3. Какие модели заданы `hermes-a` и `hermes-b` (только названия, **без ключей**).
-4. Подключён ли `claurst` (да/нет).
-5. `systemctl is-active asp-gateway` и последние 20 строк `journalctl -u asp-gateway`.
-6. Любой шаг, который пришлось выполнить иначе, чем написано, — с указанием причины.
+1. Версии бинарников (`gatewayd --version` / `hermes --version`, если поддерживается) и откуда взяты.
+2. Коды ответов из 5.1, 5.2, 5.3.
+3. Модели `hermes-a` и `hermes-b` — только названия, **без ключей**.
+4. Подключён ли `claurst`.
+5. `systemctl is-active asp-gateway` + последние 20 строк `journalctl -u asp-gateway`.
+6. Что пришлось сделать иначе и почему.
 
-Подробности по архитектуре и ограничениям — `deploy/README.md`.
+Детали архитектуры и ограничений — `deploy/README.md`.

@@ -6,7 +6,8 @@
 HTTP-вход к двум независимым агентам.
 
 Код шлюза не вендорится — здесь только конфиг, юнит, установщик и роутинг.
-Сам шлюз собирается из upstream-репозитория (Rust workspace: `protocol` / `core` / `gatewayd`).
+**Установка идёт из готовых бинарников**: `gatewayd` собирается локально (`cargo build --release`
+в upstream-репозитории), на хост копируется уже собранным. Компилятора на хосте не нужно.
 
 ## Почему на хост, а не в контейнер
 
@@ -17,29 +18,21 @@ HTTP-вход к двум независимым агентам.
 
 ## Установка
 
+Положить готовые бинари в `bin/` (`gatewayd` + хотя бы один агент), затем:
+
 ```bash
-sudo ./install.sh                 # шлюз + агенты; или: sudo ./install.sh /path/to/ASP-A2A_gateway
+chmod +x bin/*
+sudo ./install.sh
 systemctl restart asp-gateway
-systemctl status asp-gateway
 ```
 
-Из офлайн-архива (`asp-gateway-deploy.zip`): распаковать и запустить `deploy/install.sh` —
-исходники шлюза уже внутри, сеть нужна только установщику hermes и `cargo` за крейтами.
+Скрипт ничего не собирает и не качает: проверяет бинари (архитектура + `ldd` — чтобы чужая
+сборка не сломалась уже после установки), заводит пользователя `gateway`, копирует бинари в
+`/srv/gateway/bin`, создаёт два изолированных `HOME` для агентов, кладёт `config.yaml`,
+генерирует токены в `/srv/gateway/env` (0600), ставит юнит. Повторный запуск **не
+перезаписывает** `config.yaml` и `env`.
 
-`install.sh` идемпотентен: проверяет `rustc >= 1.80` и dev-пакеты (`pkg-config`, `libssl-dev`,
-`build-essential`), заводит пользователя `gateway`, собирает `cargo build --release --workspace`,
-кладёт бинарь в `/srv/gateway/bin`, **ставит агентов** (`install-agents.sh`), генерирует токены в
-`/srv/gateway/env` (0600) и ставит юнит. `config.yaml` и `env` при повторном запуске **не
-перезаписываются**. `SKIP_AGENTS=1` — поставить только шлюз.
-
-`install-agents.sh` ставит hermes официальным установщиком (от пользователя `gateway`, не root)
-и заводит два изолированных `HOME`. ACP включается **подкомандой** `acp` — не флагом
-`--bare`/`--print`.
-
-```bash
-sudo ./install-agents.sh                                   # два инстанса hermes
-sudo CLAURST_BIN=/opt/claurst/claurst ./install-agents.sh   # + claurst третьим
-```
+ACP-режим агента включается **подкомандой** `acp` — не флагом `--bare`/`--print`.
 
 После установки каждому агенту задаётся **своя** модель — иначе смысл двух агентов теряется:
 
@@ -61,9 +54,8 @@ sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-b /srv/gateway/bin/herme
 модели в одном бинаре. Два агента на одной модели с одним промптом дали бы коррелированные
 ошибки и обесценили сверку.
 
-`claurst` автоматически не ставится: его дистрибутив не публичный — в репозитории шлюза только
-пометка «проверено на 0.1.7», установщика нет. Есть бинарь — подключается через `CLAURST_BIN`
-и раскомментирование блока в `config.yaml`.
+`claurst` — опционален: положить бинарь в `bin/` и раскомментировать блок `claurst-main`
+в `config.yaml`.
 
 ## Сеть и TLS
 
@@ -127,8 +119,9 @@ curl -so /dev/null -w '%{http_code}\n' http://127.0.0.1:8348/agents/x/.well-know
 
 | Файл | Назначение |
 |---|---|
-| `install.sh` | идемпотентная установка на хост (шлюз + агенты) |
-| `install-agents.sh` | установка hermes ×2 (+ опционально claurst) |
+| `install.sh` | идемпотентная установка из готовых бинарников |
+| `bin/` | сюда кладутся `gatewayd`, `hermes`, `claurst` (в git не попадают) |
+| `AGENT_TASK.md` | пошаговое задание агенту-исполнителю |
 | `config.yaml.example` | конфиг шлюза с двумя агентами → `/srv/gateway/config.yaml` |
 | `systemd/asp-gateway.service` | юнит (явный PATH для спавна агентов, лимиты, хардненинг) |
 | `traefik-dynamic.yml` | публикация 8348 наружу (file-provider, т.к. шлюз не в Docker) |

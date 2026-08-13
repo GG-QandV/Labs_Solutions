@@ -1,69 +1,67 @@
 #!/usr/bin/env bash
-# Установка ASP-A2A gateway + двух ACP-агентов на хост парка.
-# Идемпотентно: повторный запуск обновляет бинарь и юнит, не трогая config/env.
+# Установка ASP-A2A шлюза и агентов из ГОТОВЫХ бинарников.
+# Ничего не собирает и не качает: кладёт бинари, конфиг, юнит.
 #
-#   sudo ./install.sh [путь-к-клону-ASP-A2A_gateway]
+#   sudo ./install.sh
 #
-# Почему на хост, а не в контейнер: gatewayd спавнит stdio-агентов
-# (hermes/claurst) как ДОЧЕРНИЕ процессы — они обязаны лежать в той же
-# файловой системе. Пихать их в образ шлюза = мультистек Python+Node+Rust
-# в одном контейнере; на хосте это две команды и обновляется независимо.
+# Бинари положить рядом со скриптом в bin/ (см. bin/README.md):
+#   bin/gatewayd   — обязательно
+#   bin/hermes     — агент (обязателен хотя бы один)
+#   bin/claurst    — опционально
 set -euo pipefail
 
 GW_HOME=/srv/gateway
 GW_USER=gateway
-REPO_URL=https://github.com/GG-QandV/ASP-A2A_gateway.git
-SRC=${1:-/usr/local/src/ASP-A2A_gateway}
 HERE=$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+SRC_BIN=${BIN_DIR:-$HERE/bin}
 
-log() { printf '\033[0;36m==>\033[0m %s\n' "$*"; }
-die() { printf '\033[0;31mОШИБКА:\033[0m %s\n' "$*" >&2; exit 1; }
+log()  { printf '\033[0;36m==>\033[0m %s\n' "$*"; }
+warn() { printf '\033[0;33m!\033[0m %s\n' "$*"; }
+die()  { printf '\033[0;31mОШИБКА:\033[0m %s\n' "$*" >&2; exit 1; }
 
 [ "$(id -u)" -eq 0 ] || die "запускать через sudo"
+[ -x "$SRC_BIN/gatewayd" ] || die "нет $SRC_BIN/gatewayd (или он не исполняемый). Положи бинарь в bin/"
 
-# --- 1. Зависимости сборки -------------------------------------------------
-log "проверка окружения"
-command -v cargo >/dev/null || die "нет cargo. Поставить: https://rustup.rs (нужен rustc 1.80+)"
-RUSTV=$(rustc --version | awk '{print $2}')
-# Минимальная из пары должна быть 1.80.0 — иначе локальный toolchain старее.
-[ "$(printf '%s\n1.80.0\n' "$RUSTV" | sort -V | head -1)" = "1.80.0" ] \
-  || die "rustc $RUSTV < 1.80 (зависимости: openssl, native-tls)"
-for p in pkg-config libssl-dev build-essential; do
-  dpkg -s "$p" >/dev/null 2>&1 || die "нет пакета $p. Поставить: apt install -y pkg-config libssl-dev build-essential"
+# --- 1. Бинари запускаются на этом хосте? ---------------------------------
+# Единственный реальный риск при переносе готовых бинарников: чужая архитектура
+# или более новый glibc на машине сборки. Проверяем сразу, а не после установки.
+log "проверка бинарников"
+HOST_ARCH=$(uname -m)
+for b in "$SRC_BIN"/*; do
+  [ -f "$b" ] && [ -x "$b" ] || continue
+  n=$(basename "$b")
+  if file -b "$b" | grep -q 'ELF'; then
+    a=$(file -b "$b" | grep -o 'x86-64\|aarch64\|ARM aarch64' | head -1)
+    case "$HOST_ARCH:$a" in
+      x86_64:x86-64|aarch64:aarch64|aarch64:"ARM aarch64") : ;;
+      *) die "$n собран под '$a', хост — $HOST_ARCH" ;;
+    esac
+    if ldd "$b" 2>&1 | grep -q 'not found\|GLIBC_.* not found'; then
+      ldd "$b" 2>&1 | grep 'not found' | sed 's/^/    /'
+      die "$n требует библиотек, которых нет на хосте (собери статически или на этой же ОС)"
+    fi
+  fi
+  log "  $n — ок"
 done
 
 # --- 2. Пользователь и каталоги -------------------------------------------
 id -u "$GW_USER" >/dev/null 2>&1 || { log "создаю пользователя $GW_USER"; useradd --system --home-dir "$GW_HOME" --shell /usr/sbin/nologin "$GW_USER"; }
-install -d -o "$GW_USER" -g "$GW_USER" -m 0755 "$GW_HOME" "$GW_HOME/bin" "$GW_HOME/tasks" \
-                                               "$GW_HOME/workspaces/hermes" "$GW_HOME/workspaces/claurst"
+install -d -o "$GW_USER" -g "$GW_USER" -m 0755 "$GW_HOME" "$GW_HOME/bin" "$GW_HOME/tasks"
+install -d -o "$GW_USER" -g "$GW_USER" -m 0700 "$GW_HOME/workspaces/hermes-a" "$GW_HOME/workspaces/hermes-b"
 
-# --- 3. Сборка gatewayd ----------------------------------------------------
-if [ -d "$SRC/.git" ]; then
-  log "обновляю исходники: $SRC"; git -C "$SRC" pull --ff-only
-elif [ -f "$SRC/Cargo.toml" ]; then
-  # Офлайн-бандл: исходники распакованы из zip, без .git — берём как есть.
-  log "использую готовые исходники: $SRC (без git)"
-elif [ -f "$HERE/../ASP-A2A_gateway/Cargo.toml" ]; then
-  SRC=$(cd "$HERE/../ASP-A2A_gateway" && pwd)
-  log "использую исходники из бандла: $SRC"
-else
-  log "клонирую $REPO_URL → $SRC"; install -d "$(dirname "$SRC")"; git clone "$REPO_URL" "$SRC"
-fi
-# Cargo.lock намеренно не в репозитории (зависимости там понижены под старый
-# компилятор) — резолвим заново под локальный toolchain.
-log "cargo build --release --workspace"
-( cd "$SRC" && cargo build --release --workspace )
-install -o "$GW_USER" -g "$GW_USER" -m 0755 "$SRC/target/release/gatewayd" "$GW_HOME/bin/gatewayd"
+# --- 3. Копирование бинарников --------------------------------------------
+agents=0
+for b in "$SRC_BIN"/*; do
+  [ -f "$b" ] && [ -x "$b" ] || continue
+  n=$(basename "$b"); [ "$n" = "README.md" ] && continue
+  install -o "$GW_USER" -g "$GW_USER" -m 0755 "$b" "$GW_HOME/bin/$n"
+  log "$n → $GW_HOME/bin/$n"
+  [ "$n" != "gatewayd" ] && agents=$((agents+1))
+done
+[ "$agents" -gt 0 ] || die "в bin/ нет ни одного агента (нужен hermes и/или claurst)"
+[ -x "$GW_HOME/bin/claurst" ] && install -d -o "$GW_USER" -g "$GW_USER" -m 0700 "$GW_HOME/workspaces/claurst"
 
-# --- 4. Два агента ---------------------------------------------------------
-if [ "${SKIP_AGENTS:-0}" = "1" ]; then
-  log "SKIP_AGENTS=1 — установка агентов пропущена"
-else
-  log "установка агентов (install-agents.sh)"
-  "$HERE/install-agents.sh"
-fi
-
-# --- 5. Конфиг и секреты (не перезаписываются) -----------------------------
+# --- 4. Конфиг и токены (не перезаписываются) ------------------------------
 if [ ! -f "$GW_HOME/config.yaml" ]; then
   install -o "$GW_USER" -g "$GW_USER" -m 0644 "$HERE/config.yaml.example" "$GW_HOME/config.yaml"
   log "создан $GW_HOME/config.yaml — проверить public_url"
@@ -80,9 +78,20 @@ else
   log "env на месте, токены не перегенерирую"
 fi
 
-# --- 6. systemd ------------------------------------------------------------
+# --- 5. systemd ------------------------------------------------------------
 install -m 0644 "$HERE/systemd/asp-gateway.service" /etc/systemd/system/asp-gateway.service
 systemctl daemon-reload
 systemctl enable asp-gateway.service
-log "готово. Запуск: systemctl restart asp-gateway && systemctl status asp-gateway"
-log "проверка: curl -so /dev/null -w '%{http_code}\\n' http://127.0.0.1:8348/agents/x/.well-known/agent.json  # ожидается 401"
+log "готово"
+
+cat <<EOF
+
+Дальше:
+  1. Проверить public_url в $GW_HOME/config.yaml (должен совпасть с доменом Traefik).
+  2. Задать РАЗНЫЕ модели агентам (иначе смысл двух агентов теряется):
+       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/hermes-a $GW_HOME/bin/hermes model
+       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/hermes-b $GW_HOME/bin/hermes model
+  3. systemctl restart asp-gateway
+  4. curl -so /dev/null -w '%{http_code}\\n' \\
+       http://127.0.0.1:8348/agents/x/.well-known/agent.json     # 401 = живой
+EOF
