@@ -50,7 +50,8 @@ uv venv && uv pip install fastapi "uvicorn[standard]" httpx
 |---|---|---|
 | GET | `/api/stream?lang=en\|uk\|pl\|ru&mode=cached\|live` | SSE-поток событий |
 | POST | `/api/approve/{run_id}` | подтверждение человеком (шаг 06) |
-| GET | `/health` | liveness для Traefik/OpsHub |
+| GET | `/health` | liveness для Traefik/OpsHub (внутрь контейнера) |
+| GET | `/api/health` | то же для браузера — под `/api/`, чтобы попасть под одно правило Cloudflare |
 
 Один SSE-поток на всё демо; каждое событие несёт `panel` (`a` / `b` / `arbiter` / `gate` /
 `verdict` / `meta`), фронт раскладывает по колонкам. Три отдельных соединения упёрлись бы
@@ -92,8 +93,7 @@ nginx буферизует поток и пошаговость исчезает
 
 ### Правило 1 — Bypass cache для потока
 
-**Caching → Cache Rules → Create rule.** В визуальном билдере поля заполняются по отдельности,
-значения — **без кавычек**:
+Одно правило, **два условия через `And`** — ни скобок, ни `or`:
 
 | Шаг | Что выбрать |
 |---|---|
@@ -106,27 +106,33 @@ nginx буферизует поток и пошаговость исчезает
 | Value | `/api/` |
 | Then → Cache eligibility | **Bypass cache** |
 
-→ **Deploy**. Всё, одно правило из двух условий через `And` — скобки и `or` в билдере не нужны.
-
-**Как читаются части выражения в билдере** (частая ошибка — вписать их текстом в Value):
-
-| В выражении | Field | Operator | Value |
-|---|---|---|---|
-| `starts_with(http.request.uri.path, "/api/")` | URI Path | **starts with** | `/api/` |
-| `http.request.uri.path eq "/health"` | URI Path | **equals** | `/health` |
-| `http.host eq "agents-labs.mnemostroma.com"` | Hostname | **equals** | `agents-labs.mnemostroma.com` |
-
-`starts_with(...)` — это не текст для поля, а сам оператор в выпадающем списке; кавычки в
-Value **не ставятся**. Если вставить строку целиком, билдер её не примет.
-
-Если хочется закрыть ещё и `/health` — это **отдельное** правило с теми же двумя условиями,
-только `URI Path` **equals** `/health`. Смешивать `And` и `Or` в одном правиле билдер рисует
-плохо, а выигрыша нет.
-
-Готовое выражение (вкладка **Edit expression**, если билдер не устраивает):
+Выражение целиком (вкладка **Edit expression**):
 
 ```
-(http.host eq "agents-labs.mnemostroma.com" and starts_with(http.request.uri.path, "/api/"))
+http.host eq "agents-labs.mnemostroma.com" and starts_with(http.request.uri.path, "/api/")
+```
+
+**Почему без `or` и без `/health`.** В движке правил `and` связывает сильнее `or`, поэтому
+плоское `HOST and X or Y` читается как `(HOST and X) or Y` — ветка `Y` уезжает на всю зону
+(`rag-labs`, `pdf-labs` и остальные). Скобки же визуальный билдер не даёт поставить.
+Поэтому всё, что должно обходить кэш, живёт под одним префиксом: у health есть алиас
+**`/api/health`**, его и дёргает фронт. Внутренний `/health` остаётся для Traefik и OpsHub —
+они ходят в контейнер напрямую, мимо Cloudflare, и правило им не нужно.
+
+**Значения в билдере пишутся без кавычек** (`agents-labs.mnemostroma.com`, `/api/`);
+кавычки нужны только в режиме Edit expression. `starts_with(...)` — это не текст для поля,
+а оператор **starts with** в выпадающем списке.
+
+**Порядок правил.** Если у другого правила в условии стоит `http.host in {…}` со списком
+поддоменов и `agents-labs` там нет — оно наш хост не трогает, конфликта нет, позиция в списке
+роли не играет. Конфликт возможен, только если правило выше матчит тот же хост и путь; тогда
+у Cache Rules побеждает **последнее** совпавшее, а у legacy Page Rules — **первое**.
+
+Проверка после деплоя:
+
+```bash
+curl -sI "https://agents-labs.mnemostroma.com/api/stream?lang=en&mode=cached" | grep -i cf-cache-status
+# BYPASS или DYNAMIC — правило работает; HIT/MISS — перекрыто другим правилом
 ```
 
 ### Правило 2 — выключить Rocket Loader

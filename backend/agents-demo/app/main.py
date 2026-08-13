@@ -45,7 +45,16 @@ async def _startup() -> None:
 
 @app.get("/health")
 async def health() -> dict:
+    """Для Traefik/OpsHub — ходят внутрь контейнера, мимо Cloudflare."""
     return {"ok": True, "live_enabled": config.LIVE_ENABLED}
+
+
+@app.get("/api/health")
+async def api_health() -> dict:
+    """Тот же ответ для браузера. Живёт под /api/, чтобы одно правило Cloudflare
+    (`URI Path starts with /api/`) закрывало и поток, и health — без `or`,
+    который в билдере правил разъезжается по всей зоне."""
+    return await health()
 
 
 def _client_ip(request: Request) -> str:

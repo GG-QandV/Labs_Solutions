@@ -145,6 +145,6 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('agents.lang', lang);
       applyUI();
     }));
-  fetch('/health').then((r) => r.json()).then((h) => { $('live').hidden = !h.live_enabled; })
+  fetch('/api/health').then((r) => r.json()).then((h) => { $('live').hidden = !h.live_enabled; })
     .catch(() => {});
 });
