@@ -1,0 +1,43 @@
+# ASP-A2A gateway — конфиг для парка Labs.
+# Источник: github.com/GG-QandV/ASP-A2A_gateway (config.example.yaml).
+# Копировать в /srv/gateway/config.yaml и заполнить токены.
+#
+# ВАЖНО: TCP-порт слушает 127.0.0.1 — шлюз НЕ терминирует TLS, наружу
+# токены пойдут открытым текстом. Публично отдаётся только HTTP-порт
+# через Traefik (см. systemd/README).
+
+listen: "127.0.0.1:8347"      # TCP: ACP-клиенты (локально/по SSH-туннелю)
+http_listen: "127.0.0.1:8348" # HTTP: A2A-клиенты, наружу — только через Traefik
+
+# Внешний адрес: попадает в AgentCard.url (.well-known/agent.json).
+# Должен совпадать с доменом Traefik, иначе карточка невалидна по A2A-спеке.
+public_url: "https://gw-labs.mnemostroma.com"
+
+# Пустой токен → ошибка старта. Генерировать: openssl rand -hex 24
+tokens:
+  - "{env:GW_TOKEN_MAIN}"     # {env:X} с отсутствующей переменной → ошибка старта
+  - "{env:GW_TOKEN_DEMO}"     # отдельный токен для agents-demo
+
+# --- Два агента на хосте (stdio; gatewayd спавнит их как дочерние процессы) ---
+# ACP включается ПОДКОМАНДОЙ `acp` — не флагом. Бинари ставит install.sh.
+agents:
+  # Агент A демо «сверка документов» — читает оригинал.
+  hermes-main:
+    transport: stdio
+    command: ["hermes", "acp"]
+    cwd: "/srv/gateway/workspaces/hermes"
+
+  # Агент B — читает перевод. Другая реализация => независимость извлечения
+  # (в этом смысл демо: два агента не должны разделять реализацию и промпт).
+  claurst-main:
+    transport: stdio
+    command: ["claurst", "acp"]
+    cwd: "/srv/gateway/workspaces/claurst"
+    env:
+      CLAURST_DISABLE_MODELS_FETCH: "1"   # не ходить за списком моделей
+      CLAURST_SHARE_NO_OPEN: "1"          # не открывать браузер на хосте
+
+task_store_dir: "/srv/gateway/tasks"
+task_retention_days: 7        # фоновая уборка завершённых задач раз в час
+turn_lease_timeout_secs: 30
+agent_call_timeout_secs: 120
