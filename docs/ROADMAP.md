@@ -23,6 +23,7 @@
 | Диспетчер заявок | ⬜ кандидат-база (реализуемо) | внешн.: `Rahilralu/FlowDesk-AI` (MIT) | адаптация под парк, см. Этап 3a |
 | CRM-copilot | ⬜ | — | весь модуль |
 | CSV/XLSX-аналитик | ⬜ | — | весь модуль |
+| Agents (сверка документов) | ⬜ спека готова | — | весь модуль, см. [`SPEC_agents_demo_v1.md`](SPEC_agents_demo_v1.md) |
 | RAGFlow (предложение клиенту) | ▪ маркер, без демо | внешн.: [`infiniflow/ragflow`](https://github.com/infiniflow/ragflow) (Apache-2.0) | «тяжёлый» RAG (≥16 GB RAM) для клиентов с мощным железом / в контуре клиента — §5.8 |
 
 ---
