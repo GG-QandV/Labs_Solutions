@@ -10,6 +10,7 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 from collections.abc import AsyncIterator
 
 from . import config
@@ -108,11 +109,20 @@ async def run(lang: str, live: bool, gate: asyncio.Event) -> AsyncIterator[Event
     yield {"panel": "gate", "type": "approval_pending",
            "text": t(lang, "gate.text"), "button": t(lang, "gate.button")}
 
-    try:
-        await asyncio.wait_for(gate.wait(), timeout=config.GATE_TIMEOUT_SEC)
-    except asyncio.TimeoutError:
-        yield {"panel": "gate", "type": "timeout"}
-        return
+    # Пока ждём человека, в потоке НЕ должно быть тишины: Cloudflare и прочие
+    # прокси рвут простаивающее соединение (~100 с → 524), и подтверждение
+    # придёт уже в мёртвый поток. Пингуем, пока ждём.
+    waited = 0.0
+    while not gate.is_set():
+        if waited >= config.GATE_TIMEOUT_SEC:
+            yield {"panel": "gate", "type": "timeout"}
+            return
+        step = min(config.GATE_PING_SEC, config.GATE_TIMEOUT_SEC - waited)
+        with contextlib.suppress(asyncio.TimeoutError):
+            await asyncio.wait_for(asyncio.shield(gate.wait()), timeout=step)
+        waited += step
+        if not gate.is_set():
+            yield {"panel": "meta", "type": "ping"}
 
     # 07 Sent — только после подтверждения человеком.
     summary = (t(lang, "verdict.none") if mismatches == 0

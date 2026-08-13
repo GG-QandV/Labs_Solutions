@@ -26,6 +26,8 @@ SPEED = float(os.environ.get("SPEED", "1.0"))
 
 # Ожидание подтверждения человеком (шаг 06 трека сайта). Дальше — таймаут, поток закрывается.
 GATE_TIMEOUT_SEC = int(os.environ.get("GATE_TIMEOUT_SEC", "300"))
+# Пинг в SSE, пока ждём подтверждения: у Cloudflare простой ~100 с рвёт соединение (524).
+GATE_PING_SEC = int(os.environ.get("GATE_PING_SEC", "15"))
 
 PORT = int(os.environ.get("PORT", "8080"))
 
