@@ -42,7 +42,9 @@ body{background:var(--bg);background-image:radial-gradient(circle at 50% -10%,#2
 .answer.ungrounded{background:#f7f0dd;color:var(--warn)}
 .sources{margin-top:14px;display:grid;gap:8px}
 .src{border:1px solid var(--line);border-radius:6px;padding:10px 12px}
+.src.cited{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
 .src .head{font-family:var(--mono);font-size:11px;color:var(--muted);display:flex;justify-content:space-between}
+.src.cited .head{color:var(--accent)}
 .src .body{font-size:13.5px;color:#33383d;margin-top:6px;max-height:4.6em;overflow:hidden}
 .src.open .body{max-height:none}
 .src mark{background:#efe0c9;padding:0 2px;border-radius:2px}

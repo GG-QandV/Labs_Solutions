@@ -62,12 +62,21 @@ async function ask() {
   if (!res.ok) { $("answer").className = "answer ungrounded"; $("answer").textContent = data.detail; return; }
   $("answer").className = "answer" + (data.grounded ? "" : " ungrounded");
   $("answer").textContent = data.answer;
+  const citedPages = extractCitedPages(data.answer);
   $("sources").innerHTML = data.sources.map(s => `
-    <div class="src">
-      <div class="head"><span>${escapeHtml(s.filename)} · p.${s.page}</span><span>score ${s.score}</span></div>
+    <div class="src${citedPages.has(String(s.page)) ? " cited" : ""}">
+      <div class="head"><span>${escapeHtml(s.filename)} · p.${s.page}</span><span>score ${s.score}${citedPages.has(String(s.page)) ? " · cited" : ""}</span></div>
       <div class="body">${highlight(s.text, s.entities)}</div>
     </div>`).join("");
   document.querySelectorAll(".src").forEach(el => el.onclick = () => el.classList.toggle("open"));
+}
+
+/* Извлекает страницы, которые LLM реально процитировал в ответе ([p.N]). */
+function extractCitedPages(answer) {
+  const set = new Set();
+  if (!answer) return set;
+  for (const m of answer.matchAll(/\[[^\]]*p\.(\d+)[^\]]*\]/g)) set.add(m[1]);
+  return set;
 }
 
 function highlight(text, entities) {
