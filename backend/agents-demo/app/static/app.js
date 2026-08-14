@@ -37,6 +37,24 @@ function pickLang() {
   return LANGS.includes(nav) ? nav : 'en';
 }
 
+function initTheme() {
+  const btn = document.getElementById('theme-toggle');
+  if (!btn) return;
+  const apply = () => {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    const sun = btn.querySelector('[data-ico="sun"]'), moon = btn.querySelector('[data-ico="moon"]');
+    if (sun) sun.style.display = dark ? 'none' : 'inline-block';
+    if (moon) moon.style.display = dark ? 'inline-block' : 'none';
+  };
+  btn.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('agents-theme', next); } catch (_) {}
+    apply();
+  });
+  apply();
+}
+
 function applyUI() {
   const s = UI[lang];
   document.documentElement.lang = lang;
@@ -131,6 +149,7 @@ function start(mode) {
 
 document.addEventListener('DOMContentLoaded', () => {
   applyUI();
+  initTheme();
   $('start').addEventListener('click', () => start('cached'));
   $('live').addEventListener('click', () => start('live'));
   $('approve').addEventListener('click', async () => {

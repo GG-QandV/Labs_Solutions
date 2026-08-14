@@ -3,8 +3,14 @@
 :root{
   --bg:#14101E; --surf:#211A33; --txt:#EFEAF8; --mut:#A99FC4;
   --acc:#F3B78D; --bord:#3A2F55; --good:#7BD88F; --bad:#F0868B;
+  --btn-line:transparent;
   --mono:ui-monospace,SFMono-Regular,"JetBrains Mono",Menlo,monospace;
   --sans:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+[data-theme="light"]{
+  --bg:#F5F3FA; --surf:#FFFFFF; --txt:#241F33; --mut:#6B6480;
+  --acc:#B0722F; --bord:#D9D4E6; --good:#1D7A4E; --bad:#B23A45;
+  --btn-line:#FFFFFF;
 }
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.55 var(--sans)}
@@ -12,9 +18,20 @@ body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.55 var(--sans)}
 
 .hdr{display:flex;align-items:center;justify-content:space-between;gap:16px;
   padding:14px 20px;border-bottom:1px solid var(--bord);margin-bottom:28px}
-.brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:var(--txt)}
-.brand b{font-size:20px;letter-spacing:.04em}
-.brand span{font:12px var(--mono);color:var(--mut)}
+.brand{display:flex;align-items:center;height:20px;text-decoration:none;color:var(--txt)}
+.brand svg{height:20px;width:auto}
+[data-logo-part="labs"]{fill:#FFFFFF}
+[data-logo-part="mnemo"]{fill:#9FB0CC}
+[data-logo-part="stroma"]{fill:#6B7A8D}
+[data-logo-part="dot"]{fill:#7E5490}
+[data-theme="light"] [data-logo-part="labs"]{fill:#334155}
+[data-theme="light"] [data-logo-part="mnemo"]{fill:#8795AD}
+[data-theme="light"] [data-logo-part="stroma"]{fill:#0D0D1A}
+[data-theme="light"] [data-logo-part="dot"]{fill:#7E5490}
+.hdr__right{display:flex;align-items:center;gap:10px}
+.icon-btn{background:transparent;border:1px solid var(--bord);border-radius:8px;color:var(--mut);
+  width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.icon-btn svg{width:17px;height:17px}
 
 .seg{display:flex;border:1px solid var(--bord);border-radius:8px;overflow:hidden}
 .seg__b{background:transparent;color:var(--mut);border:0;padding:6px 11px;
@@ -33,6 +50,7 @@ body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.55 var(--sans)}
 .bar{display:flex;align-items:center;gap:12px;margin-bottom:20px;flex-wrap:wrap}
 .btn{font:14px/1 var(--sans);padding:11px 18px;border-radius:8px;cursor:pointer;border:1px solid transparent}
 .btn--primary{background:var(--acc);color:#241a12;font-weight:600}
+[data-theme="light"] .btn--primary{color:#fff}
 .btn--ghost{background:transparent;color:var(--txt);border-color:var(--bord)}
 .btn:disabled{opacity:.5;cursor:default}
 .mode{font:12px var(--mono);color:var(--mut)}
