@@ -27,8 +27,12 @@ body {
 .shell { max-width: 720px; margin: 0 auto; padding: 28px 20px 60px; }
 
 .mast { display: flex; justify-content: space-between; align-items: center; color: #cfd4d9; }
-.mark { font-family: var(--mono); font-size: 15px; letter-spacing: .04em; }
-.mark span { color: var(--accent); filter: brightness(1.8); }
+.brand { display: flex; align-items: center; height: 20px; text-decoration: none; }
+.brand svg { height: 20px; width: auto; }
+[data-logo-part="labs"]{fill:#FFFFFF}
+[data-logo-part="mnemo"]{fill:#9FB0CC}
+[data-logo-part="stroma"]{fill:#6B7A8D}
+[data-logo-part="dot"]{fill:#7E5490}
 .langs { display: flex; gap: 6px; }
 .lang { font-family: var(--mono); font-size: 11px; padding: 4px 8px; border-radius: 4px;
   border: 1px solid #3a4046; background: transparent; color: #9aa1a8; cursor: pointer; }

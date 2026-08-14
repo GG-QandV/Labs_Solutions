@@ -47,3 +47,9 @@
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* Labs.Mnemostroma wordmark (baked paths) */
+[data-logo-part="labs"]{fill:#FFFFFF}
+[data-logo-part="mnemo"]{fill:#9FB0CC}
+[data-logo-part="stroma"]{fill:#6B7A8D}
+[data-logo-part="dot"]{fill:#7E5490}
