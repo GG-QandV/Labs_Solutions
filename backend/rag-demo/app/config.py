@@ -24,8 +24,8 @@ EMBED_DIM = 384
 # retrieval
 TOP_K = int(os.environ.get("TOP_K", "10"))
 TOP_N_CITED = int(os.environ.get("TOP_N_CITED", "5"))
-RERANK_THRESHOLD = float(os.environ.get("RERANK_THRESHOLD", "-4.0"))  # cross-encoder logit
-COSINE_THRESHOLD = float(os.environ.get("COSINE_THRESHOLD", "0.78"))  # used when reranker is unavailable
+RERANK_THRESHOLD = float(os.environ.get("RERANK_THRESHOLD", "-4.0"))  # cross-encoder logit (informational now)
+COSINE_THRESHOLD = float(os.environ.get("COSINE_THRESHOLD", "0.55"))  # relevance bar (retrieve filter)
 
 # external APIs
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
