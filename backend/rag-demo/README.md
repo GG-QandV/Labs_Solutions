@@ -30,7 +30,12 @@ Evaluated `onnx-community/embeddinggemma-300m-ONNX` (Google EmbeddingGemma) as a
 - **Size check vs fleet limits** (embedder ≤600–700 MB):
   - `model_quantized.onnx_data` (q8) ≈ **295 MB** ✓ (recommended)
   - `model_q4.onnx_data` ≈ 188 MB ✓, `model_q4f16` ≈ 167 MB ✓, `model_fp16` ≈ 589 MB ✓
-  - ⚠️ README: activations do NOT support fp16 — use fp32/q8/q4 (fp16 file exists but is not recommended).
+  - ⚠️ README: activations do NOT support fp16 — use fp32/q8/q4. **fp16 is a RAM trap here:**
+    onnxruntime does not run fp16 on CPU, so a fp16 graph is upcast to fp32 in memory at load time
+    (weights ×2 peak + activations), which can spike far beyond the container quota. RAM was NOT
+    measured during the eval; as a rule, only use the `quantized` (q8) or `q4` variants whose
+    in-memory size ≈ file size. Reference: current pipeline (e5-small 130M + TinyBERT + NER,
+    lazy-loaded) idles at ~58 MiB inside the 2 GiB container after warmup.
 - **Inputs/outputs (verified)**: `input_ids` + `attention_mask` int64 → `last_hidden_state` [*,*,768] + `sentence_embedding` [*,768].
 - **Prefixes (mandatory)**: query → `task: search result | query: …`, document → `title: none | text: …`.
   Without them recall drops sharply.
