@@ -6,7 +6,6 @@
   "nav.demo": "Live demo",
   "nav.privacy": "Privacy",
   "nav.terms": "Terms",
-
   "hero.eyebrow": "Commercial multi-agent gateway",
   "hero.title": "Connect your AI agent to a controlled multi-agent network",
   "hero.sub": "AgentMesh Labs connects ACP and A2A agents through one gateway — with isolated sessions, temporary access tokens, synchronous conversations and asynchronous tasks.",
@@ -17,7 +16,6 @@
   "hero.chip1": "ACP ↔ A2A interoperability",
   "hero.chip2": "Sync conversations + async tasks",
   "hero.chip3": "Isolated sessions and scoped access",
-
   "hero.card.title": "Connection check",
   "hero.card.session": "Demo session",
   "hero.card.active": "Active",
@@ -35,7 +33,6 @@
   "hero.card.node.hermes.sub": "verification",
   "hero.card.link1": "A2A / ACP",
   "hero.card.link2": "isolated",
-
   "problem.eyebrow": "The problem",
   "problem.title": "A shared chat is not an integration layer",
   "problem.p1": "When several agents work through one chat, there is no contract: nobody guarantees the response format, the session boundary, or the scope of access. Every integration becomes a bespoke, fragile build.",
@@ -46,7 +43,6 @@
   "problem.f2.desc": "Agents advertise nothing — integration is reverse-engineered by hand.",
   "problem.f3.title": "No safe demo path",
   "problem.f3.desc": "There is no way to try a connection without granting full access.",
-
   "how.eyebrow": "How it works",
   "how.title": "One gateway. Three clear stages.",
   "how.p": "AgentMesh Labs sits between your agent and the network. Every check runs inside an isolated, short-lived session.",
@@ -56,7 +52,6 @@
   "how.s2.desc": "A synthetic test task runs over the real connection. Hermes validates the response format and the session boundary.",
   "how.s3.title": "Review",
   "how.s3.desc": "You get a compatibility report: protocol, capabilities, latency, session scope — and a one-click revoke.",
-
   "demo.eyebrow": "Live sandbox",
   "demo.title": "Run a live sandbox check",
   "demo.p": "Bring your A2A agent, or use the bundled demo. Temporary credentials, synthetic payload, 15-minute TTL, one external agent per session.",
@@ -64,7 +59,6 @@
   "demo.badge.mode": "Mode",
   "demo.badge.state": "State",
   "demo.badge.ttl": "TTL",
-
   "hermes.eyebrow": "Guided by Hermes",
   "hermes.title": "A compatibility arbiter, not a black box",
   "hermes.p": "Hermes acts as a bounded demo guide. It checks the agent card, negotiates the protocol, runs a synthetic task and reports what actually happened — without ever touching your systems.",
@@ -74,7 +68,6 @@
   "hermes.l2.desc": "A role-relevance signal is estimated but never blocks a verdict.",
   "hermes.l3.title": "No hidden access",
   "hermes.l3.desc": "Synthetic data only. Nothing leaves the session boundary.",
-
   "caps.eyebrow": "Capabilities",
   "caps.title": "What you get out of the box",
   "caps.c1.title": "ACP ↔ A2A interoperability",
@@ -89,7 +82,6 @@
   "caps.c5.desc": "Outbound validation and inbound temporary routes keep the demo path bounded.",
   "caps.c6.title": "Compatibility report",
   "caps.c6.desc": "Protocol, capabilities, latency and scope in one readable report.",
-
   "license.eyebrow": "Licensing",
   "license.title": "Commercial license",
   "license.p": "AgentMesh Labs is available under a commercial license for teams that run multiple agents in production.",
@@ -98,12 +90,10 @@
   "license.b2.title": "Self-serve demo",
   "license.b2.desc": "The public sandbox stays free for evaluation and integration checks.",
   "license.cta": "Request guided review",
-
   "cta.title": "Ready to connect your agent?",
   "cta.p": "Run the live demo or request a guided integration review.",
   "cta.primary": "Run a live sandbox check",
   "cta.secondary": "Request guided review",
-
   "footer.tagline": "A commercial multi-agent gateway for ACP and A2A agents — isolated sessions, temporary credentials, verified connections.",
   "footer.col.product": "Product",
   "footer.col.resources": "Resources",
@@ -116,10 +106,8 @@
   "footer.link.privacy": "Privacy policy",
   "footer.link.terms": "Terms of use",
   "footer.rights": "All rights reserved.",
-
   "lang.en": "English",
   "lang.uk": "Українська",
-
   "wizard.title": "Live sandbox check",
   "wizard.role.title": "Choose your role",
   "wizard.role.desc": "Select how you want to run the connection check.",
@@ -165,5 +153,6 @@
   "wizard.mode.badge": "Mode",
   "wizard.foot.live": "Live sandbox — real connection",
   "wizard.foot.mock": "Sandbox preview — backend not reachable, deterministic mock",
-  "wizard.error.select": "Select an option to continue."
+  "wizard.error.select": "Select an option to continue.",
+  "meta.title": "AgentMesh Labs — Connect your AI agent to a controlled multi-agent network"
 }

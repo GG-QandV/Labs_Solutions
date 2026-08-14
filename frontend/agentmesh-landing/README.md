@@ -26,7 +26,7 @@ assets/
 i18n/   en.json  uk.json   (ключ localStorage: aml-lang, default en)
 ```
 
-Подпапки `architecture/ security/ licensing/ docs/ demo/ privacy/ terms/ build/` — заглушки для будущих SEO-страниц и `build/prerender.py`.
+Подпапки: `architecture/ security/ licensing/ docs/ privacy/ terms/` — SEO-страницы (index), `demo/` — полный sandbox (noindex в MVP), `build/prerender.py` — генерация `/uk/`.
 
 ## Запуск локально
 
@@ -71,8 +71,7 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 
 ## TODO / техдолг
 
-- [ ] SEO-подстраницы: `/architecture/ /security/ /licensing/ /docs/ /demo/ /privacy/ /terms/` (папки созданы).
-- [ ] `build/prerender.py` (по образцу `../landing/build/prerender.py`).
 - [ ] Подключение реального agentmesh-api backend (сейчас `/api/v1/agentmesh/availability` → 404 от gatewayd → wizard честно уходит в mock).
-- [ ] `assets/og/og-cover.png` — og-изображение (пока 404, грузится только при шаринге).
 - [ ] Локализация динамического контента wizard (timeline/hermes/report сейчас хардкод EN; ключи `wizard.*` в i18n готовы).
+- [ ] uk-версии SEO-подстраниц (`/uk/architecture/` и т.д.) — сейчас prerender только для `/uk/` (главная).
+- [ ] `/demo/?mode=built-in|a2a` — deep-link с преселектом режима (спека §6.2).

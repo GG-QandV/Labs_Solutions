@@ -7,9 +7,11 @@ Allow: /
 Allow: /uk/
 
 Disallow: /api/
+Disallow: /a2a/
 Disallow: /admin/
 Disallow: /ops/
 Disallow: /session/
+Disallow: /demo/
 Disallow: /demos/*/run
 Disallow: /*?ref=
 Disallow: /*?session=
