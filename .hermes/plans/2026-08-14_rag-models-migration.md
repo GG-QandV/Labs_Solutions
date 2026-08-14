@@ -44,13 +44,33 @@
 | **G5 · reindex** | `vec_chunks` обновлён, вопрос даёт University | `curl /api/ask` «название высшего учебного заведения» | проверить UPDATE/DELETE+INSERT в sqlite-vec |
 | **G6 · deploy** | `/health` models=true; ответ с цитатой; RAM < 2GiB | `curl /health` + E2E + `docker stats` | смотреть логи, проверить lazy-load |
 
-**Ловушки-логи** (trap logs — писать в stdout/stderr, подхватываются OpsHub):
-1. **`embedding.pooling`** — при старте/первом encode логировать выбранный pooling и размерность: `log.info("embedder ready: model=%s pooling=%s dim=%s", path, cfg.EMBED_POOLING, dim)`.
-2. **`embedding.dim_mismatch`** — если выходная размерность ≠ config.EMBED_DIM → `log.error` (сломает вставку в vec_chunks float[384]).
-3. **`rerank.logits`** — при первом score логировать диапазон логитов: `log.info("rerank logits: min=%.2f max=%.2f", min, max)`. Если все близки (~одинаковые) — подозрение на сломанную модель/токенизатор.
-4. **`retrieve.empty`** — при `NoContext` логировать вопрос + скоуры top-10 (cosine), чтобы отличать «нет данных» от «порог задушил». Это ключевая ловушка против повтора бага «Not found».
-5. **`reindex.progress`** — каждые N чанков логировать счётчик (N=25), при ошибке — `opshub_error("reindex_failed", ...)`.
-6. **`model.load_time`** — замерять время первой загрузки каждой модели (lazy-load): `log.info("model %s loaded in %.1fs", name, dt)`.
+**Ловушки-логи (trap logs — stdout/stderr, подхватываются OpsHub).**
+
+Управление через env в compose (Task 1):
+
+```yaml
+- TRAP_LOGS=${TRAP_LOGS:-1}        # глобальный рубильник ловушек: 1 = вкл, 0 = все выкл
+- TRAP_LEVEL=${TRAP_LEVEL:-warning} # error|warning|info|debug — порог отсечения
+```
+
+Правила:
+- `TRAP_LOGS=0` — все ловушки молчат (аварийный режим/шумный tenant).
+- `TRAP_LEVEL` — фильтр: при `warning` пишутся только `log.error`/`log.warning`; при `info` добавляется `log.info`-диагностика; `debug` — полная трассировка.
+- По умолчанию **`TRAP_LEVEL=warning`** в проде: в OpsHub уходят только баги/варнинги, диагностика НЕ шумит.
+
+Классификация ловушек по уровням:
+
+| Ловушка | Уровень | Когда пишется |
+|---|---|---|
+| `embedding.dim_mismatch` | **error** | выходная dim ≠ `EMBED_DIM` (сломает vec_chunks) |
+| `retrieve.empty` | **warning** | `NoContext`: вопрос + cosine top-10 (отличать «нет данных» от «порог задушил») |
+| `reindex.failed` | **error** | ошибка реиндекса (opshub_error) |
+| `rerank.logits` | **info** | диапазон логитов (min/max); warning при max≈min (сломанная модель/токенизатор) |
+| `embedding.pooling` | **info** | старт: модель, pooling, dim |
+| `model.load_time` | **info** | время первой загрузки модели (lazy-load) |
+| `reindex.progress` | **debug** | счётчик каждые 25 чанков |
+
+Итог: в проде по умолчанию (`warning`) в логи/OpsHub попадают **только баги** (dim_mismatch, reindex.failed) и **варнинги** (retrieve.empty, аномальные rerank.logits). Диагностические info-ловушки включаются точечно через `TRAP_LEVEL=info` при отладке — не засоряют продакшн.
 
 **Параметры как переменные в docker-compose** (не хардкод в config.py по умолчанию — см. Task 1):
 
@@ -63,9 +83,31 @@ environment:
   - COSINE_THRESHOLD=${COSINE_THRESHOLD:-0.55}
   - RERANK_THRESHOLD=${RERANK_THRESHOLD:--4.0}
   - CHUNK_TOKENS=${CHUNK_TOKENS:-420}
+  - TRAP_LOGS=${TRAP_LOGS:-1}                 # рубильник ловушек
+  - TRAP_LEVEL=${TRAP_LEVEL:-warning}          # error|warning|info|debug
 ```
 
 В `config.py` — только `os.environ.get(..., default)`, default = текущие значения (обратная совместимость). Продакшн-значения задаются в `/srv/demos/lending_solutions/.env` (или в compose). Это даёт: быстрый откат на старые модели через env без пересборки образа.
+
+### Хранение логов: ротация до месяца, авто-затирание
+
+Текущее состояние (проверено на проде): docker logging driver `json-file` БЕЗ ограничений (`map[]`) — файлы логов в `/var/lib/docker/containers/*/*-json.log` растут бесконечно, пока не кончится диск (затирания нет). journald почти пуст (8MB) и в него логи контейнера не идут.
+
+Решение — через docker-compose `logging:` (не трогаем journald на хосте):
+
+```yaml
+logging:
+  driver: json-file
+  options:
+    max-size: "10m"      # ротация каждого файла при 10 МБ
+    max-file: "5"        # держать максимум 5 файлов (≈50 МБ на контейнер)
+```
+
+**Покрытие месячного окна:** 5 × 10MB = 50MB буфер. При типовом объёме логов rag-demo (~десятки КБ/день при TRAP_LEVEL=warning) 50MB хватает **на несколько месяцев**; старые файлы автоматически затираются драйвером при превышении `max-file`. Для шумных периодов (debug) окно сокращается — это осознанный трейдофф, при `TRAP_LEVEL=warning` в проде буфер > 1 месяца.
+
+Если нужна жёсткая гарантия ≥ 30 дней — включить `LOG_ROTATE_DAYS` в env и реализовать ротацию в коде (`logging.handlers.RotatingFileHandler` с date-именем + удаление старше 30 дней) **только по явному запросу** — docker json-file ротация проще и достаточна.
+
+**Task 8 дополняется:** прописать `logging:` блок в `docker-compose.yml` (прод + репо) и убедиться `docker inspect` показывает `max-size=10m max-file=5`.
 
 ---
 
@@ -87,6 +129,19 @@ environment:
 - `RERANK_MODEL = os.environ.get("RERANK_MODEL", "gte-reranker")`; `RERANK_DIR = os.path.join(MODELS_DIR, RERANK_MODEL)`.
 - `EMBED_DIM = int(os.environ.get("EMBED_DIM", "384"))`.
 - `COSINE_THRESHOLD` default `0.55`; `RERANK_THRESHOLD` default `-4.0` (информационный — жёсткий фильтр НЕ включать, пока не проверены логиты gte).
+- **Ловушки:** `TRAP_LOGS = os.environ.get("TRAP_LOGS", "1") == "1"`; `TRAP_LEVEL = os.environ.get("TRAP_LEVEL", "warning")` (error|warning|info|debug).
+- **Хелпер ловушек** в `config.py` (или `app/traps.py`):
+  ```python
+  _TRAP_RANK = {"error": 0, "warning": 1, "info": 2, "debug": 3}
+  def trap(level: str, msg: str, *args, **kw) -> None:
+      """Пишет ловушку только если TRAP_LOGS=1 и level <= TRAP_LEVEL."""
+      if not TRAP_LOGS:
+          return
+      if _TRAP_RANK.get(level, 1) > _TRAP_RANK.get(TRAP_LEVEL, 1):
+          return
+      getattr(log, level, log.info)(msg, *args, **kw)
+  ```
+  Ловушки в коде вызываются через `trap("error", ...)` / `trap("warning", ...)` / `trap("info", ...)` / `trap("debug", ...)` — единая точка фильтрации по `TRAP_LEVEL`.
 - Оставить `E5_DIR`-эквивалент как fallback-константу для отката (не удалять старую логику полностью до G6).
 
 **Изменения docker-compose.yml** — параметры моделей через environment (см. блок выше в «Параметры как переменные»), дефолты в `.env.example`:
@@ -232,20 +287,35 @@ EMBED_POOLING=cls
 RERANK_MODEL=gte-reranker
 EMBED_DIM=384
 COSINE_THRESHOLD=0.55
+TRAP_LOGS=1
+TRAP_LEVEL=warning
 ```
 
-**Verification:** `docker compose config | grep EMBED` показывает значения из .env.
+**Также в Task 8:** прописать `logging:` ротацию в `docker-compose.yml` (репо + прод):
+```yaml
+logging:
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "5"
+```
 
-**Commit:** `chore(rag): .env.example — параметры моделей (документация)`
+**Verification:**
+- `docker compose config | grep EMBED` показывает значения из .env.
+- `docker inspect rag-demo --format '{{.HostConfig.LogConfig.Config}}'` → `map[max-file:5 max-size:10m]`.
+
+**Commit:** `chore(rag): .env.example + compose — параметры моделей, TRAP_*, ротация логов`
 
 ---
 
 ## Тесты / валидация
 
 - Единичные: `python3 -m py_compile` по всем изменённым файлам.
+- **Ловушки:** unit-тест `trap()` — фильтрация по `TRAP_LOGS`/`TRAP_LEVEL` (при `TRAP_LEVEL=warning` info-ловушка молчит, error пишется; при `TRAP_LOGS=0` — всё молчит).
 - В контейнере: `test_embed.py`, `test_rerank.py` (временные скрипты — проверить эмбеддинг 384-dim, CLS, логиты gte).
 - E2E: сквозной ответ через `/api/ask`.
 - RAM: `docker stats` (пик lazy-load < 2GiB лимит; целевой idle ~100–200 MiB с 3 int8-моделями).
+- Ротация: `docker inspect rag-demo` → LogConfig `max-size=10m max-file=5`.
 
 ## Риски / открытые вопросы
 
