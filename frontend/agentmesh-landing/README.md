@@ -65,6 +65,7 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 Продакшн (89.58.12.118):
 - Фронт: nginx-контейнер `agentmesh-site` (`/srv/agentmesh/docker-compose.yml`, образец — `site` в `/srv/site/`), статика монтируется из `/srv/agentmesh/public`.
 - Traefik: `/srv/traefik/dynamic/asp-gateway.yml` — роутер `aspgateway` с `priority: 100` ведёт только `/agents/*` и `/api/v1/agentmesh/*` на gatewayd `172.18.0.1:8348`; остальное на домене обслуживает nginx-фронт. `noindex` оставлен только на API-роутере, лендинг индексируется.
+- **Cloudflare (важно):** домен proxied через CF. CF Managed Rules префиксят `robots.txt` (Content-Signal + `Disallow: /` для GPTBot/ClaudeBot/Google-Extended и т.п.) — это видно только снаружи, файл на сервере чистый. Если AI-индексация нужна — отключить/смягчить Managed robots rule в панели CF (`dash.cloudflare.com/mnemostroma.com`).
 - Деплой артефакта: `tar -czf /tmp/aml-frontend.tar.gz -C frontend agentmesh-landing` → распаковать с transform в `/srv/agentmesh/public`. `sudo` через `~/.labs_deploy_creds` (SUDO_PASSWORD, не печатать).
 
 Детали API-интеграции — `../backend/gateway/traefik-dynamic.yml`.
