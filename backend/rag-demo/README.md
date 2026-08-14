@@ -20,7 +20,29 @@ clearly relevant cross-lingual fragments, so `RERANK_THRESHOLD=-4.0` silently di
 everything ("Not found in the provided documents" for every question). Rerank now only
 re-orders; the cosine threshold decides. `RERANK_THRESHOLD` stays in config as informational.
 
-## Embedder upgrade note — EmbeddingGemma-300m (evaluated, NOT adopted yet)
+## Embedder upgrade note — granite-embedding-97m-multilingual-r2 (evaluated, NOT adopted yet)
+Evaluated `ibm-granite/granite-embedding-97m-multilingual-r2` (IBM Granite) as an alternative embedder.
+
+- **What it is**: 97M dense multilingual embedding, **384-dim** (matches current e5-small schema!), context up to 32,768,
+  **200+ languages** (52 enhanced incl. ru/uk + code). MTEB Retrieval **60.3** — best open multilingual embedder under 100M
+  (e5-small = 50.9, +9.4). ModernBERT backbone, Apache-2.0 (no Gemma-style restrictions).
+- **ONNX**: `onnx/model.onnx` (fp32, 372 MB) and `onnx/model_quint8_avx2.onnx` (**int8, 94 MB**) — no external .onnx_data.
+  → https://huggingface.co/ibm-granite/granite-embedding-97m-multilingual-r2/tree/main/onnx
+- **Size**: int8 94 MB, fp32 372 MB — both fit the embedder budget (≤600–700 MB). No fp16 variant, so no fp16→fp32 RAM trap.
+- **Inputs/outputs (verified)**: `input_ids` + `attention_mask` int64 → `last_hidden_state` [*,*,384] only
+  (no `sentence_embedding` head — **pooling is external**). Pooling per `1_Pooling/config.json` = **CLS token** (not mean).
+- **No query/passage prefixes required** — plain encode on both sides (unlike EmbeddingGemma/Harrier).
+- **Live test on the resume (3 chunks, ru questions, CLS pooling)** — scores in a healthy 0.68–0.79 range
+  (compatible with the current ~0.55 cosine bar; unlike EmbeddingGemma's 0.07–0.35):
+  «какие навыки у кандидата» → Education chunk ✓, «что за вуз окончил кандидат» → ✓, «где работает человек» → ✓,
+  «название высшего учебного заведения» → ✗ (Contact chunk at 0.709 vs Education at 0.692 — a near-tie miss).
+  Mean pooling (incorrect for this model) dropped to 2/4.
+- **Dimension**: 384 = drop-in for current `vec_chunks` (no schema change), unlike EmbeddingGemma's 768.
+- **Verdict**: strongest overall engineering trade-off — Apache-2.0, same 384-dim as today (no migration),
+  healthy score range (threshold keeps working), 94 MB int8. Recall on the weak «название высшего учебного заведения»
+  phrasing missed by a hair. Adopt if the current pipeline's weak spot is recall, not phrasing edge-cases.
+
+## Embedder upgrade note — EmbeddingGemma-300m (SELECTED, not adopted yet)
 Evaluated `onnx-community/embeddinggemma-300m-ONNX` (Google EmbeddingGemma) as a replacement for multilingual-e5-small.
 
 - **What it is**: Google open embedding model, 300M / 768-dim (MRL 512/256/128), 2,048 token context,
@@ -44,9 +66,13 @@ Evaluated `onnx-community/embeddinggemma-300m-ONNX` (Google EmbeddingGemma) as a
   Absolute scores are low (0.07–0.35) vs e5-small (0.65–0.70) — ranking is correct, but `COSINE_THRESHOLD=0.55`
   would discard everything → the threshold must be retuned (~0.05) if adopted.
 - **Dimension change** 384 → 768 (or MRL-truncated 128/256/512) requires re-indexing all chunks + `vec_chunks` schema change.
-- **Verdict**: strongest recall of the three evaluated embedders (e5-small / Harrier-270m / EmbeddingGemma),
-  fits the size budget (q8 295 MB). Needs: prefix wrapping on both sides, threshold retune, dimension migration.
-  Revisit when cross-lingual recall becomes the bottleneck.
+- **Selection rationale** (vs e5-small / Harrier-270m): e5-small is excluded by weak recall; Harrier-270m is
+  formally fp16-capable (so it keeps an fp16→fp32 RAM-spike path) and scored weaker on the live test.
+  EmbeddingGemma is the only one with fp16 explicitly banned by the vendor → its q8 mode is the native,
+  RAM-safe operating point. **Selected model/variant: EmbeddingGemma-300m `model_quantized.onnx` (q8, 295 MB).**
+- **Adoption checklist**: wrap queries with `task: search result | query: …`, documents with
+  `title: none | text: …`; retune `COSINE_THRESHOLD` (~0.05); migrate `vec_chunks` to float[768];
+  re-index all chunks; re-verify live recall.
 
 ## Embedder upgrade note — harrier-oss-v1-270m (evaluated, NOT adopted yet)
 Evaluated `onnx-community/harrier-oss-v1-270m-ONNX` (Microsoft Harrier) as a replacement for multilingual-e5-small.
