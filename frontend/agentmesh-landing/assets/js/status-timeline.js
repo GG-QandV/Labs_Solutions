@@ -3,6 +3,7 @@
    capability → running → verified/failed. Icons per state. */
 
 import { SESSION_STATE } from "./api-client.js";
+import { t } from "./i18n.js";
 
 const ORDER = [
   SESSION_STATE.CREATED,
@@ -15,13 +16,13 @@ const ORDER = [
 ];
 
 const LABELS = {
-  [SESSION_STATE.CREATED]: "Session created",
-  [SESSION_STATE.AGENT_CARD_VALIDATING]: "Validating agent card",
-  [SESSION_STATE.DISCOVERED]: "Agent endpoint discovered",
-  [SESSION_STATE.CAPABILITY_CHECKED]: "Capability check",
-  [SESSION_STATE.TASK_RUNNING]: "Running test task",
-  [SESSION_STATE.VERIFIED]: "Hermes verification",
-  [SESSION_STATE.FAILED]: "Check failed",
+  [SESSION_STATE.CREATED]: () => t("tl.created"),
+  [SESSION_STATE.AGENT_CARD_VALIDATING]: () => t("tl.validating"),
+  [SESSION_STATE.DISCOVERED]: () => t("tl.discovered"),
+  [SESSION_STATE.CAPABILITY_CHECKED]: () => t("tl.capability"),
+  [SESSION_STATE.TASK_RUNNING]: () => t("tl.running"),
+  [SESSION_STATE.VERIFIED]: () => t("tl.verified"),
+  [SESSION_STATE.FAILED]: () => t("tl.failed"),
 };
 
 function iconFor(state) {
@@ -52,7 +53,7 @@ export function renderTimeline(container, session) {
       <li class="${cls}">
         <span class="status-dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${iconFor(state)}</svg></span>
         <div class="status-body">
-          <div class="st-title">${LABELS[state]}</div>
+          <div class="st-title">${LABELS[state] ? LABELS[state]() : ""}</div>
           ${state === current && session?.steps ? `<div class="st-msg">${esc(session.steps[session.steps.length - 1]?.msg || "")}</div>` : ""}
         </div>
       </li>`;

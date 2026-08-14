@@ -9,6 +9,7 @@
 */
 
 import * as sessionStore from "./session-store.js";
+import { t } from "./i18n.js";
 
 const BASE = window.AML_API_BASE || "";
 export const API_BASE = BASE;
@@ -158,24 +159,24 @@ export const mock = {
         }, ms)
       );
 
-    emit(SESSION_STATE.AGENT_CARD_VALIDATING, "Validating agent card and temporary credentials…");
+    emit(SESSION_STATE.AGENT_CARD_VALIDATING, t("hm.validating"));
     await wait(700);
 
-    emit(SESSION_STATE.DISCOVERED, "Agent endpoint discovered", {
+    emit(SESSION_STATE.DISCOVERED, t("hm.discovered"), {
       discovered: { protocol: "A2A", endpoint: "https://agentmesh-labs.mnemostroma.com/agents/claurst-a/rpc", latency_ms: 84 },
     });
     await wait(800);
 
-    emit(SESSION_STATE.CAPABILITY_CHECKED, "Capability check passed — sync messages and async tasks", {
+    emit(SESSION_STATE.CAPABILITY_CHECKED, t("hm.capability"), {
       capabilities: ["message.send", "task.run", "task.status", "status.get"],
     });
     await wait(900);
 
     const task = MOCK_TASKS.find((t) => t.kind === s.mode) || MOCK_TASKS[0];
-    emit(SESSION_STATE.TASK_RUNNING, "Running synthetic test task…", { task });
+    emit(SESSION_STATE.TASK_RUNNING, t("hm.running"), { task });
     await wait(1600);
 
-    emit(SESSION_STATE.VERIFIED, "Hermes validated the response format and session boundary.", {
+    emit(SESSION_STATE.VERIFIED, t("hm.verified"), {
       verified: true,
       protocol: "A2A",
       capability_check: "passed",

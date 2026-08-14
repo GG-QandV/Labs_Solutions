@@ -73,6 +73,5 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 ## TODO / техдолг
 
 - [ ] Подключение реального agentmesh-api backend (сейчас `/api/v1/agentmesh/availability` → 404 от gatewayd → wizard честно уходит в mock).
-- [ ] Локализация динамического контента wizard (timeline/hermes/report сейчас хардкод EN; ключи `wizard.*` в i18n готовы).
 - [ ] uk-версии SEO-подстраниц (`/uk/architecture/` и т.д.) — сейчас prerender только для `/uk/` (главная).
-- [ ] `/demo/?mode=built-in|a2a` — deep-link с преселектом режима (спека §6.2).
+- [ ] Ре-рендер динамического контента wizard при смене языка после запуска (timeline/hermes/report локализованы на момент запуска).

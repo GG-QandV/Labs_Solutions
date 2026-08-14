@@ -4,12 +4,13 @@
    internal hostnames, or other sessions' data. */
 
 import { SESSION_STATE } from "./api-client.js";
+import { t } from "./i18n.js";
 
 function verdictFor(state) {
   switch (state) {
-    case SESSION_STATE.VERIFIED: return { cls: "verdict--ok", ico: "ok", title: "Compatible", sub: "Response validated against the expected schema and session boundary." };
-    case SESSION_STATE.FAILED: return { cls: "verdict--fail", ico: "x", title: "Check did not pass", sub: "Review the details below or rerun the check." };
-    default: return { cls: "verdict--warn", ico: "pending", title: "In progress", sub: "Hermes is still validating the session." };
+    case SESSION_STATE.VERIFIED: return { cls: "verdict--ok", ico: "ok", title: t("rp.verdict.ok"), sub: t("rp.verdict.ok.sub") };
+    case SESSION_STATE.FAILED: return { cls: "verdict--fail", ico: "x", title: t("rp.verdict.fail"), sub: t("rp.verdict.fail.sub") };
+    default: return { cls: "verdict--warn", ico: "pending", title: t("rp.verdict.pending"), sub: t("rp.verdict.pending.sub") };
   }
 }
 
@@ -33,19 +34,19 @@ export function renderReport(container, session) {
         <div><div class="v-title">${v.title}</div><div class="v-sub">${v.sub}</div></div>
       </div>
       <div class="report-grid">
-        <div class="report-row"><span class="r-key">Protocol</span><span class="r-val">${esc(discovered.protocol || "A2A")}</span></div>
-        <div class="report-row"><span class="r-key">Agent endpoint</span><span class="r-val">${esc(discovered.endpoint || "—")}</span></div>
-        <div class="report-row"><span class="r-key">Capability check</span><span class="r-val ${session?.capability_check === "passed" ? "ok" : "warn"}">${esc(session?.capability_check || "pending")}</span></div>
-        <div class="report-row"><span class="r-key">Capabilities</span><span class="r-val">${caps.map(esc).join(" · ") || "—"}</span></div>
-        <div class="report-row"><span class="r-key">Response latency</span><span class="r-val">${session?.response_latency_ms ? session.response_latency_ms + " ms" : "—"}</span></div>
-        <div class="report-row"><span class="r-key">Session</span><span class="r-val">${esc(session?.id || "—")}</span></div>
-        <div class="report-row"><span class="r-key">Scope</span><span class="r-val">${(session?.scope || []).map(esc).join(" · ")}</span></div>
-        <div class="report-row"><span class="r-key">Role relevance</span><span class="r-val warn">heuristic — non-blocking</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.protocol"))}</span><span class="r-val">${esc(discovered.protocol || "A2A")}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.endpoint"))}</span><span class="r-val">${esc(discovered.endpoint || "—")}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.capability"))}</span><span class="r-val ${session?.capability_check === "passed" ? "ok" : "warn"}">${esc(session?.capability_check === "passed" ? t("rp.passed") : t("rp.pending"))}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.capabilities"))}</span><span class="r-val">${caps.map(esc).join(" · ") || "—"}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.latency"))}</span><span class="r-val">${session?.response_latency_ms ? session.response_latency_ms + " ms" : "—"}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.session"))}</span><span class="r-val">${esc(session?.id || "—")}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.scope"))}</span><span class="r-val">${(session?.scope || []).map(esc).join(" · ")}</span></div>
+        <div class="report-row"><span class="r-key">${esc(t("rp.role"))}</span><span class="r-val warn">${esc(t("rp.role.value"))}</span></div>
       </div>
-      <p class="report-note">The role-relevance signal is a heuristic estimate and never blocks a verdict. No internal hostnames, credentials, or other sessions are shown.</p>
+      <p class="report-note">${esc(t("rp.note"))}</p>
       <div class="report-actions">
-        <button class="btn btn--danger btn--sm" data-revoke>Revoke access now</button>
-        <a class="btn btn--secondary btn--sm" href="#contact">Request guided review</a>
+        <button class="btn btn--danger btn--sm" data-revoke>${esc(t("wizard.revoke"))}</button>
+        <a class="btn btn--secondary btn--sm" href="#contact">${esc(t("wizard.review"))}</a>
       </div>
     </div>`;
 }

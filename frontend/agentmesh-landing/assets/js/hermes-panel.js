@@ -4,16 +4,17 @@
    heuristic compatibility signal. */
 
 import { SESSION_STATE } from "./api-client.js";
+import { t } from "./i18n.js";
 
 const MESSAGES = {
-  [SESSION_STATE.CREATED]: "Session boundary established. Waiting for the agent to connect…",
-  [SESSION_STATE.AGENT_CARD_VALIDATING]: "Hermes is checking the agent card and temporary credentials.",
-  [SESSION_STATE.DISCOVERED]: "Endpoint discovered. Hermes is negotiating the A2A protocol.",
-  [SESSION_STATE.CAPABILITY_CHECKED]: "Capability check passed. Sync and async channels available.",
-  [SESSION_STATE.TASK_RUNNING]: "Hermes is validating the response format and session boundary.",
-  [SESSION_STATE.VERIFIED]: "Compatible. The response matches the expected schema and stayed inside the session boundary.",
-  [SESSION_STATE.FAILED]: "Compatibility check did not pass. Review the report below.",
-  [SESSION_STATE.REVOKED]: "Session revoked. Temporary credentials were invalidated.",
+  [SESSION_STATE.CREATED]: () => t("hm.created"),
+  [SESSION_STATE.AGENT_CARD_VALIDATING]: () => t("hm.validating"),
+  [SESSION_STATE.DISCOVERED]: () => t("hm.discovered"),
+  [SESSION_STATE.CAPABILITY_CHECKED]: () => t("hm.capability"),
+  [SESSION_STATE.TASK_RUNNING]: () => t("hm.running"),
+  [SESSION_STATE.VERIFIED]: () => t("hm.verified"),
+  [SESSION_STATE.FAILED]: () => t("hm.failed"),
+  [SESSION_STATE.REVOKED]: () => t("hm.revoked"),
 };
 
 export function renderHermesPanel(container, session) {
@@ -23,10 +24,10 @@ export function renderHermesPanel(container, session) {
     <div class="hermes-panel">
       <div class="hermes-panel-head">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2H3v16h5v4l6-4h7V2zM8 10h.01M12 10h.01M16 10h.01"/></svg>
-        Hermes · demo guide
-        <span class="hermes-status"><span class="live-dot"></span> listening</span>
+        ${esc(t("hm.title"))}
+        <span class="hermes-status"><span class="live-dot"></span> ${esc(t("hm.listening"))}</span>
       </div>
-      <div class="hermes-panel-body"><span class="caret">▸</span> ${esc(MESSAGES[state] || "")}</div>
+      <div class="hermes-panel-body"><span class="caret">▸</span> ${esc((MESSAGES[state] ? MESSAGES[state]() : ""))}</div>
     </div>`;
 }
 
