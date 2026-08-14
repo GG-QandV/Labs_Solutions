@@ -295,6 +295,8 @@
 
 .wizard-nav .spacer { width: 1px; flex: 1; }
 
+.modal-foot .wizard-nav { margin-top: 0; }
+
 /* ---------- sandbox boundaries (step 3) ---------- */
 
 .boundary-list { display: grid; gap: 8px; margin-bottom: 18px; }

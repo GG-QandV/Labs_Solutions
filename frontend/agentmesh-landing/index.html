@@ -59,22 +59,9 @@
   <!-- fonts -->
   <link rel="preload" href="/assets/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/JetBrainsMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
-  <style>
-    @font-face {
-      font-family: "Inter Tight";
-      src: local("Inter Tight"), url("/assets/fonts/Inter-Variable.woff2") format("woff2");
-      font-weight: 100 900;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: "JetBrains Mono";
-      src: local("JetBrains Mono"), url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2");
-      font-weight: 100 800;
-      font-display: swap;
-    }
-  </style>
 
   <!-- styles -->
+  <link rel="stylesheet" href="/assets/css/fonts.css">
   <link rel="stylesheet" href="/assets/css/tokens.css">
   <link rel="stylesheet" href="/assets/css/base.css">
   <link rel="stylesheet" href="/assets/css/layout.css">
@@ -251,7 +238,7 @@
           <h2 data-i18n="how.title">One gateway. Three clear stages.</h2>
           <p class="lede" data-i18n="how.p">AgentMesh Labs sits between your agent and the network. Every check runs inside an isolated, short-lived session.</p>
         </div>
-        <div class="grid-3" style="margin-top:48px">
+        <div class="grid-3 mt-xl">
           <div class="card" data-reveal>
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><path d="M15 3h6v6M10 14 21 3"/></svg></div>
             <h3 data-i18n="how.s1.title">Connect</h3>
@@ -278,7 +265,7 @@
           <span class="eyebrow" data-i18n="demo.eyebrow">Live sandbox</span>
           <h2 data-i18n="demo.title">Run a live sandbox check</h2>
           <p class="lede" data-i18n="demo.p">Bring your A2A agent, or use the bundled demo. Temporary credentials, synthetic payload, 15-minute TTL, one external agent per session.</p>
-          <div style="margin-top:28px">
+          <div class="mt-lg">
             <a class="btn btn--primary btn--lg" href="#" data-wizard-open data-i18n="demo.cta">Run a live sandbox check</a>
           </div>
         </div>
@@ -331,7 +318,7 @@
           <span class="eyebrow" data-i18n="caps.eyebrow">Capabilities</span>
           <h2 data-i18n="caps.title">What you get out of the box</h2>
         </div>
-        <div class="grid-3" style="margin-top:48px">
+        <div class="grid-3 mt-xl">
           <div class="card" data-reveal>
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-5 3 5 3M16 9l5 3-5 3M13 5l-2 14"/></svg></div>
             <h3 data-i18n="caps.c1.title">ACP ↔ A2A interoperability</h3>
@@ -373,7 +360,7 @@
           <span class="eyebrow" data-i18n="license.eyebrow">Licensing</span>
           <h2 data-i18n="license.title">Commercial license</h2>
           <p data-i18n="license.p">AgentMesh Labs is available under a commercial license for teams that run multiple agents in production.</p>
-          <div style="margin-top:24px">
+          <div class="mt-md">
             <a class="btn btn--secondary" href="/licensing/" data-i18n="license.cta">Request guided review</a>
           </div>
         </div>
@@ -394,11 +381,11 @@
 
     <!-- ================= final CTA ================= -->
     <section class="section section--alt" id="contact">
-      <div class="container reading" style="text-align:center" data-reveal>
+      <div class="container reading ta-center" data-reveal>
         <span class="eyebrow">AgentMesh Labs</span>
         <h2 data-i18n="cta.title">Ready to connect your agent?</h2>
         <p class="lede" data-i18n="cta.p">Run the live demo or request a guided integration review.</p>
-        <div class="hero-actions" style="justify-content:center;margin-top:32px">
+        <div class="hero-actions flex-center mt-lg">
           <a class="btn btn--primary btn--lg" href="#" data-wizard-open data-i18n="cta.primary">Run a live sandbox check</a>
           <a class="btn btn--secondary btn--lg" href="/licensing/" data-i18n="cta.secondary">Request guided review</a>
         </div>
@@ -546,13 +533,13 @@
               <span class="pill" id="wizard-mode-badge">SIMULATED</span>
               <span class="ttl">TTL <b id="wizard-ttl">15:00</b></span>
             </div>
-            <div class="live-metrics" style="margin:16px 0">
+            <div class="live-metrics my-md">
               <div class="metric"><div class="m-label" data-i18n="wizard.metric.mode">Mode</div><div class="m-val" id="wizard-metric-mode">—</div></div>
               <div class="metric"><div class="m-label" data-i18n="wizard.metric.state">State</div><div class="m-val" id="wizard-metric-state">—</div></div>
               <div class="metric"><div class="m-label" data-i18n="wizard.metric.ttl">TTL</div><div class="m-val" id="wizard-metric-ttl">—</div></div>
             </div>
             <div id="wizard-timeline"></div>
-            <div id="wizard-hermes" style="margin-top:18px"></div>
+            <div id="wizard-hermes" class="mt-lg"></div>
           </div>
 
           <div id="wizard-report" class="hidden"></div>
@@ -561,7 +548,7 @@
 
       <div class="modal-foot">
         <span class="foot-status"></span>
-        <div class="wizard-nav" style="margin-top:0">
+        <div class="wizard-nav modal-foot-nav">
           <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Back</button>
           <button class="btn btn--primary" type="button" data-wizard="next" data-i18n="wizard.next">Continue</button>
           <button class="btn btn--primary hidden" type="button" data-wizard="rerun" data-i18n="wizard.rerun">Run again</button>

@@ -1,0 +1,17 @@
+/* fonts.css — @font-face declarations (loaded via <link>, CSP-safe).
+   Inter Tight — primary UI font; Inter-Variable.woff2 served as fallback
+   source until a true Inter Tight file is available. */
+
+@font-face {
+  font-family: "Inter Tight";
+  src: local("Inter Tight"), url("/assets/fonts/Inter-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "JetBrains Mono";
+  src: local("JetBrains Mono"), url("/assets/fonts/JetBrainsMono-Variable.woff2") format("woff2");
+  font-weight: 100 800;
+  font-display: swap;
+}

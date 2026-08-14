@@ -6,6 +6,7 @@
 
 - Vanilla HTML/CSS/JS (ES modules), без сборки и зависимостей.
 - Дизайн-токены: `assets/css/tokens.css` (dark по умолчанию + light).
+- `@font-face` вынесен в `assets/css/fonts.css` (не inline) — строгий CSP `style-src 'self'` на проде не допускает inline `<style>`/`style=""`; **инлайн-стили в разметке запрещены**, для отступов/центрирования использовать утилиты из `base.css` (`.mt-md`, `.mt-xl`, `.ta-center`, `.flex-center`, `.hidden` и т.п.).
 - Логотип Labs.Mnemostroma — inline SVG с запечёнными путями из брендбука; цвета частей переключаются по теме через `[data-logo-part]` (см. `components.css`).
 - Шрифты: `Inter Tight` (fallback Inter), `JetBrains Mono` — `assets/fonts/`.
 
@@ -61,11 +62,17 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 
 ## Deploy
 
-Продакшн: статика → `/srv/site/public` (nginx); `/api/v1/agentmesh/*` и `/agents/*` → gatewayd `172.18.0.1:8348` (Traefik). Детали — в `../backend/gateway/traefik-dynamic.yml`.
+Продакшн (89.58.12.118):
+- Фронт: nginx-контейнер `agentmesh-site` (`/srv/agentmesh/docker-compose.yml`, образец — `site` в `/srv/site/`), статика монтируется из `/srv/agentmesh/public`.
+- Traefik: `/srv/traefik/dynamic/asp-gateway.yml` — роутер `aspgateway` с `priority: 100` ведёт только `/agents/*` и `/api/v1/agentmesh/*` на gatewayd `172.18.0.1:8348`; остальное на домене обслуживает nginx-фронт. `noindex` оставлен только на API-роутере, лендинг индексируется.
+- Деплой артефакта: `tar -czf /tmp/aml-frontend.tar.gz -C frontend agentmesh-landing` → распаковать с transform в `/srv/agentmesh/public`. `sudo` через `~/.labs_deploy_creds` (SUDO_PASSWORD, не печатать).
+
+Детали API-интеграции — `../backend/gateway/traefik-dynamic.yml`.
 
 ## TODO / техдолг
 
 - [ ] SEO-подстраницы: `/architecture/ /security/ /licensing/ /docs/ /demo/ /privacy/ /terms/` (папки созданы).
 - [ ] `build/prerender.py` (по образцу `../landing/build/prerender.py`).
-- [ ] Подключение реального agentmesh-api backend.
-- [ ] `assets/og/og-cover.png` — og-изображение (пока 404).
+- [ ] Подключение реального agentmesh-api backend (сейчас `/api/v1/agentmesh/availability` → 404 от gatewayd → wizard честно уходит в mock).
+- [ ] `assets/og/og-cover.png` — og-изображение (пока 404, грузится только при шаринге).
+- [ ] Локализация динамического контента wizard (timeline/hermes/report сейчас хардкод EN; ключи `wizard.*` в i18n готовы).
