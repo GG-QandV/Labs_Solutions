@@ -20,6 +20,28 @@ clearly relevant cross-lingual fragments, so `RERANK_THRESHOLD=-4.0` silently di
 everything ("Not found in the provided documents" for every question). Rerank now only
 re-orders; the cosine threshold decides. `RERANK_THRESHOLD` stays in config as informational.
 
+## Embedder upgrade note — harrier-oss-v1-270m (evaluated, NOT adopted yet)
+Evaluated `onnx-community/harrier-oss-v1-270m-ONNX` (Microsoft Harrier) as a replacement for multilingual-e5-small.
+
+- **What it is**: multilingual text-embedding family (MIT), 270M / 640-dim / 32,768 token context,
+  MTEB v2 score **66.5** (e5-small is far below). 70+ languages incl. ru/uk.
+  Decoder-only, **last-token pooling** + L2 norm. Usable for retrieval and (via dot-product) reranking.
+- **ONNX files**: each variant is 2 files — `.onnx` (graph) + `.onnx_data` (external weights),
+  onnxruntime loads them when both sit in the same dir with matching basename.
+  → https://huggingface.co/onnx-community/harrier-oss-v1-270m-ONNX/tree/main/onnx
+- **Size check vs fleet limits** (embedder ≤600–700 MB, runtime ≤1.5–1.7 GB):
+  - `model_quantized.onnx_data` ≈ **328 MB** ✓ (fits embedder budget)
+  - `model_q4f16.onnx_data` ≈ 164 MB, `model_q4.onnx_data` ≈ 196 MB, `model_fp16.onnx_data` ≈ 527 MB
+  - `model.onnx_data` (fp32) ≈ 1055 MB ✗
+- **Inputs/outputs (verified)**: `input_ids` int64, `attention_mask` int64 → `sentence_embedding` [*,640]. No `token_type_ids`.
+- **Integration gotchas (verified on prod data)**:
+  - Query MUST carry the instruction prefix (`Instruct: Given a web search query, retrieve relevant passages that answer the query\nQuery: …`), otherwise performance degrades sharply.
+  - Last-token pooling needs a correct mask/EOS handling — naive mean-pad encode gave weak scores (0.18–0.31) on a ru question; with the instruction prefix the relevant chunk ranked #1 for «что за вуз окончил кандидат» but not for «название высшего учебного заведения».
+  - Dimension change 384 → 640 requires re-indexing all chunks and a `vec_chunks` schema change (`float[640]`).
+- **Verdict**: strong quality, fits the size budget (quantized 328 MB), but non-trivial to wire correctly
+  (instruction prompts, last-token pooling, dimension migration). Defer until the retrieval logic is
+  proven with the current pipeline; revisit when cross-lingual recall is the bottleneck.
+
 ## Reranker upgrade note — gte-multilingual-reranker-base (evaluated, NOT adopted yet)
 Evaluated `Alibaba-NLP/gte-multilingual-reranker-base` as a replacement for TinyBERT-L2.
 
