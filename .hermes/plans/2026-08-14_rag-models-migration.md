@@ -99,15 +99,21 @@ environment:
 logging:
   driver: json-file
   options:
-    max-size: "10m"      # ротация каждого файла при 10 МБ
-    max-file: "5"        # держать максимум 5 файлов (≈50 МБ на контейнер)
+    max-size: "5m"      # ротация каждого файла при 5 МБ
+    max-file: "3"        # держать максимум 3 файла (≈15 МБ на контейнер)
 ```
 
-**Покрытие месячного окна:** 5 × 10MB = 50MB буфер. При типовом объёме логов rag-demo (~десятки КБ/день при TRAP_LEVEL=warning) 50MB хватает **на несколько месяцев**; старые файлы автоматически затираются драйвером при превышении `max-file`. Для шумных периодов (debug) окно сокращается — это осознанный трейдофф, при `TRAP_LEVEL=warning` в проде буфер > 1 месяца.
+**Обоснование размера (измерено на проде):** контейнер за ~4 часа пишет ~69KB при INFO-уровне →
+≈ 0.4MB/день. При `TRAP_LEVEL=warning` (прод-режим) — примерно 0.1MB/день. Буфер **5MB × 3 = 15MB**
+покрывает:
+- warning-режим: 15MB / 0.1MB ≈ **150 дней** (5 месяцев);
+- info-режим: 15MB / 0.4MB ≈ **37 дней** (> 1 месяца даже при диагностике).
+Старые файлы автоматически затираются драйвером при превышении `max-file`. Размер 10MB×5 (50MB)
+избыточен — нет смысла держать месяцы логов, когда диагностика включается точечно через `TRAP_LEVEL`.
 
 Если нужна жёсткая гарантия ≥ 30 дней — включить `LOG_ROTATE_DAYS` в env и реализовать ротацию в коде (`logging.handlers.RotatingFileHandler` с date-именем + удаление старше 30 дней) **только по явному запросу** — docker json-file ротация проще и достаточна.
 
-**Task 8 дополняется:** прописать `logging:` блок в `docker-compose.yml` (прод + репо) и убедиться `docker inspect` показывает `max-size=10m max-file=5`.
+**Task 8 дополняется:** прописать `logging:` блок в `docker-compose.yml` (прод + репо) и убедиться `docker inspect` показывает `max-size=5m max-file=3`.
 
 ---
 
@@ -296,13 +302,13 @@ TRAP_LEVEL=warning
 logging:
   driver: json-file
   options:
-    max-size: "10m"
-    max-file: "5"
+    max-size: "5m"
+    max-file: "3"
 ```
 
 **Verification:**
 - `docker compose config | grep EMBED` показывает значения из .env.
-- `docker inspect rag-demo --format '{{.HostConfig.LogConfig.Config}}'` → `map[max-file:5 max-size:10m]`.
+- `docker inspect rag-demo --format '{{.HostConfig.LogConfig.Config}}'` → `map[max-file:3 max-size:5m]`.
 
 **Commit:** `chore(rag): .env.example + compose — параметры моделей, TRAP_*, ротация логов`
 
@@ -315,7 +321,7 @@ logging:
 - В контейнере: `test_embed.py`, `test_rerank.py` (временные скрипты — проверить эмбеддинг 384-dim, CLS, логиты gte).
 - E2E: сквозной ответ через `/api/ask`.
 - RAM: `docker stats` (пик lazy-load < 2GiB лимит; целевой idle ~100–200 MiB с 3 int8-моделями).
-- Ротация: `docker inspect rag-demo` → LogConfig `max-size=10m max-file=5`.
+- Ротация: `docker inspect rag-demo` → LogConfig `max-size=5m max-file=3`.
 
 ## Риски / открытые вопросы
 
