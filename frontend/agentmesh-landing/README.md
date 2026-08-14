@@ -74,5 +74,5 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 ## TODO / техдолг
 
 - [ ] Подключение реального agentmesh-api backend (сейчас `/api/v1/agentmesh/availability` → 404 от gatewayd → wizard честно уходит в mock).
-- [ ] uk-версии SEO-подстраниц (`/uk/architecture/` и т.д.) — сейчас prerender только для `/uk/` (главная).
 - [ ] Ре-рендер динамического контента wizard при смене языка после запуска (timeline/hermes/report локализованы на момент запуска).
+- [ ] uk-версии подстраниц: nav-ссылки внутри uk-страниц ведут на EN-версии (не на `/uk/...`); при подключении uk-локали целиком — пройтись по ссылкам.

@@ -24,6 +24,8 @@ SRC = ROOT / "index.html"
 LANGS = ["uk"]
 DOMAIN = "agentmesh-labs.mnemostroma.com"
 
+SUBPAGES = ["architecture", "security", "licensing", "docs", "demo", "privacy", "terms"]
+
 
 def deep_get(d, dotted):
     # Словари здесь плоские ("caps.c1.title" — один ключ), но поддерживаем
@@ -38,16 +40,14 @@ def deep_get(d, dotted):
     return cur if isinstance(cur, str) else None
 
 
-def process_lang(lang):
+def process_page(lang, src_path, out_path, base_url):
     dict_path = ROOT / "i18n" / f"{lang}.json"
-    out_dir = ROOT / lang
-    out_path = out_dir / "index.html"
 
-    if not SRC.exists() or not dict_path.exists():
-        print(f"ПРОПУСК {lang}: index.html или i18n/{lang}.json не найдены", file=sys.stderr)
+    if not src_path.exists() or not dict_path.exists():
+        print(f"ПРОПУСК: {src_path} или i18n/{lang}.json не найдены", file=sys.stderr)
         return False
 
-    src = SRC.read_text(encoding="utf-8")
+    src = src_path.read_text(encoding="utf-8")
     d = json.loads(dict_path.read_text(encoding="utf-8"))
     missing = []
 
@@ -88,8 +88,13 @@ def process_lang(lang):
 
     src = re.sub(r"<[^>]*\bdata-i18n-attr=\"([^\"]+)\"[^>]*>", repl_attr, src)
 
-    # 3) <title>
-    title = deep_get(d, "meta.title")
+    # 3) <title> — для подстраниц берём meta.title.<slug>, для главной meta.title
+    title = None
+    if src_path.parent.name != "agentmesh-landing" and src_path.parent.name != ROOT.name:
+        # src_path = ROOT/<slug>/index.html
+        title = deep_get(d, f"meta.title.{src_path.parent.name}")
+    if title is None:
+        title = deep_get(d, "meta.title")
     if title:
         src = re.sub(
             r"(<title[^>]*>).*?(</title>)",
@@ -97,17 +102,23 @@ def process_lang(lang):
             src,
             flags=re.S,
         )
+        src = re.sub(
+            r'(<meta property="og:title" content=")[^"]*(")',
+            lambda m: m.group(1) + html.escape(title, quote=True) + m.group(2),
+            src,
+            count=1,
+        )
 
     # 4) язык документа, canonical, og:url, data-lang-default
     src = src.replace('<html lang="en"', f'<html lang="{lang}"', 1)
     src = src.replace(
-        f'<link rel="canonical" href="https://{DOMAIN}/">',
-        f'<link rel="canonical" href="https://{DOMAIN}/{lang}/">',
+        f'<link rel="canonical" href="https://{DOMAIN}/{base_url}">',
+        f'<link rel="canonical" href="https://{DOMAIN}/{lang}/{base_url}">',
         1,
     )
     src = src.replace(
-        f'<meta property="og:url" content="https://{DOMAIN}/">',
-        f'<meta property="og:url" content="https://{DOMAIN}/{lang}/">',
+        f'<meta property="og:url" content="https://{DOMAIN}/{base_url}">',
+        f'<meta property="og:url" content="https://{DOMAIN}/{lang}/{base_url}">',
         1,
     )
     src = src.replace(
@@ -116,7 +127,7 @@ def process_lang(lang):
         1,
     )
 
-    out_dir.mkdir(exist_ok=True)
+    out_path.parent.mkdir(exist_ok=True)
     out_path.write_text(src, encoding="utf-8")
 
     uniq = sorted(set(k for k in missing if k))
@@ -128,11 +139,19 @@ def process_lang(lang):
 
 def main() -> int:
     ok = 0
+    total = 0
     for lang in LANGS:
-        if process_lang(lang):
+        # главная
+        total += 1
+        if process_page(lang, ROOT / "index.html", ROOT / lang / "index.html", ""):
             ok += 1
-    print(f"\nГотово: {ok}/{len(LANGS)} языков")
-    return 0 if ok == len(LANGS) else 1
+        # подстраницы
+        for slug in SUBPAGES:
+            total += 1
+            if process_page(lang, ROOT / slug / "index.html", ROOT / lang / slug / "index.html", f"{slug}/"):
+                ok += 1
+    print(f"\nГотово: {ok}/{total} страниц")
+    return 0 if ok == total else 1
 
 
 if __name__ == "__main__":

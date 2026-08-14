@@ -54,10 +54,11 @@ def version_html(path: pathlib.Path) -> int:
         q = assets_path_hash(url)
         if q is None:
             return m.group(0)
-        if "?" in url:
+        base = url.split("?")[0]
+        if url == f"{base}{q}":
             return m.group(0)
         changed += 1
-        return f'{attr}="{url}{q}"'
+        return f'{attr}="{base}{q}"'
 
     new_src = re.sub(r'(src|href)="(/assets/[^"]+)"', repl, src)
     if new_src != src:
@@ -91,6 +92,8 @@ def main() -> int:
     pages = [ROOT / "index.html"]
     for slug in ["architecture", "security", "licensing", "docs", "demo", "privacy", "terms"]:
         pages.extend(sorted((ROOT / slug).glob("index.html")))
+        pages.extend(sorted((ROOT / "uk" / slug).glob("index.html")))
+    pages.extend(sorted((ROOT / "uk").glob("index.html")))
     for html in pages:
         if html.exists():
             total += version_html(html)

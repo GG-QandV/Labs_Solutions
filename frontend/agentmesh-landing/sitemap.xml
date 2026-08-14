@@ -74,5 +74,59 @@
     <priority>0.3</priority>
   </url>
 
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/architecture/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/security/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/security/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/security/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/licensing/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/licensing/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/docs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/docs/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/docs/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/privacy/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/terms/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/terms/"/>
+    <lastmod>2026-08-14</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
   <!-- /demo/ — noindex в MVP (спека §2), не включать в sitemap -->
 </urlset>

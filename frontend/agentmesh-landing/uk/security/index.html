@@ -1,35 +1,45 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="uk" data-theme="dark" data-lang-default="uk">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Live demo — AgentMesh Labs</title>
-<meta name="description" content="AgentMesh Labs live sandbox — run a connection check against the bundled demo agent with temporary credentials.">
-  <link rel="canonical" href="https://agentmesh-labs.mnemostroma.com/demo">
-  <meta name="robots" content="noindex, nofollow">
+
+  <title>Безпека — AgentMesh Labs</title>
+  <meta name="description" content="AgentMesh Labs security model: session isolation, temporary per-session credentials, synthetic test data, and a bounded demo path that never touches your systems.">
+  <link rel="canonical" href="https://agentmesh-labs.mnemostroma.com/uk/security/">
+  <meta name="robots" content="index, follow">
+
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="AgentMesh Labs">
-  <meta property="og:title" content="Live demo — AgentMesh Labs">
-  <meta property="og:url" content="https://agentmesh-labs.mnemostroma.com/demo">
-  <link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/demo">
-  <link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/demo">
+  <meta property="og:title" content="Безпека — AgentMesh Labs">
+  <meta property="og:description" content="Session isolation, temporary access, synthetic data, bounded demo path.">
+  <meta property="og:url" content="https://agentmesh-labs.mnemostroma.com/uk/security/">
+
+  <link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/security/">
+  <link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/security/">
+
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
       { "@type": "ListItem", "position": 1, "name": "AgentMesh Labs", "item": "https://agentmesh-labs.mnemostroma.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Live demo" }
+      { "@type": "ListItem", "position": 2, "name": "Security" }
     ]
   }
   </script>
+
   <script src="/assets/js/theme-init.js?v=e1188de9ec"></script>
+
   <link rel="preload" href="/assets/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/JetBrainsMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+
   <link rel="stylesheet" href="/assets/css/fonts.css?v=aae268c18f">
   <link rel="stylesheet" href="/assets/css/tokens.css?v=6f0668dcfe">
   <link rel="stylesheet" href="/assets/css/base.css?v=c4a65ac4e8">
   <link rel="stylesheet" href="/assets/css/layout.css?v=1768176a92">
   <link rel="stylesheet" href="/assets/css/components.css?v=9b381cc1f1">
+
   <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=fd8f6f0571">
 </head>
 <body>
@@ -49,23 +59,28 @@
         </span>
         <span class="brand-badge">Labs</span>
       </a>
+
       <nav class="main-nav" aria-label="Main">
         <a href="/#how">How it works</a>
-        <a href="/architecture/" data-i18n="nav.architecture">Architecture</a>
-        <a href="/security/" data-i18n="nav.security">Security</a>
-        <a href="/licensing/" data-i18n="nav.licensing">Licensing</a>
-        <a href="/docs/" aria-current="page">Docs</a>
+        <a href="/architecture/" data-i18n="nav.architecture">Архітектура</a>
+        <a href="/security/" aria-current="page" data-i18n="pg.security.0">Безпека</a>
+        <a href="/licensing/" data-i18n="nav.licensing">Ліцензування</a>
+        <a href="/docs/" data-i18n="nav.docs">Документація</a>
       </nav>
+
       <div class="header-actions">
         <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch to light theme">
           <svg data-ico="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
           <svg data-ico="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
         </button>
+
         <div class="lang-switch" role="group" aria-label="Language">
           <button type="button" data-lang="en" aria-label="English">EN</button>
           <button type="button" data-lang="uk" aria-label="Українська">UA</button>
         </div>
+
         <a class="btn btn--primary btn--sm" href="#" data-wizard-open>Run live check</a>
+
         <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-label="Menu" aria-expanded="false">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
         </button>
@@ -76,43 +91,98 @@
   <main>
     <div class="container page-head">
       <nav class="breadcrumbs" aria-label="Breadcrumb">
-        <a href="/">Home</a><span class="sep">/</span><span>Live demo</span>
+        <a href="/">Home</a><span class="sep">/</span><span>Security</span>
       </nav>
     </div>
 
     <section class="section">
-      <div class="container reading ta-center">
-        <span class="eyebrow">Live sandbox</span>
-        <h1>AgentMesh Labs — live sandbox</h1>
-        <p class="lede">Run a real connection check against the bundled demo agent. Temporary credentials, synthetic payload, 15-minute TTL, one external agent per session.</p>
-        <div class="hero-actions flex-center mt-lg">
-          <a class="btn btn--primary btn--lg" href="#" data-wizard-open>Run a live sandbox check</a>
-          <a class="btn btn--secondary btn--lg" href="/#how">How it works</a>
-        </div>
-        <p class="mt-md">Preset a role: <a href="/demo/?mode=built-in">Built-in demo</a> · <a href="/demo/?mode=a2a">Bring your A2A agent</a></p>
+      <div class="container reading">
+        <span class="eyebrow">Security</span>
+        <h1 data-i18n="pg.security.1">Обмежена за дизайном</h1>
+        <p class="lede">AgentMesh Labs keeps the demo path inside explicit boundaries: isolated sessions, temporary credentials, synthetic payloads, and a session boundary that Hermes validates on every run.</p>
       </div>
     </section>
 
     <section class="section section--alt">
       <div class="container">
+        <h2 class="section-title" data-i18n="pg.security.2">Модель безпеки</h2>
         <div class="grid-3 mt-xl">
-          <div class="stat-card card">
-            <div class="stat-num">15<span class="unit">min</span></div>
-            <div class="stat-label">Session TTL, max 30</div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h3>Session isolation</h3>
+            <p data-i18n="pg.security.3">Один зовнішній агент на сесію. Жодного витоку контексту чи облікових даних між клієнтами або агентами.</p>
           </div>
-          <div class="stat-card card">
-            <div class="stat-num">1<span class="unit">/sess</span></div>
-            <div class="stat-label">External agent per session</div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/><path d="m9 12 2 2 4-4"/></svg></div>
+            <h3 data-i18n="pg.security.4">Тимчасовий доступ</h3>
+            <p data-i18n="pg.security.5">Облікові дані видаються на сесію, обмежені демо-поверхнею та анулюються після TTL або за запитом.</p>
           </div>
-          <div class="stat-card card">
-            <div class="stat-num">0<span class="unit">keys</span></div>
-            <div class="stat-label">No permanent credentials</div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M18.4 5.6l-2.1 2.1M21 12h-3M18.4 18.4l-2.1-2.1M12 21v-3M5.6 18.4l2.1-2.1M3 12h3M5.6 5.6l2.1 2.1"/><circle cx="12" cy="12" r="3"/></svg></div>
+            <h3 data-i18n="pg.security.6">Синтетичні дані</h3>
+            <p data-i18n="pg.security.7">Демо-шляхом проходять лише синтетичні тестові дані. Нічого з ваших внутрішніх систем не запитується і не надається.</p>
           </div>
         </div>
       </div>
     </section>
-  </main>
 
+    <section class="section">
+      <div class="container split">
+        <div>
+          <h2 data-i18n="pg.security.8">Життєвий цикл сесії</h2>
+          <p>Every session is short-lived and revocable. The timeline makes the lifecycle visible: created → validated → discovered → capability check → test task → verified.</p>
+        </div>
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>
+            <div><b>Short TTL</b><br><span>15 minutes by default, 30 max. Credentials die with the session.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <div><b>One-click revoke</b><br><span>Revoke access immediately from the compatibility report.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            <div><b>Visible boundary</b><br><span>Hermes reports the exact scope used — nothing more.</span></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container reading">
+        <h2 data-i18n="pg.security.9">Чого ми ніколи не показуємо</h2>
+        <ul class="feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <div><b>Raw credentials</b><br><span>Bearer tokens are masked after the first copy and never logged.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <div><b>Internal hostnames</b><br><span>Gateway addresses and internal routing stay off the public page.</span></div>
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            <div><b>Other sessions</b><br><span>Each session is sandboxed from every other session.</span></div>
+          </li>
+        </ul>
+        <div class="notice mt-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div>The role-relevance signal shown in reports is a heuristic estimate and never blocks a verdict. Full technical security details are published in the <a href="/docs/">documentation</a>.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container reading ta-center">
+        <h2 data-i18n="pg.security.10">Побачте межі в дії</h2>
+        <p class="lede" data-i18n="pg.security.11">Запустіть live sandbox і спостерігайте за життєвим циклом сесії з повною прозорістю.</p>
+        <div class="hero-actions flex-center mt-lg">
+          <a class="btn btn--primary btn--lg" href="#" data-wizard-open>Run a live sandbox check</a>
+          <a class="btn btn--secondary btn--lg" href="/architecture/">Read the architecture</a>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer class="site-footer">
@@ -135,12 +205,12 @@
           <h4>Product</h4>
           <a href="#" data-wizard-open>Live demo</a>
           <a href="/architecture/">Architecture</a>
-          <a href="/security/">Security</a>
+          <a href="/security/" data-i18n="nav.security">Безпека</a>
           <a href="/licensing/">Licensing</a>
         </div>
         <div class="footer-col">
           <h4>Resources</h4>
-          <a href="/docs/" data-i18n="nav.docs">Documentation</a>
+          <a href="/docs/" data-i18n="nav.docs">Документація</a>
           <a href="/#how">How it works</a>
           <a href="/#capabilities">Capabilities</a>
         </div>
@@ -164,7 +234,7 @@
       <div class="modal-head">
         <h3 class="modal-title" id="wizard-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
-          <span data-i18n="wizard.title">Live sandbox check</span>
+          <span data-i18n="wizard.title">Жива перевірка з'єднання</span>
         </h3>
         <button class="modal-close" type="button" aria-label="Close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
@@ -176,44 +246,44 @@
       <div class="modal-body">
         <!-- step 1: role -->
         <div class="wizard-step active" data-step="1">
-          <h3 data-i18n="wizard.role.title">Choose your role</h3>
-          <p class="step-desc" data-i18n="wizard.role.desc">Select how you want to run the connection check.</p>
+          <h3 data-i18n="wizard.role.title">Оберіть роль</h3>
+          <p class="step-desc" data-i18n="wizard.role.desc">Оберіть, як запустити перевірку з'єднання.</p>
           <div class="option-grid" id="wizard-role" role="radiogroup">
             <button type="button" class="option" data-value="bundled" role="radio">
               <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/></svg></span>
-              <span><span class="opt-title" data-i18n="wizard.role.bundled">Bundled demo</span><br><span class="opt-desc" data-i18n="wizard.role.bundled.desc">Hermes connects to a built-in demo agent with a fixed synthetic case.</span></span>
+              <span><span class="opt-title" data-i18n="wizard.role.bundled">Вбудована демо</span><br><span class="opt-desc" data-i18n="wizard.role.bundled.desc">Hermes з'єднується з вбудованим демо-агентом з фіксованим синтетичним кейсом.</span></span>
             </button>
             <button type="button" class="option" data-value="a2a" role="radio">
               <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-5 3 5 3M16 9l5 3-5 3M13 5l-2 14"/></svg></span>
-              <span><span class="opt-title" data-i18n="wizard.role.a2a">Public A2A sandbox</span><br><span class="opt-desc" data-i18n="wizard.role.a2a.desc">Bring your own A2A agent — temporary credentials, synthetic payload.</span></span>
+              <span><span class="opt-title" data-i18n="wizard.role.a2a">Публічна A2A пісочниця</span><br><span class="opt-desc" data-i18n="wizard.role.a2a.desc">Приведіть власного A2A-агента — тимчасові облікові дані, синтетичний payload.</span></span>
             </button>
             <button type="button" class="option" data-value="acp" role="radio">
               <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></span>
-              <span><span class="opt-title" data-i18n="wizard.role.acp">Guided ACP test</span><br><span class="opt-desc" data-i18n="wizard.role.acp.desc">Walk through an ACP-style connection with guided review.</span></span>
+              <span><span class="opt-title" data-i18n="wizard.role.acp">Керований ACP тест</span><br><span class="opt-desc" data-i18n="wizard.role.acp.desc">Пройдіть ACP-з'єднання з керованим оглядом.</span></span>
             </button>
           </div>
         </div>
 
         <!-- step 2: mode -->
         <div class="wizard-step" data-step="2">
-          <h3 data-i18n="wizard.mode.title">Sync or async?</h3>
-          <p class="step-desc" data-i18n="wizard.mode.desc">Choose the interaction model for the test task.</p>
+          <h3 data-i18n="wizard.mode.title">Синхронно чи асинхронно?</h3>
+          <p class="step-desc" data-i18n="wizard.mode.desc">Оберіть модель взаємодії для тестового завдання.</p>
           <div class="option-grid" id="wizard-mode" role="radiogroup">
             <button type="button" class="option" data-value="sync" role="radio">
               <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg></span>
-              <span><span class="opt-title" data-i18n="wizard.mode.sync">Synchronous</span><br><span class="opt-desc" data-i18n="wizard.mode.sync.desc">A short exchange with a direct response.</span></span>
+              <span><span class="opt-title" data-i18n="wizard.mode.sync">Синхронно</span><br><span class="opt-desc" data-i18n="wizard.mode.sync.desc">Короткий обмін з прямою відповіддю.</span></span>
             </button>
             <button type="button" class="option" data-value="async" role="radio">
               <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
-              <span><span class="opt-title" data-i18n="wizard.mode.async">Asynchronous</span><br><span class="opt-desc" data-i18n="wizard.mode.async.desc">Fire a task and track it through the timeline.</span></span>
+              <span><span class="opt-title" data-i18n="wizard.mode.async">Асинхронно</span><br><span class="opt-desc" data-i18n="wizard.mode.async.desc">Запустіть завдання та відстежуйте його через таймлайн.</span></span>
             </button>
           </div>
         </div>
 
         <!-- step 3: agent card url -->
         <div class="wizard-step" data-step="3">
-          <h3 data-i18n="wizard.url.title">Your Agent Card URL</h3>
-          <p class="step-desc" data-i18n="wizard.url.desc">Paste the URL of your A2A agent card. It stays inside the session and is never published.</p>
+          <h3 data-i18n="wizard.url.title">URL вашого Agent Card</h3>
+          <p class="step-desc" data-i18n="wizard.url.desc">Вставте URL картки вашого A2A-агента. Він залишається всередині сесії та ніколи не публікується.</p>
           <div class="field">
             <label for="wizard-url">Agent Card URL</label>
             <input class="input" id="wizard-url" type="url" inputmode="url" autocomplete="off" spellcheck="false"
@@ -221,25 +291,25 @@
                    data-i18n-attr="placeholder=wizard.url.placeholder">
           </div>
           <div class="wizard-nav">
-            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Back</button>
-            <button class="btn btn--primary" type="button" data-wizard="url-continue" data-i18n="wizard.url.continue">Review sandbox boundaries</button>
+            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Назад</button>
+            <button class="btn btn--primary" type="button" data-wizard="url-continue" data-i18n="wizard.url.continue">Огляд меж пісочниці</button>
           </div>
         </div>
 
         <!-- step 4: boundaries -->
         <div class="wizard-step" data-step="4">
-          <h3 data-i18n="wizard.boundaries.title">Sandbox boundaries</h3>
-          <p class="step-desc" data-i18n="wizard.boundaries.desc">This is what the check will do. Nothing else is requested or granted.</p>
+          <h3 data-i18n="wizard.boundaries.title">Межі пісочниці</h3>
+          <p class="step-desc" data-i18n="wizard.boundaries.desc">Ось що зробить перевірка. Нічого більше не запитується і не надається.</p>
           <div class="boundary-list">
-            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row1.k">Scope</span><div class="scope-tags"><span class="scope-tag">agent-card:read</span><span class="scope-tag">task:receive</span><span class="scope-tag">task:respond</span><span class="scope-tag">status:read</span></div></div>
-            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row2.k">Credentials</span><span class="b-val" data-i18n="wizard.boundaries.row2.v">Temporary, per-session</span></div>
-            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row3.k">TTL</span><span class="b-val" data-i18n="wizard.boundaries.row3.v">15 minutes (max 30)</span></div>
-            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row4.k">Payload</span><span class="b-val" data-i18n="wizard.boundaries.row4.v">Synthetic test data only</span></div>
-            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row5.k">External agents</span><span class="b-val" data-i18n="wizard.boundaries.row5.v">One per session</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row1.k">Обсяг</span><div class="scope-tags"><span class="scope-tag">agent-card:read</span><span class="scope-tag">task:receive</span><span class="scope-tag">task:respond</span><span class="scope-tag">status:read</span></div></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row2.k">Облікові дані</span><span class="b-val" data-i18n="wizard.boundaries.row2.v">Тимчасові, на сесію</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row3.k">TTL</span><span class="b-val" data-i18n="wizard.boundaries.row3.v">15 хвилин (макс 30)</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row4.k">Payload</span><span class="b-val" data-i18n="wizard.boundaries.row4.v">Тільки синтетичні тестові дані</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row5.k">Зовнішні агенти</span><span class="b-val" data-i18n="wizard.boundaries.row5.v">Один на сесію</span></div>
           </div>
           <div class="wizard-nav">
-            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Back</button>
-            <button class="btn btn--primary" type="button" data-wizard="run" data-i18n="wizard.run">Run live check</button>
+            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Назад</button>
+            <button class="btn btn--primary" type="button" data-wizard="run" data-i18n="wizard.run">Запустити перевірку</button>
           </div>
         </div>
 
@@ -255,8 +325,8 @@
               <span class="ttl">TTL <b id="wizard-ttl">15:00</b></span>
             </div>
             <div class="live-metrics my-md">
-              <div class="metric"><div class="m-label" data-i18n="wizard.metric.mode">Mode</div><div class="m-val" id="wizard-metric-mode">—</div></div>
-              <div class="metric"><div class="m-label" data-i18n="wizard.metric.state">State</div><div class="m-val" id="wizard-metric-state">—</div></div>
+              <div class="metric"><div class="m-label" data-i18n="wizard.metric.mode">Режим</div><div class="m-val" id="wizard-metric-mode">—</div></div>
+              <div class="metric"><div class="m-label" data-i18n="wizard.metric.state">Стан</div><div class="m-val" id="wizard-metric-state">—</div></div>
               <div class="metric"><div class="m-label" data-i18n="wizard.metric.ttl">TTL</div><div class="m-val" id="wizard-metric-ttl">—</div></div>
             </div>
             <div id="wizard-timeline"></div>
@@ -270,9 +340,9 @@
       <div class="modal-foot">
         <span class="foot-status"></span>
         <div class="wizard-nav modal-foot-nav">
-          <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Back</button>
-          <button class="btn btn--primary" type="button" data-wizard="next" data-i18n="wizard.next">Continue</button>
-          <button class="btn btn--primary hidden" type="button" data-wizard="rerun" data-i18n="wizard.rerun">Run again</button>
+          <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Назад</button>
+          <button class="btn btn--primary" type="button" data-wizard="next" data-i18n="wizard.next">Далі</button>
+          <button class="btn btn--primary hidden" type="button" data-wizard="rerun" data-i18n="wizard.rerun">Запустити знову</button>
         </div>
       </div>
     </div>

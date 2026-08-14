@@ -62,10 +62,10 @@
 
       <nav class="main-nav" aria-label="Main">
         <a href="/#how">How it works</a>
-        <a href="/architecture/" aria-current="page">Architecture</a>
-        <a href="/security/">Security</a>
-        <a href="/licensing/">Licensing</a>
-        <a href="/docs/">Docs</a>
+        <a href="/architecture/" aria-current="page" data-i18n="pg.architecture.0">Architecture</a>
+        <a href="/security/" data-i18n="nav.security">Security</a>
+        <a href="/licensing/" data-i18n="nav.licensing">Licensing</a>
+        <a href="/docs/" data-i18n="nav.docs">Docs</a>
       </nav>
 
       <div class="header-actions">
@@ -98,29 +98,29 @@
     <section class="section">
       <div class="container reading">
         <span class="eyebrow">Architecture</span>
-        <h1>Agent → gateway → Hermes → result</h1>
-        <p class="lede">AgentMesh Labs sits between your agent and the multi-agent network. Every connection runs inside an isolated, short-lived session with temporary credentials and a bounded demo path.</p>
+        <h1 data-i18n="pg.architecture.1">Agent → gateway → Hermes → result</h1>
+        <p class="lede" data-i18n="pg.architecture.2">AgentMesh Labs sits between your agent and the multi-agent network. Every connection runs inside an isolated, short-lived session with temporary credentials and a bounded demo path.</p>
       </div>
     </section>
 
     <section class="section section--alt">
       <div class="container">
-        <h2 class="section-title">The data path</h2>
+        <h2 class="section-title" data-i18n="pg.architecture.3">The data path</h2>
         <div class="grid-3 mt-xl">
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
-            <h3>Your agent</h3>
-            <p>Publishes an Agent Card (ACP or A2A). The card declares the endpoint, protocol, and capabilities that the gateway uses to connect.</p>
+            <h3 data-i18n="pg.architecture.4">Your agent</h3>
+            <p data-i18n="pg.architecture.5">Publishes an Agent Card (ACP or A2A). The card declares the endpoint, protocol, and capabilities that the gateway uses to connect.</p>
           </div>
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/></svg></div>
-            <h3>AgentMesh gateway</h3>
+            <h3 data-i18n="pg.architecture.6">AgentMesh gateway</h3>
             <p>Discovers the endpoint, validates temporary credentials, and routes both protocols. Sessions are isolated: one external agent per session, short TTL.</p>
           </div>
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></div>
-            <h3>Hermes verification</h3>
-            <p>Validates the response format and session boundary on a synthetic task, then reports protocol, capabilities, latency, and scope.</p>
+            <h3 data-i18n="pg.architecture.7">Hermes verification</h3>
+            <p data-i18n="pg.architecture.8">Validates the response format and session boundary on a synthetic task, then reports protocol, capabilities, latency, and scope.</p>
           </div>
         </div>
       </div>
@@ -129,24 +129,24 @@
     <section class="section">
       <div class="container split">
         <div>
-          <h2>Why isolation matters</h2>
+          <h2 data-i18n="pg.architecture.9">Why isolation matters</h2>
           <p>A shared chat is not an integration layer: there is no contract, no session boundary, and no scope control. AgentMesh Labs replaces guesswork with an explicit protocol.</p>
         </div>
         <div class="grid-3">
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-            <h3>Session isolation</h3>
-            <p>One external agent per session. No cross-client context leakage.</p>
+            <h3 data-i18n="pg.architecture.10">Session isolation</h3>
+            <p data-i18n="pg.architecture.11">One external agent per session. No cross-client context leakage.</p>
           </div>
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
-            <h3>Temporary credentials</h3>
-            <p>Issued per session, revoked at TTL end or on demand. No permanent tokens.</p>
+            <h3 data-i18n="pg.architecture.12">Temporary credentials</h3>
+            <p data-i18n="pg.architecture.13">Issued per session, revoked at TTL end or on demand. No permanent tokens.</p>
           </div>
           <div class="card">
             <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
-            <h3>Bounded demo path</h3>
-            <p>Synthetic payloads only. Outbound validation keeps the path within a sandbox.</p>
+            <h3 data-i18n="pg.architecture.14">Bounded demo path</h3>
+            <p data-i18n="pg.architecture.15">Synthetic payloads only. Outbound validation keeps the path within a sandbox.</p>
           </div>
         </div>
       </div>
@@ -154,7 +154,7 @@
 
     <section class="section section--alt">
       <div class="container reading">
-        <h2>Protocol support</h2>
+        <h2 data-i18n="pg.architecture.16">Protocol support</h2>
         <p>The gateway normalizes ACP and A2A traffic for the frontend. Synchronous conversations and asynchronous tasks share the same session timeline.</p>
         <div class="notice mt-lg">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -165,8 +165,8 @@
 
     <section class="section">
       <div class="container reading ta-center">
-        <h2>Try the live sandbox</h2>
-        <p class="lede">Run a real connection check against the bundled demo agent — temporary credentials, synthetic payload, 15-minute TTL.</p>
+        <h2 data-i18n="pg.architecture.17">Try the live sandbox</h2>
+        <p class="lede" data-i18n="pg.architecture.18">Run a real connection check against the bundled demo agent — temporary credentials, synthetic payload, 15-minute TTL.</p>
         <div class="hero-actions flex-center mt-lg">
           <a class="btn btn--primary btn--lg" href="#" data-wizard-open>Run a live sandbox check</a>
           <a class="btn btn--secondary btn--lg" href="/security/">Read the security model</a>
@@ -194,13 +194,13 @@
         <div class="footer-col">
           <h4>Product</h4>
           <a href="#" data-wizard-open>Live demo</a>
-          <a href="/architecture/">Architecture</a>
+          <a href="/architecture/" data-i18n="nav.architecture">Architecture</a>
           <a href="/security/">Security</a>
           <a href="/licensing/">Licensing</a>
         </div>
         <div class="footer-col">
           <h4>Resources</h4>
-          <a href="/docs/">Documentation</a>
+          <a href="/docs/" data-i18n="nav.docs">Documentation</a>
           <a href="/#how">How it works</a>
           <a href="/#capabilities">Capabilities</a>
         </div>
