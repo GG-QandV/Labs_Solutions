@@ -139,12 +139,13 @@ def _mock_vector(text: str) -> list[float]:
 
 # ---------------- reranker ----------------
 class Reranker:
-    """ms-marco-TinyBERT-L2-v2 cross-encoder, lazy loaded (4.4 MB)."""
+    """gte-multilingual-reranker-base cross-encoder (int8, 340 MB), lazy loaded."""
 
     def __init__(self) -> None:
         self._sess = None
         self._tok = None
         self.available = _has(RERANK_DIR)
+        self._logged_logits = False
 
     def _load(self) -> None:
         if self._sess is None:
@@ -152,7 +153,7 @@ class Reranker:
                 if self._sess is None:
                     self._sess = _session(RERANK_DIR)
                     self._tok = _tokenizer(RERANK_DIR)
-                    log.info("tinybert reranker loaded")
+                    log.info("reranker loaded (%s)", config.RERANK_MODEL)
 
     def score(self, query: str, passages: list[str]) -> list[float]:
         if not passages:
@@ -160,7 +161,7 @@ class Reranker:
         if not self.available:
             return [float("nan")] * len(passages)  # caller falls back to cosine
         self._load()
-        self._tok.enable_truncation(max_length=512)
+        self._tok.enable_truncation(max_length=8192)
         self._tok.enable_padding()
         encs = self._tok.encode_batch([(query, p) for p in passages])
         ids = np.array([e.ids for e in encs], dtype=np.int64)
@@ -171,7 +172,14 @@ class Reranker:
         if "token_type_ids" in names:
             feed["token_type_ids"] = types
         logits = self._sess.run(None, {k: v for k, v in feed.items() if k in names})[0]
-        return [float(x[0]) if x.shape else float(x) for x in logits]
+        out = [float(x[0]) if x.shape else float(x) for x in logits]
+        if not self._logged_logits:
+            self._logged_logits = True
+            lo, hi = min(out), max(out)
+            trap("info", "rerank.logits min=%.2f max=%.2f n=%d", lo, hi, len(out))
+            if abs(hi - lo) < 1e-4:
+                trap("warning", "rerank.logits.flat max≈min — подозрение на сломанный токенизатор/модель")
+        return out
 
 
 # ---------------- NER ----------------
