@@ -42,8 +42,8 @@
 | **G2 · download** | Файлы моделей на месте, размеры совпадают | `ls -la /models/granite-embedding-r2/ /models/gte-reranker/` (94MB / 340MB / tokenizer.json) | скачать заново, проверить сеть HF |
 | **G3 · embedder** | Эмбеддинг 384-dim, top-1 = Education-чанк | `python3 /tmp/check_embed.py` | сменить pooling (first↔mean), проверить feed |
 | **G4 · reranker** | Логиты gte НЕ все ~-10; ранжирование работает | `python3 /tmp/check_rerank.py` | залогировать сырые логиты, проверить токенизатор |
-| **G5 · reindex** | `vec_chunks` обновлён, вопрос даёт University | `curl /api/ask` «название высшего учебного заведения» | проверить UPDATE/DELETE+INSERT в sqlite-vec |
-| **G6 · deploy** | `/health` models=true; ответ с цитатой; RAM < 2GiB | `curl /health` + E2E + `docker stats` | смотреть логи, проверить lazy-load |
+| **G5 · deploy** | `/health` models=true; модели загружены; RAM < 2GiB | `curl /health` + `docker stats` | смотреть логи, проверить lazy-load |
+| **G6 · reindex+E2E** | `vec_chunks` обновлён; `/api/ask` «название высшего учебного заведения» → University + цитата | `curl /api/ask` | проверить UPDATE/DELETE+INSERT в sqlite-vec |
 
 **Ловушки-логи (trap logs — stdout/stderr, подхватываются OpsHub).**
 
@@ -185,9 +185,9 @@ logging:
 ("gte-reranker", f"{BASE}/onnx-community/gte-multilingual-reranker-base/resolve/main",
  ["onnx/model_int8.onnx:model_int8.onnx", "tokenizer.json"]),
 ```
-Оставить e5-small/tinybert/ner targets (для отката) ИЛИ удалить — на усмотрение; рекомендую оставить e5+tinybert, NER обязательно.
+Оставить e5-small/tinybert/ner targets (для отката) ИЛИ удалить — на усмотрение; рекомендую оставить e5+tinybert, NER обязательно. **Обе новые модели (+ e5/tinybert для отката) попадут в образ при `docker compose build` (Task 5) — `/models` встроен в слой образа (Dockerfile `RUN python scripts_download_models.py`, `/models` НЕ в VOLUME, только `/data`).**
 
-**Verification:** `python3 scripts_download_models.py` в контейнере (модели появятся в `/models/granite-embedding-r2/` и `/models/gte-reranker/`).
+**Verification:** `python3 scripts_download_models.py` локально/на build (модели появятся в `/models/granite-embedding-r2/` и `/models/gte-reranker/` в образе); в рантайме контейнера новые модели НЕ появятся до пересборки (см. Task 5/6 порядок).
 
 **Commit:** `feat(rag): download scripts для granite + gte`
 
@@ -244,7 +244,22 @@ out.extend((pooled / np.clip(norm, 1e-9, None)).astype(np.float32).tolist())
 
 **Commit (checkpoint G4):** `feat(rag): reranker — gte-multilingual-reranker-base int8`
 
-### Task 5: Переиндексация чанков
+### Task 5: Деплой и E2E (ПЕРЕД reindex — модели попадают в образ на build)
+
+**Objective:** Пересобрать контейнер, задеплоить, проверить сквозной ответ.
+
+**Steps:**
+1. `scp` изменённых файлов на прод `/srv/demos/lending_solutions/backend/rag-demo/`.
+2. `docker compose build rag-demo && docker compose up -d rag-demo` (новые модели в образе на этом шаге).
+3. Проверить `GET /health` → `models.embedder=true, models.reranker=true`.
+4. **Проверка моделей (не полноценный E2E):** `/health` модели=true; `reranker.score` на контрольном вопросе даёт осмысленные логиты (G4 уже прошёл). Полноценный ответ «Kyiv National Economic University» — ТОЛЬКО после reindex (Task 6): старые чанки заэмбедчены e5-small, новая модель их не находит до переиндексации.
+5. Проверить RAM: `docker stats rag-demo` — пик при первом запросе, затем idle (lazy-load).
+6. Проверить ловушки-логи: для info-ловушек (`embedding.pooling`, `rerank.logits`, `model.load_time`) временно `TRAP_LEVEL=info` в .env → перезапуск → `docker logs rag-demo`, затем вернуть `warning` (аудит F8). Отсутствие `embedding.dim_mismatch`/`rerank.logits.flat` — всегда (error/warning не фильтруются).
+7. Проверить ротацию: `docker inspect rag-demo --format '{{.HostConfig.LogConfig.Config}}'` → `map[max-file:3 max-size:5m]`.
+
+**Commit (checkpoint G5):** `chore(rag): deploy granite + gte`
+
+### Task 6: Переиндексация чанков (ПОСЛЕ деплоя — новые модели уже в образе)
 
 **Objective:** Пересоздать эмбеддинги всех существующих чанков под Granite (dim та же 384, но новые векторы).
 
@@ -262,25 +277,9 @@ out.extend((pooled / np.clip(norm, 1e-9, None)).astype(np.float32).tolist())
 
 **Ловушка-лог `reindex.progress`:** каждые 25 чанков `trap("debug", "reindex.progress", done, total)`; при ошибке — `opshub_error("reindex_failed", ...)` + прервать (БД в консистентном состоянии через транзакцию на батч).
 
-**Verification:** после реиндекса вопрос «название высшего учебного заведения» через `retrieve()` возвращает чанк с University (cosine ≥ 0.55), а не NoContext.
+**Verification (полный E2E — теперь корректно):** после реиндекса загрузить резюме → спросить «название высшего учебного заведения» через `/api/ask` → ожидать «Kyiv National Economic University» + цитата `[filename, p.N]`, скоуры в sources ~0.6+, а не NoContext. Этот шаг невозможен до Task 5 (deploy) — см. порядок.
 
-**Commit (checkpoint G5):** `feat(rag): reindex под granite`
-
-### Task 6: Деплой и E2E
-
-**Objective:** Пересобрать контейнер, задеплоить, проверить сквозной ответ.
-
-**Steps:**
-1. `scp` изменённых файлов на прод `/srv/demos/lending_solutions/backend/rag-demo/`.
-2. `docker compose build rag-demo && docker compose up -d rag-demo`.
-3. Проверить `GET /health` → `models.embedder=true, models.reranker=true`.
-4. E2E через API: загрузить резюме → спросить «название высшего учебного заведения» → ожидать ответ с «Kyiv National Economic University» и цитатой `[filename, p.N]`.
-5. Проверить скоуры в `sources` (cosine ~0.6+).
-6. Проверить RAM: `docker stats rag-demo` — пик при первом запросе, затем idle (lazy-load).
-7. Проверить ловушки-логи: для info-ловушек (`embedding.pooling`, `rerank.logits`, `model.load_time`) временно `TRAP_LEVEL=info` в .env → перезапуск → `docker logs rag-demo`, затем вернуть `warning` (аудит F8). Отсутствие `embedding.dim_mismatch`/`rerank.logits.flat` — всегда (error/warning не фильтруются).
-8. Проверить ротацию: `docker inspect rag-demo --format '{{.HostConfig.LogConfig.Config}}'` → `map[max-file:3 max-size:5m]`.
-
-**Commit (checkpoint G6):** `chore(rag): deploy granite + gte`
+**Commit (checkpoint G6):** `feat(rag): reindex под granite`
 
 ### Task 7 (опционально): восстановить мягкий rerank-фильтр
 
