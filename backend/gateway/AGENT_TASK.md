@@ -88,9 +88,9 @@ sudo cp deploy/traefik-dynamic.yml /srv/traefik/dynamic/asp-gateway.yml
 ```
 
 Сверить в файле: `Host(...)` = `public_url` из шага 2; адрес бэкенда — реальный адрес хоста
-со стороны Traefik:
+со стороны Traefik (шлюз должен слушать адрес хоста в docker-сети `web`, где сидит Traefik):
 ```bash
-ip -4 addr show docker0 | awk '/inet /{print $2}'    # обычно 172.17.0.1
+ip -4 addr show | grep -E '172\.18'   # адрес хоста в сети web, обычно 172.18.0.1
 ```
 
 **Проверка:** в логах Traefik нет ошибок парсинга конфига.

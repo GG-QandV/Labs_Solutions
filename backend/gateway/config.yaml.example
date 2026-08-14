@@ -11,7 +11,7 @@ http_listen: "127.0.0.1:8348" # HTTP: A2A-клиенты, наружу — то�
 
 # Внешний адрес: попадает в AgentCard.url (.well-known/agent.json).
 # Должен совпадать с доменом Traefik, иначе карточка невалидна по A2A-спеке.
-public_url: "https://gw-labs.mnemostroma.com"
+public_url: "https://agentmesh-labs.mnemostroma.com"
 
 # Пустой токен → ошибка старта. Генерирует install.sh в /srv/gateway/env.
 tokens:

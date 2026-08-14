@@ -60,7 +60,7 @@ sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-b /srv/gateway/bin/herme
 ## Сеть и TLS
 
 - `http_listen` `127.0.0.1:8348` → наружу через Traefik (`traefik-dynamic.yml`,
-  `gw-labs.mnemostroma.com`). Шлюз **не терминирует TLS сам** — это его сознательное решение.
+  `agentmesh-labs.mnemostroma.com`). Шлюз **не терминирует TLS сам** — это его сознательное решение.
 - `listen` (TCP ACP) `127.0.0.1:8347` — наружу не публикуется: токен идёт первой строкой
   открытым текстом. Доступ — локально или по SSH-туннелю.
 - `public_url` в конфиге обязан совпадать с доменом Traefik: он уходит в
@@ -72,10 +72,10 @@ sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-b /srv/gateway/bin/herme
 TOKEN=$(sudo awk -F= '/GW_TOKEN_DEMO/{print $2}' /srv/gateway/env)
 
 curl -H "Authorization: Bearer $TOKEN" \
-     https://gw-labs.mnemostroma.com/agents/hermes-a/.well-known/agent.json
+     https://agentmesh-labs.mnemostroma.com/agents/hermes-a/.well-known/agent.json
 
 curl -X POST -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-     https://gw-labs.mnemostroma.com/agents/hermes-a/rpc \
+     https://agentmesh-labs.mnemostroma.com/agents/hermes-a/rpc \
      -d '{"jsonrpc":"2.0","id":1,"method":"message/send","params":{"message":{"role":"user","parts":[{"kind":"text","text":"..."}]}}}'
 ```
 
