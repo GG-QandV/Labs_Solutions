@@ -17,12 +17,14 @@ from typing import Any
 import numpy as np
 
 from .. import config
+from ..traps import trap
 
 log = logging.getLogger("rag.models")
 
-E5_DIR = os.path.join(config.MODELS_DIR, "multilingual-e5-small")
+# Пути из config (единая таблица параметров, аудит F2): EMBED_DIR/RERANK_DIR берут имя модели из env.
+EMBED_DIR = config.EMBED_DIR
 NER_DIR = os.path.join(config.MODELS_DIR, "distilbert-ner")
-RERANK_DIR = os.path.join(config.MODELS_DIR, "tinybert-rerank")
+RERANK_DIR = config.RERANK_DIR
 
 _lock = threading.Lock()
 
@@ -54,22 +56,25 @@ def _tokenizer(dirpath: str) -> Any:
 
 # ---------------- embedder ----------------
 class Embedder:
-    """multilingual-e5-small INT8, 384d, max_length 512. Prefixes: 'query: ' / 'passage: '."""
+    """granite-embedding-97m-r2 (int8 avx2, 384d) — first-pooling (<|startoftext|>, no [CLS]).
+    EMBED_PREFIXED=1 (rollback e5) добавляет 'query: ' / 'passage: '. Fallback на mean pooling."""
 
-    max_length = 512
+    max_length = 8192  # Granite: 32768; e5-small: 512 — берётся по факту токенов, лимит защитный
 
     def __init__(self) -> None:
         self._sess = None
         self._tok = None
-        self.available = _has(E5_DIR)
+        self.available = _has(EMBED_DIR)
 
     def _load(self) -> None:
         if self._sess is None:
             with _lock:
                 if self._sess is None:
-                    self._sess = _session(E5_DIR)
-                    self._tok = _tokenizer(E5_DIR)
-                    log.info("e5-small loaded")
+                    self._sess = _session(EMBED_DIR)
+                    self._tok = _tokenizer(EMBED_DIR)
+                    trap("info", "embedding.pooling model=%s pooling=%s dim=%s prefixed=%s",
+                         config.EMBED_MODEL, config.EMBED_POOLING, config.EMBED_DIM, config.EMBED_PREFIXED)
+                    log.info("embedder loaded (%s)", config.EMBED_MODEL)
 
     def count_tokens(self, text: str) -> int:
         if not self.available:
@@ -77,7 +82,10 @@ class Embedder:
         self._load()
         return len(self._tok.encode(text).ids)
 
-    def encode(self, texts: list[str], prefix: str) -> list[list[float]]:
+    def _apply_prefix(self, text: str, prefix: str) -> str:
+        return prefix + text if config.EMBED_PREFIXED else text
+
+    def encode(self, texts: list[str], prefix: str = "") -> list[list[float]]:
         if not texts:
             return []
         if not self.available:
@@ -85,7 +93,7 @@ class Embedder:
         self._load()
         out: list[list[float]] = []
         for i in range(0, len(texts), 8):  # small batches: bounded RAM
-            batch = [prefix + t for t in texts[i : i + 8]]
+            batch = [self._apply_prefix(t, prefix) for t in texts[i : i + 8]]
             encs = [self._tok.encode(t) for t in batch]
             maxlen = min(self.max_length, max(len(e.ids) for e in encs))
             ids = np.zeros((len(encs), maxlen), dtype=np.int64)
@@ -99,8 +107,13 @@ class Embedder:
             if "token_type_ids" in names:
                 feed["token_type_ids"] = np.zeros_like(ids)
             hidden = self._sess.run(None, {k: v for k, v in feed.items() if k in names})[0]
-            m = mask[..., None].astype(np.float32)
-            pooled = (hidden * m).sum(axis=1) / np.clip(m.sum(axis=1), 1e-9, None)  # mean pooling
+            if config.EMBED_POOLING == "first":
+                pooled = hidden[:, 0, :]  # <|startoftext|> — у ModernBERT нет [CLS] (аудит F1)
+            else:  # mean fallback
+                m = mask[..., None].astype(np.float32)
+                pooled = (hidden * m).sum(axis=1) / np.clip(m.sum(axis=1), 1e-9, None)
+            if pooled.shape[-1] != config.EMBED_DIM:
+                trap("error", "embedding.dim_mismatch got=%s expected=%s", pooled.shape[-1], config.EMBED_DIM)
             norm = np.linalg.norm(pooled, axis=1, keepdims=True)
             out.extend((pooled / np.clip(norm, 1e-9, None)).astype(np.float32).tolist())
         return out
