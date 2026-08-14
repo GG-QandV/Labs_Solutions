@@ -87,9 +87,27 @@ function openWizard() {
   const modal = document.getElementById("demo-wizard");
   if (!modal) return;
   resetToStep(1);
+  applyDeepLink();
   modal.closest(".modal-overlay").classList.add("open");
   document.body.style.overflow = "hidden";
   updateModeBadge();
+}
+
+/* Spec §6.2: /demo/?mode=built-in|a2a preselects the role.
+   Never reads session id, token or Agent Card URL from query params. */
+function applyDeepLink() {
+  if (location.pathname.replace(/\/+$/, "") !== "/demo") return;
+  const params = new URLSearchParams(location.search);
+  const mode = params.get("mode");
+  const map = { "built-in": "bundled", a2a: "a2a" };
+  const role = map[mode];
+  if (!role) return;
+  current.role = role;
+  const group = document.getElementById("wizard-role");
+  if (!group) return;
+  group.querySelectorAll(".option").forEach((o) => {
+    o.classList.toggle("selected", o.getAttribute("data-value") === role);
+  });
 }
 
 function closeAndReset() {
