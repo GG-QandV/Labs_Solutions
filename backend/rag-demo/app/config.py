@@ -16,16 +16,32 @@ QUESTIONS_PER_HOUR = int(os.environ.get("QUESTIONS_PER_HOUR", "20"))
 SESSION_TTL_SECONDS = int(os.environ.get("SESSION_TTL_SECONDS", "3600"))
 REGISTERED_RETENTION_DAYS = int(os.environ.get("REGISTERED_RETENTION_DAYS", "7"))
 
-# chunking — hard-bounded by multilingual-e5-small max_length=512 (incl. "passage: " prefix)
+# chunking — hard-bounded by embedder max_length (Granite: 32k; e5-small: 512)
 CHUNK_TOKENS = int(os.environ.get("CHUNK_TOKENS", "420"))
 CHUNK_OVERLAP = int(os.environ.get("CHUNK_OVERLAP", "70"))
-EMBED_DIM = 384
+EMBED_DIM = int(os.environ.get("EMBED_DIM", "384"))  # vec_chunks float[EMBED_DIM] — must match the model
+
+# models (dir names under MODELS_DIR; weights baked into the image at build)
+EMBED_MODEL = os.environ.get("EMBED_MODEL", "granite-embedding-r2")
+EMBED_DIR = os.path.join(MODELS_DIR, EMBED_MODEL)
+# pooling: "first" = first token (<|startoftext|>, ModernBERT has no [CLS]) | "mean"
+EMBED_POOLING = os.environ.get("EMBED_POOLING", "first")
+# 1 = prepend query:/passage: prefixes (rollback path for e5-small; Granite needs none)
+EMBED_PREFIXED = os.environ.get("EMBED_PREFIXED", "0") == "1"
+RERANK_MODEL = os.environ.get("RERANK_MODEL", "gte-reranker")
+RERANK_DIR = os.path.join(MODELS_DIR, RERANK_MODEL)
 
 # retrieval
 TOP_K = int(os.environ.get("TOP_K", "10"))
 TOP_N_CITED = int(os.environ.get("TOP_N_CITED", "5"))
 RERANK_THRESHOLD = float(os.environ.get("RERANK_THRESHOLD", "-4.0"))  # cross-encoder logit (informational now)
+# empty = rerank soft-filter disabled (Task 7); numeric value enables it after G4 logit measurement
+RERANK_THRESHOLD_LOOSE = os.environ.get("RERANK_THRESHOLD_LOOSE", "")
 COSINE_THRESHOLD = float(os.environ.get("COSINE_THRESHOLD", "0.55"))  # relevance bar (retrieve filter)
+
+# trap logs (audit F8): TRAP_LOGS=0 silences everything; TRAP_LEVEL is the cutoff
+TRAP_LOGS = os.environ.get("TRAP_LOGS", "1") == "1"
+TRAP_LEVEL = os.environ.get("TRAP_LEVEL", "warning")  # error | warning | info | debug
 
 # external APIs
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")

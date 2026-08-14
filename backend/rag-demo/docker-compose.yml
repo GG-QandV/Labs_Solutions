@@ -17,8 +17,26 @@ services:
       - OPSHUB_URL=http://opshub:8700
       - OPSHUB_KEY=${OPSHUB_KEY}
       - OPSHUB_SERVICE=rag-demo
+      # models & retrieval (single source of truth: .env, audit F2)
+      - EMBED_MODEL=${EMBED_MODEL:-granite-embedding-r2}
+      - EMBED_POOLING=${EMBED_POOLING:-first}
+      - EMBED_PREFIXED=${EMBED_PREFIXED:-0}
+      - RERANK_MODEL=${RERANK_MODEL:-gte-reranker}
+      - EMBED_DIM=${EMBED_DIM:-384}
+      - COSINE_THRESHOLD=${COSINE_THRESHOLD:-0.55}
+      - RERANK_THRESHOLD=${RERANK_THRESHOLD:--4.0}
+      - RERANK_THRESHOLD_LOOSE=${RERANK_THRESHOLD_LOOSE:-}
+      - CHUNK_TOKENS=${CHUNK_TOKENS:-420}
+      # trap logs (audit F8)
+      - TRAP_LOGS=${TRAP_LOGS:-1}
+      - TRAP_LEVEL=${TRAP_LEVEL:-warning}
     volumes:
       - /srv/demos/rag-demo/data:/data
+    logging:                      # ротация логов до месяца (аудит F9: 5m×3 = 15MB ≈ 37-150 дней)
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "3"
     networks: [web, opsnet]
     labels:
       - "demo=true"
