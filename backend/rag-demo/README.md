@@ -20,6 +20,29 @@ clearly relevant cross-lingual fragments, so `RERANK_THRESHOLD=-4.0` silently di
 everything ("Not found in the provided documents" for every question). Rerank now only
 re-orders; the cosine threshold decides. `RERANK_THRESHOLD` stays in config as informational.
 
+## Embedder upgrade note — EmbeddingGemma-300m (evaluated, NOT adopted yet)
+Evaluated `onnx-community/embeddinggemma-300m-ONNX` (Google EmbeddingGemma) as a replacement for multilingual-e5-small.
+
+- **What it is**: Google open embedding model, 300M / 768-dim (MRL 512/256/128), 2,048 token context,
+  MTEB v2 **61.15** (768d), trained on 320B tokens, **100+ languages** incl. ru/uk. Gemma license.
+- **ONNX files**: graph `.onnx` + external weights `.onnx_data` (onnxruntime needs matching basenames in one dir).
+  → https://huggingface.co/onnx-community/embeddinggemma-300m-ONNX/tree/main/onnx
+- **Size check vs fleet limits** (embedder ≤600–700 MB):
+  - `model_quantized.onnx_data` (q8) ≈ **295 MB** ✓ (recommended)
+  - `model_q4.onnx_data` ≈ 188 MB ✓, `model_q4f16` ≈ 167 MB ✓, `model_fp16` ≈ 589 MB ✓
+  - ⚠️ README: activations do NOT support fp16 — use fp32/q8/q4 (fp16 file exists but is not recommended).
+- **Inputs/outputs (verified)**: `input_ids` + `attention_mask` int64 → `last_hidden_state` [*,*,768] + `sentence_embedding` [*,768].
+- **Prefixes (mandatory)**: query → `task: search result | query: …`, document → `title: none | text: …`.
+  Without them recall drops sharply.
+- **Live test on the resume (3 chunks, ru questions)** — all three ranked the Education/University chunk #1:
+  «название высшего учебного заведения» (sim .074), «что за вуз окончил кандидат» (.346), «какие навыки у кандидата» (.311).
+  Absolute scores are low (0.07–0.35) vs e5-small (0.65–0.70) — ranking is correct, but `COSINE_THRESHOLD=0.55`
+  would discard everything → the threshold must be retuned (~0.05) if adopted.
+- **Dimension change** 384 → 768 (or MRL-truncated 128/256/512) requires re-indexing all chunks + `vec_chunks` schema change.
+- **Verdict**: strongest recall of the three evaluated embedders (e5-small / Harrier-270m / EmbeddingGemma),
+  fits the size budget (q8 295 MB). Needs: prefix wrapping on both sides, threshold retune, dimension migration.
+  Revisit when cross-lingual recall becomes the bottleneck.
+
 ## Embedder upgrade note — harrier-oss-v1-270m (evaluated, NOT adopted yet)
 Evaluated `onnx-community/harrier-oss-v1-270m-ONNX` (Microsoft Harrier) as a replacement for multilingual-e5-small.
 
