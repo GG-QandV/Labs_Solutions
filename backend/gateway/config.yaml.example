@@ -22,38 +22,28 @@ tokens:
 # gatewayd спавнит их как ДОЧЕРНИЕ stdio-процессы. ACP включается подкомандой
 # `acp`, не флагом.
 #
-# Оба — hermes, но с РАЗНЫМИ HOME: hermes держит конфиг, провайдера, модель и
-# ключи в $HOME/.hermes, поэтому разные HOME = разные модели. Независимость на
+# Оба — claurst, но с РАЗНЫМИ HOME: claurst держит конфиг, провайдера, модель и
+# ключи в $HOME/.claude, поэтому разные HOME = разные модели. Независимость на
 # уровне модели и есть смысл демо: два агента на одной модели с одним промптом
 # дают коррелированные ошибки и обесценивают сверку.
-# Модель каждому задаётся отдельно, см. install-agents.sh.
+# Модель каждому задаётся отдельно (claurst /model или правкой settings.json
+# в HOME каждого агента).
 agents:
   # Агент A — читает оригинал.
-  hermes-a:
+  claurst-a:
     transport: stdio
-    command: ["hermes", "acp"]
-    cwd: "/srv/gateway/workspaces/hermes-a"
+    command: ["claurst", "acp"]
+    cwd: "/srv/gateway/workspaces/claurst-a"
     env:
-      HOME: "/srv/gateway/workspaces/hermes-a"
+      HOME: "/srv/gateway/workspaces/claurst-a"
 
   # Агент B — читает перевод. Другая модель/провайдер.
-  hermes-b:
+  claurst-b:
     transport: stdio
-    command: ["hermes", "acp"]
-    cwd: "/srv/gateway/workspaces/hermes-b"
+    command: ["claurst", "acp"]
+    cwd: "/srv/gateway/workspaces/claurst-b"
     env:
-      HOME: "/srv/gateway/workspaces/hermes-b"
-
-  # Третий агент другой реализации — раскомментировать, если подключён claurst
-  # (sudo CLAURST_BIN=/путь/к/claurst ./install-agents.sh). Его дистрибутив не
-  # публичный, автоматически не ставится.
-  # claurst-main:
-  #   transport: stdio
-  #   command: ["claurst", "acp"]
-  #   cwd: "/srv/gateway/workspaces/claurst"
-  #   env:
-  #     CLAURST_DISABLE_MODELS_FETCH: "1"   # не ходить за списком моделей
-  #     CLAURST_SHARE_NO_OPEN: "1"          # не открывать браузер на хосте
+      HOME: "/srv/gateway/workspaces/claurst-b"
 
 task_store_dir: "/srv/gateway/tasks"
 task_retention_days: 7        # фоновая уборка завершённых задач раз в час

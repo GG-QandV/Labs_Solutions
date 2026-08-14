@@ -47,7 +47,7 @@ done
 # --- 2. Пользователь и каталоги -------------------------------------------
 id -u "$GW_USER" >/dev/null 2>&1 || { log "создаю пользователя $GW_USER"; useradd --system --home-dir "$GW_HOME" --shell /usr/sbin/nologin "$GW_USER"; }
 install -d -o "$GW_USER" -g "$GW_USER" -m 0755 "$GW_HOME" "$GW_HOME/bin" "$GW_HOME/tasks"
-install -d -o "$GW_USER" -g "$GW_USER" -m 0700 "$GW_HOME/workspaces/hermes-a" "$GW_HOME/workspaces/hermes-b"
+install -d -o "$GW_USER" -g "$GW_USER" -m 0700 "$GW_HOME/workspaces/claurst-a" "$GW_HOME/workspaces/claurst-b"
 
 # --- 3. Копирование бинарников --------------------------------------------
 agents=0
@@ -58,7 +58,7 @@ for b in "$SRC_BIN"/*; do
   log "$n → $GW_HOME/bin/$n"
   [ "$n" != "gatewayd" ] && agents=$((agents+1))
 done
-[ "$agents" -gt 0 ] || die "в bin/ нет ни одного агента (нужен hermes и/или claurst)"
+[ "$agents" -gt 0 ] || die "в bin/ нет ни одного агента (нужен claurst и/или hermes)"
 [ -x "$GW_HOME/bin/claurst" ] && install -d -o "$GW_USER" -g "$GW_USER" -m 0700 "$GW_HOME/workspaces/claurst"
 
 # --- 4. Конфиг и токены (не перезаписываются) ------------------------------
@@ -89,8 +89,8 @@ cat <<EOF
 Дальше:
   1. Проверить public_url в $GW_HOME/config.yaml (должен совпасть с доменом Traefik).
   2. Задать РАЗНЫЕ модели агентам (иначе смысл двух агентов теряется):
-       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/hermes-a $GW_HOME/bin/hermes model
-       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/hermes-b $GW_HOME/bin/hermes model
+       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/claurst-a $GW_HOME/bin/claurst /model
+       sudo -u $GW_USER env HOME=$GW_HOME/workspaces/claurst-b $GW_HOME/bin/claurst /model
   3. systemctl restart asp-gateway
   4. curl -so /dev/null -w '%{http_code}\\n' \\
        http://127.0.0.1:8348/agents/x/.well-known/agent.json     # 401 = живой
