@@ -2,12 +2,30 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { JobStatus, PageFormat, ValidationResult } from "@demo/report-schema";
 import { t } from "@demo/i18n";
 
-const lang = "en";
+const LANGS = ["en", "uk", "pl", "ru"];
 const api = (path: string) => `/api${path}`;
 
 type Phase = "idle" | "validated" | "generating" | "sent" | "failed";
 
+function pickLang(): string {
+  const saved = localStorage.getItem("pdf.lang");
+  if (LANGS.includes(saved ?? "")) return saved!;
+  const nav = (navigator.language || "en").slice(0, 2).toLowerCase();
+  if (LANGS.includes(nav)) return nav;
+  return "en";
+}
+
+function toggleTheme() {
+  const root = document.documentElement;
+  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  try { localStorage.setItem("pdf.theme", next); } catch (_) {}
+  const btn = document.getElementById("theme-toggle");
+  if (btn) btn.textContent = next === "dark" ? "◐" : "◑";
+}
+
 export function App() {
+  const [lang, setLang] = useState<string>(pickLang);
   const [token, setToken] = useState<string | null>(null);
   const [expiresAt, setExpiresAt] = useState<number>(0);
   const [now, setNow] = useState(Date.now());
@@ -37,7 +55,7 @@ export function App() {
   async function startSession() {
     setFlash("");
     const res = await fetch(api("/token"), { method: "POST" });
-    if (!res.ok) { setFlash("Too many sessions from your address. Try again later."); return; }
+    if (!res.ok) { setFlash(t(lang, "token.limit")); return; }
     const info = await res.json();
     setToken(info.token);
     setExpiresAt(info.expiresAt);
@@ -65,11 +83,11 @@ export function App() {
       body: file
     });
     if (res.ok) {
-      setFlash(`Image for row ${row + 1} uploaded — it will replace the broken link.`);
+      setFlash(t(lang, "upload.ok", { row: String(row + 1) }));
       await validate();
     } else {
       const e = await res.json().catch(() => ({ error: "upload failed" }));
-      setFlash(`Upload failed: ${e.error}`);
+      setFlash(t(lang, "upload.fail", { error: String(e.error) }));
     }
   }
 
@@ -85,7 +103,7 @@ export function App() {
       if (!res.ok) {
         setPhase("failed");
         setFlash(data.error === "rate_limited"
-          ? `Rate limit reached (${data.scope ?? "daily"}). Resets in ~${Math.ceil((data.resetsInSeconds ?? 3600) / 60)} min.`
+          ? t(lang, "rate.limited", { scope: String(data.scope ?? "daily"), min: String(Math.ceil((data.resetsInSeconds ?? 3600) / 60)) })
           : String(data.error ?? "Request failed"));
         return;
       }
@@ -130,8 +148,15 @@ export function App() {
           </svg>
         </a>
         <div className="langs" aria-label="Language">
-          <button className="lang on">EN</button>
-          <button className="lang" disabled title="More languages coming">RU</button>
+          {LANGS.map(l => (
+            <button key={l} className={`lang ${lang === l ? "on" : ""}`}
+              onClick={() => { setLang(l); localStorage.setItem("pdf.lang", l); }}>
+              {l === "uk" ? "UA" : l.toUpperCase()}
+            </button>
+          ))}
+          <button id="theme-toggle" className="lang" type="button" aria-label="Switch theme" onClick={toggleTheme}>
+            {document.documentElement.getAttribute("data-theme") === "dark" ? "◐" : "◑"}
+          </button>
         </div>
       </header>
 
@@ -235,7 +260,7 @@ export function App() {
         {flash && <p className="flash">{flash}</p>}
       </section>
 
-      <footer className="foot">demo template · replace logo, name and accent color with your brand</footer>
+      <footer className="foot">PDF Report Demo · Labs.Mnemostroma</footer>
     </main>
   );
 }

@@ -14,11 +14,15 @@
   "generate.email": "Send the PDF to",
   "generate.format": "Page format",
   "generate.button": "Generate PDF & send to email",
-  "status.pending": "Queued\u2026",
-  "status.validating": "Validating the sheet\u2026",
-  "status.rendering": "Generating the PDF\u2026",
-  "status.sending": "Sending the email\u2026",
+  "status.pending": "Queued…",
+  "status.validating": "Validating the sheet…",
+  "status.rendering": "Generating the PDF…",
+  "status.sending": "Sending the email…",
   "status.done": "Sent to {email}",
   "status.simplified": "Rendered in simplified mode (daily browser quota reached)",
-  "error.stage": "Failed at: {stage}"
+  "error.stage": "Failed at: {stage}",
+  "upload.ok": "Image for row {row} uploaded — it will replace the broken link.",
+  "upload.fail": "Upload failed: {error}",
+  "rate.limited": "Rate limit reached ({scope}). Resets in ~{min} min.",
+  "token.limit": "Too many sessions from your address. Try again later."
 }
