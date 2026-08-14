@@ -107,6 +107,8 @@
   "demos": {
     "eyebrow": "Run it yourself",
     "h2": "Seven modules. One track. No sign-up to look.",
+    "h2Rest": ". One track. No sign-up to look.",
+    "count": { "one": "module", "few": "modules", "many": "modules" },
     "lead": "Each module works standalone or chained into the full run. Sample files are preloaded — bring your own only when you want to.",
     "in": "In",
     "out": "Out",

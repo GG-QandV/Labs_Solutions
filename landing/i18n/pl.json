@@ -107,6 +107,8 @@
   "demos": {
     "eyebrow": "Uruchom sam",
     "h2": "Siedem modułów. Jeden tor. Bez rejestracji.",
+    "h2Rest": ". Jeden tor. Bez rejestracji.",
+    "count": { "one": "moduł", "few": "moduły", "many": "modułów" },
     "lead": "Każdy moduł działa samodzielnie lub w połączonym potoku. Przykładowe pliki są wstępnie załadowane — swoje podłączysz tylko gdy chcesz.",
     "in": "Wejście",
     "out": "Wyjście",

@@ -15,6 +15,7 @@ const i18n = {
   lang: DEFAULT_LANG,
   dict: {},
   cache: new Map(),
+  hooks: [],
 
   async load(lang) {
     if (!LANGS.includes(lang)) lang = DEFAULT_LANG;
@@ -51,7 +52,10 @@ const i18n = {
     document.querySelectorAll('[data-lang-set]').forEach(b => {
       b.setAttribute('aria-pressed', String(b.dataset.langSet === this.lang));
     });
+    this.hooks.forEach(fn => { try { fn(); } catch (e) {} });
   },
+
+  onApply(fn) { this.hooks.push(fn); },
 
   async set(lang, persist = true) {
     if (!LANGS.includes(lang)) lang = DEFAULT_LANG;
@@ -150,25 +154,52 @@ function initRunner() {
 
 /* -------------------------------------------------- статусы демо-модулей
    GET /api/v1/demos → [{slug,state}] где state: ready|cold|soon|down
-   Фронт НИКОГДА не ходит в OpsHub напрямую (см. docs/BACKEND_API.md §4).  */
+   Фронт НИКОГДА не ходит в OpsHub напрямую (см. docs/BACKEND_API.md §4).
+   Список карточек и счётчик в h2 считаются из ответа бэкенда — статика не расходится с реальностью.  */
 async function initDemoStates() {
   const cards = [...document.querySelectorAll('[data-demo]')];
   if (!cards.length) return;
   const label = s => i18n.get('demoState.' + s) || s;
+
+  let realCount = null;
+  const h2 = document.querySelector('[data-i18n="demos.h2"]');
+
+  function demoNoun(lang, n) {
+    const d = i18n.get('demos.count');
+    if (!d || !d.one || !d.few || !d.many) return String(n);
+    const a = Math.abs(n);
+    if (lang === 'en') return a === 1 ? d.one : d.many;
+    if (a % 10 === 1 && a % 100 !== 11) return d.one;
+    if (a % 10 >= 2 && a % 10 <= 4 && (a % 100 < 12 || a % 100 > 14)) return d.few;
+    return d.many;
+  }
+  function syncDemoH2() {
+    if (realCount == null || !h2) return;
+    const rest = i18n.get('demos.h2Rest');
+    if (typeof rest !== 'string') return;   // словарь ещё не готов — остаётся статичный h2
+    h2.textContent = realCount + ' ' + demoNoun(i18n.lang, realCount) + rest;
+  }
+  i18n.onApply(syncDemoH2);
+
   cards.forEach(c => {
     const p = c.querySelector('[data-demo-state]');
     if (p) { p.dataset.state = 'soon'; p.textContent = label('soon'); }
   });
+
   try {
     const res = await fetch(`${API}/demos`, { headers: { 'Accept': 'application/json' } });
     if (!res.ok) return;
     const list = await res.json();
-    const map = new Map(list.map(d => [d.slug, d.state]));
-    cards.forEach(c => {
+    const map = new Map(list.filter(d => d && d.slug).map(d => [d.slug, d.state]));
+    const kept = cards.filter(c => map.has(c.dataset.demo));
+    cards.forEach(c => { if (!map.has(c.dataset.demo)) c.remove(); });
+    kept.forEach(c => {
       const st = map.get(c.dataset.demo);
       const p = c.querySelector('[data-demo-state]');
       if (p && st) { p.dataset.state = st; p.textContent = label(st); }
     });
+    realCount = kept.length;
+    syncDemoH2();
   } catch (e) { /* бэкенд ещё не поднят — карточки остаются в состоянии "soon" */ }
 }
 
