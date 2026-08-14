@@ -1,0 +1,74 @@
+/* ============================================================
+   AgentMesh Labs — design tokens (spec §3)
+   Source: brandbook labs.mnemostroma, frontend-spec §3
+   ============================================================ */
+
+:root {
+  /* layout */
+  --page-max: 1200px;
+  --reading-max: 720px;
+  --gutter: clamp(20px, 4vw, 48px);
+  --section-y: clamp(72px, 10vw, 144px);
+  --radius-sm: 10px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --shadow-card: 0 12px 36px rgba(0, 0, 0, .16);
+
+  /* type scale (spec §3.2) */
+  --display: 64/68, 650;
+  --h1: 48/54, 650;
+  --h2: 34/40, 650;
+  --h3: 22/28, 600;
+  --body-lg: 20/30, 400;
+  --body: 16/25, 400;
+  --small: 14/21, 450;
+  --label: 12/16, 650;
+  --mono: 12/18, 500;
+
+  --font-sans: "Inter Tight", Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
+
+  /* breakpoints (spec §10) */
+  --bp-sm: 480px;
+  --bp-md: 768px;
+  --bp-lg: 1024px;
+  --bp-xl: 1280px;
+}
+
+/* ---------- dark (default) ---------- */
+:root[data-theme="dark"] {
+  --bg:         #14101E;
+  --bg-2:       #1A1528;
+  --surface:    #211A33;
+  --surface-2:  #2A2240;
+  --line:       #3A2F55;
+  --line-soft:  #2C2442;
+  --text:       #EFEAF8;
+  --text-2:     #A99FC4;
+  --accent:     #F3B78D;
+  --accent-2:   #FFD3AF;
+  --accent-ink: #241705;
+  --ok:         #8FD6B4;
+  --warn:       #F0C36B;
+  --danger:     #F19A9A;
+  color-scheme: dark;
+}
+
+/* ---------- light ---------- */
+:root[data-theme="light"] {
+  --bg:         #E8EDF4;
+  --bg-2:       #EFF3F8;
+  --surface:    #FFFFFF;
+  --surface-2:  #F3F6FB;
+  --line:       #C9D3E2;
+  --line-soft:  #DCE3EE;
+  --text:       #1B1A28;
+  --text-2:     #5C5B74;
+  --accent:     #7E5490;
+  --accent-2:   #9A6BAC;
+  --accent-ink: #FFFFFF;
+  --ok:         #3E8C68;
+  --warn:       #9A6A1E;
+  --danger:     #B34C52;
+  color-scheme: light;
+}

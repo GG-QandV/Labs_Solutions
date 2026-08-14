@@ -1,0 +1,43 @@
+# robots.txt — agentmesh-labs.mnemostroma.com
+# Правило: индексируем контент, закрываем всё, что не должно попадать в выдачу
+# (API, служебные и демо-сессионные URL, сырые JSON).
+
+User-agent: *
+Allow: /
+Allow: /uk/
+
+Disallow: /api/
+Disallow: /admin/
+Disallow: /ops/
+Disallow: /session/
+Disallow: /demos/*/run
+Disallow: /*?ref=
+Disallow: /*?session=
+Disallow: /*.json$
+
+# Явно разрешаем статику, нужную рендереру Google
+Allow: /assets/
+Allow: /i18n/
+
+# AI-краулеры: маркетинговый сайт — присутствие в AI-ответах полезно.
+# Если политика изменится, меняются только эти блоки.
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Агрессивные SEO-скрейперы — отключены (лишняя нагрузка на VPS)
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+Sitemap: https://agentmesh-labs.mnemostroma.com/sitemap.xml

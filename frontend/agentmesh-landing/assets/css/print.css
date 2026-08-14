@@ -1,0 +1,25 @@
+/* ============================================================
+   AgentMesh Labs — print styles
+   ============================================================ */
+
+@media print {
+  :root { --bg: #ffffff; --text: #111; --text-2: #444; --surface: #fff; --line: #bbb; }
+
+  body { background: #fff !important; color: #111 !important; font-size: 12px; }
+
+  .site-header, .site-footer, .hero-actions, .nav-toggle,
+  .icon-btn, .modal-overlay, .card-link, .btn, .wizard-progress,
+  .modal-close { display: none !important; }
+
+  .hero, .section { padding-block: 24px !important; }
+
+  a { color: inherit; text-decoration: underline; }
+
+  a[href^="http"]::after { content: " (" attr(href) ")"; font-size: 10px; }
+
+  h1, h2, h3 { break-after: avoid-page; }
+
+  .card, .session-card, .hermes-panel { break-inside: avoid; }
+
+  .status-timeline li::before { background: #ccc; }
+}
