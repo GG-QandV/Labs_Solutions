@@ -21,6 +21,8 @@ def mock_hits():
 def _patch(monkeypatch, hits, rerank_scores=None):
     monkeypatch.setattr(answer.embedder, "encode_query", lambda q: [0.0] * config.EMBED_DIM)
     monkeypatch.setattr(answer.db, "search", lambda tenant, emb, k: hits)
+    # дефолт: софт-фильтр выключен (пустой RERANK_THRESHOLD_LOOSE, аудит F3)
+    monkeypatch.setattr(config, "RERANK_THRESHOLD_LOOSE", "")
     if rerank_scores is None:
         # reranker unavailable -> NaN fallback (cosine path)
         monkeypatch.setattr(answer.reranker, "score", lambda q, ps: [float("nan")] * len(ps))
@@ -68,3 +70,22 @@ def test_retrieve_reranker_mock_nan_path():
     assert reranker.available is False
     scores = reranker.score("вопрос", ["пассаж"])
     assert len(scores) == 1 and math.isnan(scores[0])
+
+
+def test_retrieve_loose_rerank_filter(monkeypatch, mock_hits):
+    """RERANK_THRESHOLD_LOOSE: режутся фрагменты с rerank < бар."""
+    monkeypatch.setattr(config, "COSINE_THRESHOLD", 0.0)
+    _patch(monkeypatch, mock_hits, rerank_scores=[0.1, 5.0, -3.5])
+    monkeypatch.setattr(config, "RERANK_THRESHOLD_LOOSE", "-3.0")  # после _patch (тот сбрасывает на "")
+    kept = answer.retrieve("t", "q")
+    # отсекается третий (rerank -3.5 < -3.0); сортировка по rerank
+    assert [h["text"] for h in kept] == ["контакты адрес", "обучение университет Киев"]
+
+
+def test_retrieve_loose_disabled_when_empty(monkeypatch, mock_hits):
+    """Пустой RERANK_THRESHOLD_LOOSE = фильтр выключен (аудит F3)."""
+    monkeypatch.setattr(config, "COSINE_THRESHOLD", 0.0)
+    monkeypatch.setattr(config, "RERANK_THRESHOLD_LOOSE", "")
+    _patch(monkeypatch, mock_hits, rerank_scores=[0.1, 5.0, -3.5])
+    kept = answer.retrieve("t", "q")
+    assert len(kept) == 3  # ничего не режется

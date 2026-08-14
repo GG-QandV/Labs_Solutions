@@ -32,11 +32,9 @@ def retrieve(tenant_id: str, question: str) -> list[dict[str, Any]]:
     if not hits:
         raise NoContext
 
-    # Primary: rerank as a *re-ranker* (sort by cross-encoder logits), not a hard gate.
-    # TinyBERT-L2 logits are systematically low for cross-lingual abstract queries
-    # (observed -9..-11 for clearly relevant fragments), so an absolute RERANK_THRESHOLD
-    # would silently discard everything. We sort by rerank when available, then filter
-    # by the cosine bar. When the reranker is missing/NaN we skip it entirely.
+    # Rerank as a *re-ranker* (sort by cross-encoder logits), not a hard gate.
+    # gte logits are meaningful (observed -2..-3 for relevant); RERANK_THRESHOLD_LOOSE
+    # is an optional soft bar — empty disables it (audit F3). Cosine bar always applies.
     scores = reranker.score(question, [h["text"] for h in hits])
     if scores and not math.isnan(scores[0]):
         for h, s in zip(hits, scores, strict=True):
@@ -44,6 +42,10 @@ def retrieve(tenant_id: str, question: str) -> list[dict[str, Any]]:
         hits.sort(key=lambda h: h["rerank"], reverse=True)
 
     kept = [h for h in hits if h["score"] >= config.COSINE_THRESHOLD]
+    loose = config.RERANK_THRESHOLD_LOOSE
+    if loose and scores and not math.isnan(scores[0]):
+        bar = float(loose)
+        kept = [h for h in kept if h.get("rerank", 0) >= bar]
     if not kept:
         raise NoContext
     return kept[: config.TOP_N_CITED]
