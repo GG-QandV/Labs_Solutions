@@ -177,7 +177,7 @@ class Reranker:
             self._logged_logits = True
             lo, hi = min(out), max(out)
             trap("info", "rerank.logits min=%.2f max=%.2f n=%d", lo, hi, len(out))
-            if abs(hi - lo) < 1e-4:
+            if len(out) > 1 and abs(hi - lo) < 1e-4:
                 trap("warning", "rerank.logits.flat max≈min — подозрение на сломанный токенизатор/модель")
         return out
 
