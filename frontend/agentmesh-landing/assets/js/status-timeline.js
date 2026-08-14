@@ -2,8 +2,8 @@
    Spec §5.9. Ordered steps: created → validating → discovered →
    capability → running → verified/failed. Icons per state. */
 
-import { SESSION_STATE } from "./api-client.js";
-import { t } from "./i18n.js";
+import { SESSION_STATE } from "./api-client.js?v=2b4b02e423";
+import { t } from "./i18n.js?v=8324134a3b";
 
 const ORDER = [
   SESSION_STATE.CREATED,

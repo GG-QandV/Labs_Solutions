@@ -3,8 +3,8 @@
    response format and session boundary and gives a non-blocking,
    heuristic compatibility signal. */
 
-import { SESSION_STATE } from "./api-client.js";
-import { t } from "./i18n.js";
+import { SESSION_STATE } from "./api-client.js?v=2b4b02e423";
+import { t } from "./i18n.js?v=8324134a3b";
 
 const MESSAGES = {
   [SESSION_STATE.CREATED]: () => t("hm.created"),

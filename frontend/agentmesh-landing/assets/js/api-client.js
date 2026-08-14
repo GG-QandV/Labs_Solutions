@@ -8,8 +8,8 @@
      ?mock=1|0             — force mock / force live (dev override)
 */
 
-import * as sessionStore from "./session-store.js";
-import { t } from "./i18n.js";
+import * as sessionStore from "./session-store.js?v=fe23cf0e80";
+import { t } from "./i18n.js?v=8324134a3b";
 
 const BASE = window.AML_API_BASE || "";
 export const API_BASE = BASE;

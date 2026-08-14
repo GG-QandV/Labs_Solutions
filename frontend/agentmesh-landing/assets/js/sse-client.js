@@ -2,7 +2,7 @@
    Live mode: EventSource over the backend SSE endpoint.
    Mock mode: drives the local scripted timeline via api-client.mock.runScript.
    Spec §5.9 (status timeline), §8. */
-import { api, mock, isLive } from "./api-client.js";
+import { api, mock, isLive } from "./api-client.js?v=2b4b02e423";
 
 export function subscribeStatus(sessionId, onEvent) {
   if (isLive()) {

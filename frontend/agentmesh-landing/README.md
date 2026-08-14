@@ -59,6 +59,7 @@ Mock-таймлайн: `created → agent_card_validating(+700ms) → discovered
 - Тёмная тема — дефолт, атрибут `data-theme` на `<html>`.
 - Никаких UI-утечек: raw Bearer не показывается после первого копирования, нет internal hostnames, raw логов/стектрейсов/полных payload-ов, нет фейковых typing-анимаций (спека §11).
 - `role_relevant` — эвристический non-blocking сигнал, не блокирует вердикт.
+- **Версионирование ассетов (обязательно после правок js/css):** `python3 build/version-assets.py` — добавляет `?v=<hash>` к `/assets/...` (HTML) и к `from "./x.js"` (ES-imports). Нужно, чтобы обойти 30-дневный immutable-кэш Cloudflare (index.html не кэшируется, поэтому свежая разметка обязана ссылаться на новые URL). Порядок сборки: `prerender.py` (uk из index) → `version-assets.py`.
 
 ## Deploy
 

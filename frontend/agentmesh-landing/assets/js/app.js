@@ -2,13 +2,13 @@
    Orchestrates modules: theme, i18n, modals, clipboard, demo wizard,
    hero connection map pulse, nav toggle, scroll reveal, year. */
 
-import { initThemeToggle } from "./theme.js";
-import { initI18n, bindLangSwitcher } from "./i18n.js";
-import { initModals } from "./modal.js";
-import { bindCopyButtons } from "./clipboard.js";
-import { initDemoWizard } from "./demo-wizard.js";
-import { renderConnectionMap } from "./connection-map.js";
-import { probeBackend } from "./api-client.js";
+import { initThemeToggle } from "./theme.js?v=4d3b0215ad";
+import { initI18n, bindLangSwitcher } from "./i18n.js?v=8324134a3b";
+import { initModals } from "./modal.js?v=ca1d18f48d";
+import { bindCopyButtons } from "./clipboard.js?v=79c12c9348";
+import { initDemoWizard } from "./demo-wizard.js?v=09bfe31b1a";
+import { renderConnectionMap } from "./connection-map.js?v=6b5b79e6cc";
+import { probeBackend } from "./api-client.js?v=2b4b02e423";
 
 async function init() {
   // static hero connection map (preview card)

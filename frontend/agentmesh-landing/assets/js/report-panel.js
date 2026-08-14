@@ -3,8 +3,8 @@
    scope, role_relevant (heuristic, non-blocking). Never shows raw tokens,
    internal hostnames, or other sessions' data. */
 
-import { SESSION_STATE } from "./api-client.js";
-import { t } from "./i18n.js";
+import { SESSION_STATE } from "./api-client.js?v=2b4b02e423";
+import { t } from "./i18n.js?v=8324134a3b";
 
 function verdictFor(state) {
   switch (state) {

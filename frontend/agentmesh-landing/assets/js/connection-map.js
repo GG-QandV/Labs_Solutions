@@ -2,7 +2,7 @@
    Spec §5.3 / hero. Nodes: Your agent → AgentMesh → Hermes.
    In live mode a latency pulse is animated between nodes. */
 
-import { SESSION_STATE } from "./api-client.js";
+import { SESSION_STATE } from "./api-client.js?v=2b4b02e423";
 
 export function renderConnectionMap(container, state) {
   if (!container) return;

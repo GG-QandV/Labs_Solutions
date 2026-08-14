@@ -8,12 +8,12 @@
    Falls back to a deterministic mock timeline when the backend is absent
    (see api-client.js). Mock mode is clearly flagged in the UI. */
 
-import { api, mock, isLive, getMode, SESSION_STATE } from "./api-client.js";
-import * as store from "./session-store.js";
-import { subscribeStatus } from "./sse-client.js";
-import { renderTimeline } from "./status-timeline.js";
-import { renderHermesPanel } from "./hermes-panel.js";
-import { renderReport } from "./report-panel.js";
+import { api, mock, isLive, getMode, SESSION_STATE } from "./api-client.js?v=2b4b02e423";
+import * as store from "./session-store.js?v=fe23cf0e80";
+import { subscribeStatus } from "./sse-client.js?v=591c5d173e";
+import { renderTimeline } from "./status-timeline.js?v=3332ca3e38";
+import { renderHermesPanel } from "./hermes-panel.js?v=44da71b9fa";
+import { renderReport } from "./report-panel.js?v=0d9c9aa158";
 
 const ROLES = {
   bundled: { label: "Bundled demo", desc: "Hermes connects to a built-in demo agent with a fixed synthetic case. No endpoint needed." },
