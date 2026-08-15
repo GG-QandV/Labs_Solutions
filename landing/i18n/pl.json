@@ -119,35 +119,51 @@
     "cold": "Demo uruchamiają się na żądanie i zasypiają bez aktywności. Zimny moduł potrzebuje kilku sekund — przycisk pokaże, gdy będzie gotowy.",
     "d1": {
       "t": "Dyspozytor zgłoszeń",
-      "d": "Na wejściu — mail lub wiadomość. Na wyjściu — usługa, kontakt, termin, priorytet, lista braków i szkic odpowiedzi."
+      "d": "Na wejściu — mail lub wiadomość. Na wyjściu — usługa, kontakt, termin, priorytet, lista braków i szkic odpowiedzi.",
+      "inv": "email, formularz, Telegram",
+      "outv": "JSON + zadanie + szkic"
     },
     "d2": {
       "t": "Ekstrakcja dokumentów",
-      "d": "Na wejściu — faktura, CMR, list przewozowy lub umowa. Na wyjściu — typowane pola, kontrole arytmetyczne i pewność dla każdego pola."
+      "d": "Na wejściu — faktura, CMR, list przewozowy lub umowa. Na wyjściu — typowane pola, kontrole arytmetyczne i pewność dla każdego pola.",
+      "inv": "PDF, skan, zdjęcie",
+      "outv": "JSON + raport walidacji"
     },
     "d3": {
       "t": "Odpowiedzi ze źródłami",
-      "d": "Zapytaj własne dokumenty. Każda odpowiedź zwraca plik, stronę i fragment — lub wprost «nie potwierdzone w bazie»."
+      "d": "Zapytaj własne dokumenty. Każda odpowiedź zwraca plik, stronę i fragment — lub wprost «nie potwierdzone w bazie».",
+      "inv": "dokumenty, cenniki, SOP",
+      "outv": "odpowiedź + cytaty"
     },
     "d4": {
       "t": "Kreator ofert i raportów",
-      "d": "Na wejściu — tabela lub karta zgłoszenia. Na wyjściu — firmowy PDF i szkic maila. Generacja tylko osobnym przyciskiem, nigdy automatyczna."
+      "d": "Na wejściu — tabela lub karta zgłoszenia. Na wyjściu — firmowy PDF i szkic maila. Generacja tylko osobnym przyciskiem, nigdy automatyczna.",
+      "inv": "link do arkusza, karta zgłoszenia",
+      "outv": "PDF + szkic maila"
     },
     "d5": {
       "t": "CRM copilot",
-      "d": "Na wejściu — korespondencja, dokumenty, status. Na wyjściu — podsumowanie, następny krok, zadanie i odpowiedź czekająca na zatwierdzenie."
+      "d": "Na wejściu — korespondencja, dokumenty, status. Na wyjściu — podsumowanie, następny krok, zadanie i odpowiedź czekająca na zatwierdzenie.",
+      "inv": "lead, wątek, pliki",
+      "outv": "podsumowanie + następny krok"
     },
     "d6": {
       "t": "Analityk tabel",
-      "d": "Na wejściu — CSV lub arkusz. Na wyjściu — obliczenia, wykresy, oznaczone anomalie i wyjaśnienie prostym językiem."
+      "d": "Na wejściu — CSV lub arkusz. Na wyjściu — obliczenia, wykresy, oznaczone anomalie i wyjaśnienie prostym językiem.",
+      "inv": "CSV, XLSX, link do arkusza",
+      "outv": "wykresy + ustalenia"
     },
     "d7": {
       "t": "Porównanie dwóch dokumentów",
-      "d": "Dwie wersje jednego dokumentu na wejściu — kwoty, daty i liczby wyodrębniane niezależnie z każdej, następnie zestawiane. Każda rozbieżność zachowuje wiersz źródłowy."
+      "d": "Dwie wersje jednego dokumentu na wejściu — kwoty, daty i liczby wyodrębniane niezależnie z każdej, następnie zestawiane. Każda rozbieżność zachowuje wiersz źródłowy.",
+      "inv": "oryginał + tłumaczenie",
+      "outv": "raport porównania + ryzyka"
     },
     "d8": {
       "t": "Brama agentów",
-      "d": "Agent ACP lub A2A — izolowana sesja z tymczasowymi poświadczeniami i ograniczonym testem Hermes. Na żywo lub deterministyczny sandbox."
+      "d": "Agent ACP lub A2A — izolowana sesja z tymczasowymi poświadczeniami i ograniczonym testem Hermes. Na żywo lub deterministyczny sandbox.",
+      "inv": "Agent Card",
+      "outv": "zweryfikowana sesja + raport"
     }
   },
   "demoState": {

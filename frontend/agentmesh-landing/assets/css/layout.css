@@ -251,7 +251,7 @@
 
 .footer-brand { color: var(--text-2); font-size: 14px; max-width: 300px; }
 
-.footer-brand .brand-logo { margin-bottom: 16px; }
+.footer-brand .brand-logo { display: block; margin-bottom: 16px; }
 
 .footer-col h4 {
   font-size: 12px;

@@ -20,7 +20,7 @@ const i18n = {
   async load(lang) {
     if (!LANGS.includes(lang)) lang = DEFAULT_LANG;
     if (this.cache.has(lang)) return this.cache.get(lang);
-    const res = await fetch(`/i18n/${lang}.json`, { cache: 'force-cache' });
+    const res = await fetch(`/i18n/${lang}.json?v=2`, { cache: 'force-cache' });
     if (!res.ok) throw new Error(`i18n ${lang}: HTTP ${res.status}`);
     const dict = await res.json();
     this.cache.set(lang, dict);

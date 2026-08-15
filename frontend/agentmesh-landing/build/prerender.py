@@ -21,7 +21,7 @@ import sys
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 SRC = ROOT / "index.html"
 
-LANGS = ["uk"]
+LANGS = ["uk", "pl", "ru"]
 DOMAIN = "agentmesh-labs.mnemostroma.com"
 
 SUBPAGES = ["architecture", "security", "licensing", "docs", "demo", "privacy", "terms"]

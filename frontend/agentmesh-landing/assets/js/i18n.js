@@ -2,7 +2,7 @@
    Loads i18n/<lang>.json at runtime and re-renders [data-i18n] / [data-i18n-attr].
    Default language: en (prerendered core text for SEO). */
 
-export const SUPPORTED_LANGS = ["en", "uk"];
+export const SUPPORTED_LANGS = ["en", "uk", "pl", "ru"];
 export const DEFAULT_LANG = "en";
 const LANG_KEY = "aml-lang";
 
@@ -18,7 +18,7 @@ export async function loadLang(lang) {
   dict = await res.json();
   currentLang = lang;
   try { localStorage.setItem(LANG_KEY, lang); } catch (e) {}
-  document.documentElement.setAttribute("lang", lang === "uk" ? "uk" : "en");
+  document.documentElement.setAttribute("lang", lang);
   applyDict();
 }
 

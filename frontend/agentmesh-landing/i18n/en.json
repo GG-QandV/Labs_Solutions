@@ -263,5 +263,7 @@
   "meta.title.demo": "Live demo — AgentMesh Labs",
   "meta.title.privacy": "Privacy policy — AgentMesh Labs",
   "meta.title.terms": "Terms of use — AgentMesh Labs",
-  "nav.how": "How it works"
+  "nav.how": "How it works",
+  "footer.link.how": "How it works",
+  "footer.link.capabilities": "Capabilities"
 }

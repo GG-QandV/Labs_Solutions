@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- sitemap.xml — при добавлении подстраниц раскомментировать блоки ниже.
-     lastmod проставляется в CI/деплой-скрипте (см. README §deploy). -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
@@ -8,122 +6,334 @@
     <loc>https://agentmesh-labs.mnemostroma.com/</loc>
     <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/"/>
     <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/"/>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/uk/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/"/>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/architecture/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/architecture/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/architecture/"/>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/architecture/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/architecture/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/architecture/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/architecture/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/architecture/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/security/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/security/"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/security/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/security/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/security/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/security/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/security/"/>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.8</priority>
-  </url>
-
-  <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/licensing/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/licensing/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/licensing/"/>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/docs/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/docs/"/>
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/docs/"/>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/privacy/</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/terms/</loc>
-    <lastmod>2026-08-14</lastmod>
-    <changefreq>yearly</changefreq>
-    <priority>0.3</priority>
-  </url>
-
-  <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/uk/architecture/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/architecture/"/>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/architecture/"/>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/uk/security/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/security/"/>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/security/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/security/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/security/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/security/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/security/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/security/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
 
   <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/uk/licensing/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/licensing/"/>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/security/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/security/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/security/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/security/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/security/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/security/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/security/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/security/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/security/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/security/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/security/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/security/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/licensing/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/licensing/"/>
     <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/licensing/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/licensing/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/licensing/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/licensing/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/licensing/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/licensing/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/licensing/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/licensing/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/licensing/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/docs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/docs/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/docs/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/docs/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/docs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/docs/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/uk/docs/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/docs/"/>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/docs/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/docs/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/docs/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/docs/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/docs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/docs/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
 
   <url>
-    <loc>https://agentmesh-labs.mnemostroma.com/uk/privacy/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/privacy/"/>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/docs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/docs/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/docs/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/docs/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/docs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/docs/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/docs/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/docs/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/docs/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/docs/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/docs/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/docs/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/privacy/"/>
     <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/privacy/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/privacy/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/uk/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/privacy/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/privacy/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/privacy/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/privacy/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/privacy/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/terms/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/terms/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
 
   <url>
     <loc>https://agentmesh-labs.mnemostroma.com/uk/terms/</loc>
-    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/terms/"/>
-    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/terms/"/>
-    <lastmod>2026-08-14</lastmod>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/uk/terms/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/uk/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/uk/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/uk/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/uk/terms/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/pl/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/pl/terms/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/pl/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/pl/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/pl/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/pl/terms/"/>
+    <lastmod>2026-08-15</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+
+  <url>
+    <loc>https://agentmesh-labs.mnemostroma.com/ru/terms/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/en/ru/terms/"/>
+    <xhtml:link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/ru/terms/"/>
+    <xhtml:link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/ru/terms/"/>
+    <xhtml:link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/ru/terms/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/ru/terms/"/>
+    <lastmod>2026-08-15</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>

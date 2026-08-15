@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="dark" data-lang-default="pl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Architektura — AgentMesh Labs</title>
+  <meta name="description" content="How AgentMesh Labs routes ACP and A2A agents through one gateway: isolated sessions, temporary credentials, Hermes verification, and a bounded demo path.">
+  <link rel="canonical" href="https://agentmesh-labs.mnemostroma.com/pl/architecture/">
+  <meta name="robots" content="index, follow">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AgentMesh Labs">
+  <meta property="og:title" content="Architektura — AgentMesh Labs">
+  <meta property="og:description" content="Agent → gateway → Hermes → result. Isolated sessions, temporary credentials, bounded demo path.">
+  <meta property="og:url" content="https://agentmesh-labs.mnemostroma.com/pl/architecture/">
+  <meta property="og:locale" content="en_US">
+  <meta property="og:locale:alternate" content="uk_UA">
+  <meta property="og:locale:alternate" content="pl_PL">
+  <meta property="og:locale:alternate" content="ru_RU">
+  <!-- hreflang -->
+  <link rel="alternate" hreflang="en" href="https://agentmesh-labs.mnemostroma.com/architecture/">
+  <link rel="alternate" hreflang="uk" href="https://agentmesh-labs.mnemostroma.com/uk/architecture/">
+  <link rel="alternate" hreflang="pl" href="https://agentmesh-labs.mnemostroma.com/pl/architecture/">
+  <link rel="alternate" hreflang="ru" href="https://agentmesh-labs.mnemostroma.com/ru/architecture/">
+  <link rel="alternate" hreflang="x-default" href="https://agentmesh-labs.mnemostroma.com/architecture/">
+  
+<script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "AgentMesh Labs", "item": "https://agentmesh-labs.mnemostroma.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Architecture" }
+    ]
+  }
+  </script>
+
+  <script src="/assets/js/theme-init.js?v=e1188de9ec"></script>
+
+  <link rel="preload" href="/assets/fonts/Inter-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/JetBrainsMono-Variable.woff2" as="font" type="font/woff2" crossorigin>
+
+  <link rel="stylesheet" href="/assets/css/fonts.css?v=aae268c18f">
+  <link rel="stylesheet" href="/assets/css/tokens.css?v=6f0668dcfe">
+  <link rel="stylesheet" href="/assets/css/base.css?v=c4a65ac4e8">
+  <link rel="stylesheet" href="/assets/css/layout.css?v=e471af79">
+  <link rel="stylesheet" href="/assets/css/components.css?v=9b381cc1f1">
+  <link rel="stylesheet" href="/assets/css/demo.css?v=bb575ce49a">
+
+  <link rel="icon" type="image/svg+xml" href="/assets/icons/favicon.svg?v=fd8f6f0571">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="AgentMesh Labs — home">
+        <span class="brand-logo">
+          <svg viewBox="0 0 16730.7 1527.0" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Labs.Mnemostroma">
+            <g transform="translate(0 1490.0) scale(1 -1)">
+              <g data-logo-part="labs">
+                <path d="M268 1490V0H139V1490Z" transform="translate(0 0)"/>
+                <path d="M451 -25Q350 -25 266.0 14.5Q182 54 132.5 129.5Q83 205 83 313Q83 396 114.0 452.0Q145 508 203.0 544.5Q261 581 339.5 602.5Q418 624 513 635Q607 647 672.0 655.5Q737 664 771.0 683.0Q805 702 805 744V770Q805 885 737.0 950.5Q669 1016 542 1016Q421 1016 345.0 963.0Q269 910 239 838L115 883Q153 974 220.0 1029.0Q287 1084 370.0 1108.5Q453 1133 538 1133Q602 1133 671.0 1116.0Q740 1099 800.0 1058.0Q860 1017 897.5 943.5Q935 870 935 758V0H805V177H797Q775 128 729.0 81.5Q683 35 614.0 5.0Q545 -25 451 -25ZM469 93Q572 93 647.5 138.5Q723 184 764.0 261.0Q805 338 805 429V590Q790 576 756.5 565.0Q723 554 679.5 546.0Q636 538 591.5 532.0Q547 526 513 522Q419 510 351.5 485.0Q284 460 248.5 417.0Q213 374 213 306Q213 205 285.5 149.0Q358 93 469 93Z" transform="translate(346 0)"/>
+                <path d="M623 -24Q522 -24 453.5 12.5Q385 49 343.5 103.0Q302 157 279 208H264V0H139V1490H268V904H279Q302 954 343.0 1007.0Q384 1060 452.0 1096.5Q520 1133 622 1133Q760 1133 863.5 1060.5Q967 988 1025.0 858.0Q1083 728 1083 556Q1083 383 1025.5 252.0Q968 121 864.5 48.5Q761 -24 623 -24ZM609 94Q719 94 796.0 156.0Q873 218 913.0 323.0Q953 428 953 557Q953 686 913.0 789.5Q873 893 797.0 954.0Q721 1015 609 1015Q499 1015 423.0 956.5Q347 898 307.0 795.0Q267 692 267 557Q267 423 307.0 318.5Q347 214 423.5 154.0Q500 94 609 94Z" transform="translate(1359 0)"/>
+                <path d="M889 871 771 839Q745 914 684.5 966.5Q624 1019 511 1019Q398 1019 325.0 964.5Q252 910 252 825Q252 754 301.5 708.5Q351 663 455 637L624 596Q764 561 834.5 487.5Q905 414 905 302Q905 208 852.5 134.0Q800 60 707.0 18.0Q614 -24 491 -24Q327 -24 221.0 50.5Q115 125 85 264L209 294Q232 195 303.0 144.0Q374 93 489 93Q617 93 695.0 151.0Q773 209 773 295Q773 433 590 478L408 522Q262 557 192.0 632.0Q122 707 122 819Q122 911 172.5 982.0Q223 1053 311.0 1093.0Q399 1133 511 1133Q665 1133 757.0 1062.5Q849 992 889 871Z" transform="translate(2461 0)"/>
+              </g>
+              <g data-logo-part="mnemo">
+                <path d="M91 0V1118H384V919H398Q433 1018 515.0 1075.0Q597 1132 710 1132Q825 1132 905.5 1074.5Q986 1017 1013 919H1025Q1059 1016 1149.0 1074.0Q1239 1132 1361 1132Q1517 1132 1615.5 1033.0Q1714 934 1714 752V0H1404V690Q1404 784 1354.5 830.0Q1305 876 1231 876Q1147 876 1099.5 822.5Q1052 769 1052 682V0H752V698Q752 779 705.0 827.5Q658 876 582 876Q530 876 489.0 850.0Q448 824 424.0 778.5Q400 733 400 670V0Z" transform="translate(3880.65 0)"/>
+                <path d="M400 646V0H91V1118H395V919H406Q444 1018 527.0 1075.0Q610 1132 735 1132Q851 1132 937.5 1081.0Q1024 1030 1072.0 936.0Q1120 842 1120 711V0H811V656Q811 758 758.0 816.5Q705 875 612 875Q550 875 502.0 847.5Q454 820 427.0 769.0Q400 718 400 646Z" transform="translate(5624.65 0)"/>
+                <path d="M600 -22Q428 -22 303.0 48.0Q178 118 111.5 247.5Q45 377 45 554Q45 726 111.5 856.0Q178 986 299.5 1059.0Q421 1132 585 1132Q696 1132 792.0 1096.5Q888 1061 960.0 990.5Q1032 920 1072.0 813.5Q1112 707 1112 564V480H168V671H962L818 621Q818 706 792.0 769.0Q766 832 714.5 866.5Q663 901 587 901Q511 901 458.5 866.0Q406 831 378.0 771.0Q350 711 350 633V498Q350 407 382.0 342.5Q414 278 471.5 243.5Q529 209 604 209Q656 209 698.0 224.0Q740 239 770.5 268.0Q801 297 816 338L1102 319Q1081 216 1014.5 139.5Q948 63 843.0 20.5Q738 -22 600 -22Z" transform="translate(6774.65 0)"/>
+                <path d="M91 0V1118H384V919H398Q433 1018 515.0 1075.0Q597 1132 710 1132Q825 1132 905.5 1074.5Q986 1017 1013 919H1025Q1059 1016 1149.0 1074.0Q1239 1132 1361 1132Q1517 1132 1615.5 1033.0Q1714 934 1714 752V0H1404V690Q1404 784 1354.5 830.0Q1305 876 1231 876Q1147 876 1099.5 822.5Q1052 769 1052 682V0H752V698Q752 779 705.0 827.5Q658 876 582 876Q530 876 489.0 850.0Q448 824 424.0 778.5Q400 733 400 670V0Z" transform="translate(7866.65 0)"/>
+                <path d="M594 -22Q425 -22 301.5 50.5Q178 123 111.5 252.5Q45 382 45 554Q45 728 111.5 857.5Q178 987 301.5 1059.5Q425 1132 594 1132Q764 1132 887.5 1059.5Q1011 987 1077.5 857.5Q1144 728 1144 554Q1144 382 1077.5 252.5Q1011 123 887.5 50.5Q764 -22 594 -22ZM596 220Q673 220 725.0 263.5Q777 307 803.5 383.0Q830 459 830 556Q830 654 803.5 729.0Q777 804 725.0 847.0Q673 890 596 890Q518 890 465.5 847.0Q413 804 386.5 729.0Q360 654 360 556Q360 459 386.5 383.0Q413 307 465.5 263.5Q518 220 596 220Z" transform="translate(9610.65 0)"/>
+              </g>
+              <g data-logo-part="stroma">
+                <path d="M889 871 771 839Q745 914 684.5 966.5Q624 1019 511 1019Q398 1019 325.0 964.5Q252 910 252 825Q252 754 301.5 708.5Q351 663 455 637L624 596Q764 561 834.5 487.5Q905 414 905 302Q905 208 852.5 134.0Q800 60 707.0 18.0Q614 -24 491 -24Q327 -24 221.0 50.5Q115 125 85 264L209 294Q232 195 303.0 144.0Q374 93 489 93Q617 93 695.0 151.0Q773 209 773 295Q773 433 590 478L408 522Q262 557 192.0 632.0Q122 707 122 819Q122 911 172.5 982.0Q223 1053 311.0 1093.0Q399 1133 511 1133Q665 1133 757.0 1062.5Q849 992 889 871Z" transform="translate(10800.65 0)"/>
+                <path d="M578 1118V1005H45V1118ZM212 1384H341V292Q341 201 386.0 155.5Q431 110 511 110Q529 110 547.5 112.5Q566 115 587 120L615 3Q592 -6 562.0 -11.0Q532 -16 500 -16Q376 -16 294.0 60.5Q212 137 212 261Z" transform="translate(11725.65 0)"/>
+                <path d="M139 0V1118H264V945H274Q308 1030 391.5 1081.5Q475 1133 580 1133Q596 1133 615.5 1133.0Q635 1133 648 1132V1001Q640 1002 618.0 1004.5Q596 1007 569 1007Q483 1007 414.5 970.0Q346 933 307.0 868.5Q268 804 268 721V0Z" transform="translate(12333.65 0)"/>
+                <path d="M573 -24Q428 -24 317.0 49.5Q206 123 143.5 253.5Q81 384 81 553Q81 725 143.5 855.5Q206 986 317.0 1059.5Q428 1133 573 1133Q718 1133 828.5 1059.5Q939 986 1002.0 855.5Q1065 725 1065 553Q1065 384 1002.5 253.5Q940 123 829.0 49.5Q718 -24 573 -24ZM573 94Q690 94 770.5 156.5Q851 219 893.0 324.0Q935 429 935 553Q935 679 893.0 784.0Q851 889 770.0 952.0Q689 1015 573 1015Q457 1015 376.5 951.5Q296 888 253.5 783.5Q211 679 211 553Q211 429 253.0 324.0Q295 219 376.0 156.5Q457 94 573 94Z" transform="translate(12938.65 0)"/>
+                <path d="M139 0V1118H264V945H277Q310 1032 388.5 1082.0Q467 1132 577 1132Q692 1132 766.0 1077.5Q840 1023 877 929H887Q925 1021 1010.5 1076.5Q1096 1132 1217 1132Q1373 1132 1464.0 1034.0Q1555 936 1555 749V0H1425V749Q1425 881 1357.5 947.5Q1290 1014 1179 1014Q1051 1014 982.0 934.5Q913 855 913 735V0H780V761Q780 874 717.0 944.0Q654 1014 539 1014Q462 1014 400.5 975.5Q339 937 303.5 870.0Q268 803 268 715V0Z" transform="translate(14023.65 0)"/>
+                <path d="M451 -25Q350 -25 266.0 14.5Q182 54 132.5 129.5Q83 205 83 313Q83 396 114.0 452.0Q145 508 203.0 544.5Q261 581 339.5 602.5Q418 624 513 635Q607 647 672.0 655.5Q737 664 771.0 683.0Q805 702 805 744V770Q805 885 737.0 950.5Q669 1016 542 1016Q421 1016 345.0 963.0Q269 910 239 838L115 883Q153 974 220.0 1029.0Q287 1084 370.0 1108.5Q453 1133 538 1133Q602 1133 671.0 1116.0Q740 1099 800.0 1058.0Q860 1017 897.5 943.5Q935 870 935 758V0H805V177H797Q775 128 729.0 81.5Q683 35 614.0 5.0Q545 -25 451 -25ZM469 93Q572 93 647.5 138.5Q723 184 764.0 261.0Q805 338 805 429V590Q790 576 756.5 565.0Q723 554 679.5 546.0Q636 538 591.5 532.0Q547 526 513 522Q419 510 351.5 485.0Q284 460 248.5 417.0Q213 374 213 306Q213 205 285.5 149.0Q358 93 469 93Z" transform="translate(15656.65 0)"/>
+              </g>
+              <circle data-logo-part="dot" cx="3663.825" cy="566.000" r="206.500"/>
+            </g>
+          </svg>
+        </span>
+        <span class="brand-badge">Labs</span>
+      </a>
+
+      <nav class="main-nav" aria-label="Main">
+        <a href="/#how">How it works</a>
+        <a href="/architecture/" aria-current="page" data-i18n="pg.architecture.0">Architektura</a>
+        <a href="/security/" data-i18n="nav.security">Bezpieczeństwo</a>
+        <a href="/licensing/" data-i18n="nav.licensing">Licencjonowanie</a>
+        <a href="/docs/" data-i18n="nav.docs">Dokumentacja</a>
+      </nav>
+
+      <div class="header-actions">
+        <button id="theme-toggle" class="icon-btn" type="button" aria-label="Switch to light theme">
+          <svg data-ico="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+          <svg data-ico="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+
+        <div class="lang-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-label="English">EN</button>
+          <button type="button" data-lang="uk" aria-label="Українська">UA</button>
+          <button type="button" data-lang="pl" aria-label="Polski">PL</button>
+          <button type="button" data-lang="ru" aria-label="Русский">RU</button>
+        </div>
+
+        <a class="btn btn--primary btn--sm" href="#" data-wizard-open>Run live check</a>
+
+        <button id="nav-toggle" class="icon-btn nav-toggle" type="button" aria-label="Menu" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <div class="container page-head">
+      <nav class="breadcrumbs" aria-label="Breadcrumb">
+        <a href="/">Home</a><span class="sep">/</span><span>Architecture</span>
+      </nav>
+    </div>
+
+    <section class="section">
+      <div class="container reading">
+        <span class="eyebrow">Architecture</span>
+        <h1 data-i18n="pg.architecture.1">Agent → brama → Hermes → wynik</h1>
+        <p class="lede" data-i18n="pg.architecture.2">AgentMesh Labs znajduje się między Twoim agentem a siecią multiagentową. Każde połączenie działa w izolowanej, krótkotrwałej sesji z tymczasowymi poświadczeniami i ograniczoną ścieżką demo.</p>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container">
+        <h2 class="section-title" data-i18n="pg.architecture.3">Ścieżka danych</h2>
+        <div class="grid-3 mt-xl">
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="7" width="10" height="10" rx="2"/><path d="M9 2v3M15 2v3M9 19v3M15 19v3M2 9h3M2 15h3M19 9h3M19 15h3"/></svg></div>
+            <h3 data-i18n="pg.architecture.4">Twój agent</h3>
+            <p data-i18n="pg.architecture.5">Publikuje kartę agenta (ACP lub A2A). Karta deklaruje punkt końcowy, protokół i możliwości, których brama używa do połączenia.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <h3 data-i18n="pg.architecture.6">Brama AgentMesh</h3>
+            <p>Discovers the endpoint, validates temporary credentials, and routes both protocols. Sessions are isolated: one external agent per session, short TTL.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></div>
+            <h3 data-i18n="pg.architecture.7">Weryfikacja Hermesa</h3>
+            <p data-i18n="pg.architecture.8">Weryfikuje format odpowiedzi i granice sesji na syntetycznym zadaniu, a następnie raportuje protokół, możliwości, opóźnienie i zakres.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container split">
+        <div>
+          <h2 data-i18n="pg.architecture.9">Dlaczego izolacja ma znaczenie</h2>
+          <p>A shared chat is not an integration layer: there is no contract, no session boundary, and no scope control. AgentMesh Labs replaces guesswork with an explicit protocol.</p>
+        </div>
+        <div class="grid-3">
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h3 data-i18n="pg.architecture.10">Izolacja sesji</h3>
+            <p data-i18n="pg.architecture.11">Jeden zewnętrzny agent na sesję. Bez przeciekania kontekstu między klientami.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
+            <h3 data-i18n="pg.architecture.12">Tymczasowe poświadczenia</h3>
+            <p data-i18n="pg.architecture.13">Wydawane na sesję, odwoływane po zakończeniu TTL lub na żądanie. Bez stałych tokenów.</p>
+          </div>
+          <div class="card">
+            <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/></svg></div>
+            <h3 data-i18n="pg.architecture.14">Ograniczona ścieżka demo</h3>
+            <p data-i18n="pg.architecture.15">Tylko syntetyczne payloady. Walidacja wychodząca utrzymuje ścieżkę w sandboxie.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section--alt">
+      <div class="container reading">
+        <h2 data-i18n="pg.architecture.16">Obsługa protokołów</h2>
+        <p>The gateway normalizes ACP and A2A traffic for the frontend. Synchronous conversations and asynchronous tasks share the same session timeline.</p>
+        <div class="notice mt-lg">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <div>Technical implementation details and redacted protocol examples are published in the <a href="/docs/">documentation</a> once the protocol facade is finalized.</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container reading ta-center">
+        <h2 data-i18n="pg.architecture.17">Wypróbuj żywy sandbox</h2>
+        <p class="lede" data-i18n="pg.architecture.18">Uruchom realną kontrolę połączenia z wbudowanym agentem demo — tymczasowe poświadczenia, syntetyczny payload, TTL 15 minut.</p>
+        <div class="hero-actions flex-center mt-lg">
+          <a class="btn btn--primary btn--lg" href="#" data-wizard-open>Run a live sandbox check</a>
+          <a class="btn btn--secondary btn--lg" href="/security/">Read the security model</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="brand-logo">
+            <svg viewBox="0 0 16730.7 1527.0" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Labs.Mnemostroma">
+              <g transform="translate(0 1490.0) scale(1 -1)">
+                <g data-logo-part="labs"><path d="M268 1490V0H139V1490Z" transform="translate(0 0)"/><path d="M451 -25Q350 -25 266.0 14.5Q182 54 132.5 129.5Q83 205 83 313Q83 396 114.0 452.0Q145 508 203.0 544.5Q261 581 339.5 602.5Q418 624 513 635Q607 647 672.0 655.5Q737 664 771.0 683.0Q805 702 805 744V770Q805 885 737.0 950.5Q669 1016 542 1016Q421 1016 345.0 963.0Q269 910 239 838L115 883Q153 974 220.0 1029.0Q287 1084 370.0 1108.5Q453 1133 538 1133Q602 1133 671.0 1116.0Q740 1099 800.0 1058.0Q860 1017 897.5 943.5Q935 870 935 758V0H805V177H797Q775 128 729.0 81.5Q683 35 614.0 5.0Q545 -25 451 -25ZM469 93Q572 93 647.5 138.5Q723 184 764.0 261.0Q805 338 805 429V590Q790 576 756.5 565.0Q723 554 679.5 546.0Q636 538 591.5 532.0Q547 526 513 522Q419 510 351.5 485.0Q284 460 248.5 417.0Q213 374 213 306Q213 205 285.5 149.0Q358 93 469 93Z" transform="translate(346 0)"/></g>
+                <g data-logo-part="mnemo"><path d="M91 0V1118H384V919H398Q433 1018 515.0 1075.0Q597 1132 710 1132Q825 1132 905.5 1074.5Q986 1017 1013 919H1025Q1059 1016 1149.0 1074.0Q1239 1132 1361 1132Q1517 1132 1615.5 1033.0Q1714 934 1714 752V0H1404V690Q1404 784 1354.5 830.0Q1305 876 1231 876Q1147 876 1099.5 822.5Q1052 769 1052 682V0H752V698Q752 779 705.0 827.5Q658 876 582 876Q530 876 489.0 850.0Q448 824 424.0 778.5Q400 733 400 670V0Z" transform="translate(3880.65 0)"/></g>
+                <g data-logo-part="stroma"><path d="M889 871 771 839Q745 914 684.5 966.5Q624 1019 511 1019Q398 1019 325.0 964.5Q252 910 252 825Q252 754 301.5 708.5Q351 663 455 637L624 596Q764 561 834.5 487.5Q905 414 905 302Q905 208 852.5 134.0Q800 60 707.0 18.0Q614 -24 491 -24Q327 -24 221.0 50.5Q115 125 85 264L209 294Q232 195 303.0 144.0Q374 93 489 93Q617 93 695.0 151.0Q773 209 773 295Q773 433 590 478L408 522Q262 557 192.0 632.0Q122 707 122 819Q122 911 172.5 982.0Q223 1053 311.0 1093.0Q399 1133 511 1133Q665 1133 757.0 1062.5Q849 992 889 871Z" transform="translate(2461 0)"/></g>
+                <circle data-logo-part="dot" cx="3663.825" cy="566.000" r="206.500"/>
+              </g>
+            </svg>
+          </span>
+          <p>A commercial multi-agent gateway for ACP and A2A agents — isolated sessions, temporary credentials, verified connections.</p>
+        </div>
+        <div class="footer-col">
+          <h4>Product</h4>
+          <a href="#" data-wizard-open>Live demo</a>
+          <a href="/architecture/" data-i18n="nav.architecture">Architektura</a>
+          <a href="/security/">Security</a>
+          <a href="/licensing/">Licensing</a>
+        </div>
+        <div class="footer-col">
+          <h4>Resources</h4>
+          <a href="/docs/" data-i18n="nav.docs">Dokumentacja</a>
+          <a href="/#how">How it works</a>
+          <a href="/#capabilities">Capabilities</a>
+        </div>
+        <div class="footer-col">
+          <h4>Legal</h4>
+          <a href="/privacy/">Privacy policy</a>
+          <a href="/terms/">Terms of use</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>© <span id="year">2026</span> AgentMesh Labs · Labs.Mnemostroma</span>
+        <span>All rights reserved.</span>
+      </div>
+    </div>
+  </footer>
+
+  <script type="module" src="/assets/js/app.js?v=5194cc9aec"></script>
+<!-- ================= wizard modal ================= -->
+  <div id="demo-wizard-overlay" class="modal-overlay" aria-hidden="true">
+    <div class="modal" id="demo-wizard" role="dialog" aria-modal="true" aria-labelledby="wizard-title">
+      <div class="modal-head">
+        <h3 class="modal-title" id="wizard-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          <span data-i18n="wizard.title">Kontrola w żywym sandboxie</span>
+        </h3>
+        <button class="modal-close" type="button" aria-label="Close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="wizard-progress" aria-hidden="true"></div>
+
+      <div class="modal-body">
+        <!-- step 1: role -->
+        <div class="wizard-step active" data-step="1">
+          <h3 data-i18n="wizard.role.title">Wybierz swoją rolę</h3>
+          <p class="step-desc" data-i18n="wizard.role.desc">Wybierz, jak chcesz uruchomić kontrolę połączenia.</p>
+          <div class="option-grid" id="wizard-role" role="radiogroup">
+            <button type="button" class="option" data-value="bundled" role="radio">
+              <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="3"/><path d="M8 21h8M12 17v4"/></svg></span>
+              <span><span class="opt-title" data-i18n="wizard.role.bundled">Wbudowane demo</span><br><span class="opt-desc" data-i18n="wizard.role.bundled.desc">Hermes łączy się z wbudowanym agentem demo o stałym syntetycznym scenariuszu.</span></span>
+            </button>
+            <button type="button" class="option" data-value="a2a" role="radio">
+              <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9l-5 3 5 3M16 9l5 3-5 3M13 5l-2 14"/></svg></span>
+              <span><span class="opt-title" data-i18n="wizard.role.a2a">Publiczny sandbox A2A</span><br><span class="opt-desc" data-i18n="wizard.role.a2a.desc">Podłącz własnego agenta A2A — tymczasowe poświadczenia, syntetyczny payload.</span></span>
+            </button>
+            <button type="button" class="option" data-value="acp" role="radio">
+              <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1 7 17M17 7l2.1-2.1"/></svg></span>
+              <span><span class="opt-title" data-i18n="wizard.role.acp">Test ACP z przewodnikiem</span><br><span class="opt-desc" data-i18n="wizard.role.acp.desc">Przejdź połączenie w stylu ACP z kontrolą z przewodnikiem.</span></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- step 2: mode -->
+        <div class="wizard-step" data-step="2">
+          <h3 data-i18n="wizard.mode.title">Synchronicznie czy asynchronicznie?</h3>
+          <p class="step-desc" data-i18n="wizard.mode.desc">Wybierz model interakcji dla zadania testowego.</p>
+          <div class="option-grid" id="wizard-mode" role="radiogroup">
+            <button type="button" class="option" data-value="sync" role="radio">
+              <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg></span>
+              <span><span class="opt-title" data-i18n="wizard.mode.sync">Synchronicznie</span><br><span class="opt-desc" data-i18n="wizard.mode.sync.desc">Krótka wymiana z bezpośrednią odpowiedzią.</span></span>
+            </button>
+            <button type="button" class="option" data-value="async" role="radio">
+              <span class="opt-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span>
+              <span><span class="opt-title" data-i18n="wizard.mode.async">Asynchronicznie</span><br><span class="opt-desc" data-i18n="wizard.mode.async.desc">Uruchom zadanie i śledź je w osi czasu.</span></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- step 3: agent card url -->
+        <div class="wizard-step" data-step="3">
+          <h3 data-i18n="wizard.url.title">Adres URL karty agenta</h3>
+          <p class="step-desc" data-i18n="wizard.url.desc">Wklej adres URL karty agenta A2A. Pozostaje w sesji i nigdy nie jest publikowany.</p>
+          <div class="field">
+            <label for="wizard-url">Agent Card URL</label>
+            <input class="input" id="wizard-url" type="url" inputmode="url" autocomplete="off" spellcheck="false"
+                   placeholder="https://your-agent.example.com/agent-card.json"
+                   data-i18n-attr="placeholder=wizard.url.placeholder">
+          </div>
+          <div class="wizard-nav">
+            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Wstecz</button>
+            <button class="btn btn--primary" type="button" data-wizard="url-continue" data-i18n="wizard.url.continue">Przejrzyj granice sandboxa</button>
+          </div>
+        </div>
+
+        <!-- step 4: boundaries -->
+        <div class="wizard-step" data-step="4">
+          <h3 data-i18n="wizard.boundaries.title">Granice sandboxa</h3>
+          <p class="step-desc" data-i18n="wizard.boundaries.desc">Oto, co wykona kontrola. Nic więcej nie jest wymagane ani udzielane.</p>
+          <div class="boundary-list">
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row1.k">Zakres</span><div class="scope-tags"><span class="scope-tag">agent-card:read</span><span class="scope-tag">task:receive</span><span class="scope-tag">task:respond</span><span class="scope-tag">status:read</span></div></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row2.k">Poświadczenia</span><span class="b-val" data-i18n="wizard.boundaries.row2.v">Tymczasowe, na sesję</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row3.k">TTL</span><span class="b-val" data-i18n="wizard.boundaries.row3.v">15 minut (maks. 30)</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row4.k">Payload</span><span class="b-val" data-i18n="wizard.boundaries.row4.v">Tylko syntetyczne dane testowe</span></div>
+            <div class="boundary-row"><span class="b-key" data-i18n="wizard.boundaries.row5.k">Zewnętrzni agenci</span><span class="b-val" data-i18n="wizard.boundaries.row5.v">Jeden na sesję</span></div>
+          </div>
+          <div class="wizard-nav">
+            <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Wstecz</button>
+            <button class="btn btn--primary" type="button" data-wizard="run" data-i18n="wizard.run">Uruchom kontrolę na żywo</button>
+          </div>
+        </div>
+
+        <!-- step 5: live run -->
+        <div class="wizard-step" data-step="5">
+          <div id="wizard-live">
+            <div class="live-top">
+              <span class="live-session-id">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 2v20M2 12h20"/></svg>
+                <span id="wizard-session-id">—</span>
+              </span>
+              <span class="pill" id="wizard-mode-badge">SIMULATED</span>
+              <span class="ttl">TTL <b id="wizard-ttl">15:00</b></span>
+            </div>
+            <div class="live-metrics my-md">
+              <div class="metric"><div class="m-label" data-i18n="wizard.metric.mode">Tryb</div><div class="m-val" id="wizard-metric-mode">—</div></div>
+              <div class="metric"><div class="m-label" data-i18n="wizard.metric.state">Stan</div><div class="m-val" id="wizard-metric-state">—</div></div>
+              <div class="metric"><div class="m-label" data-i18n="wizard.metric.ttl">TTL</div><div class="m-val" id="wizard-metric-ttl">—</div></div>
+            </div>
+            <div id="wizard-timeline"></div>
+            <div id="wizard-hermes" class="mt-lg"></div>
+          </div>
+
+          <div id="wizard-report" class="hidden"></div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <span class="foot-status"></span>
+        <div class="wizard-nav modal-foot-nav">
+          <button class="btn btn--secondary" type="button" data-wizard="back" data-i18n="wizard.back">Wstecz</button>
+          <button class="btn btn--primary" type="button" data-wizard="next" data-i18n="wizard.next">Dalej</button>
+          <button class="btn btn--primary hidden" type="button" data-wizard="rerun" data-i18n="wizard.rerun">Uruchom ponownie</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- scripts -->
+</body>
+</html>

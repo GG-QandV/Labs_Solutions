@@ -263,5 +263,7 @@
   "meta.title.demo": "Live demo — AgentMesh Labs",
   "meta.title.privacy": "Політика конфіденційності — AgentMesh Labs",
   "meta.title.terms": "Умови використання — AgentMesh Labs",
-  "nav.how": "Як це працює"
+  "nav.how": "Як це працює",
+  "footer.link.how": "Як це працює",
+  "footer.link.capabilities": "Можливості"
 }

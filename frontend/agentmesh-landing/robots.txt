@@ -5,6 +5,8 @@
 User-agent: *
 Allow: /
 Allow: /uk/
+Allow: /pl/
+Allow: /ru/
 
 Disallow: /api/
 Disallow: /a2a/

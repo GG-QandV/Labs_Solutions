@@ -119,35 +119,51 @@
     "cold": "Demos run on demand and sleep when idle. A cold module needs a few seconds to wake — the button tells you when it is ready.",
     "d1": {
       "t": "Request dispatcher",
-      "d": "Free-text mail or message in — service, contact, deadline, priority, missing fields and a reply draft out."
+      "d": "Free-text mail or message in — service, contact, deadline, priority, missing fields and a reply draft out.",
+      "inv": "email, form, Telegram",
+      "outv": "JSON + task + draft"
     },
     "d2": {
       "t": "Document extraction",
-      "d": "Invoice, CMR, packing list or contract in — typed fields, arithmetic checks and per-field confidence out."
+      "d": "Invoice, CMR, packing list or contract in — typed fields, arithmetic checks and per-field confidence out.",
+      "inv": "PDF, scan, photo",
+      "outv": "JSON + validation report"
     },
     "d3": {
       "t": "Answers with sources",
-      "d": "Ask your own documents. Every answer returns file, page and fragment — or an explicit \"not confirmed in the base\"."
+      "d": "Ask your own documents. Every answer returns file, page and fragment — or an explicit \"not confirmed in the base\".",
+      "inv": "docs, price lists, SOPs",
+      "outv": "answer + citations"
     },
     "d4": {
       "t": "Quote & report builder",
-      "d": "A table or a request card in — a branded PDF and an email draft out. Generation is one deliberate click, never automatic."
+      "d": "A table or a request card in — a branded PDF and an email draft out. Generation is one deliberate click, never automatic.",
+      "inv": "sheet link, request card",
+      "outv": "PDF + draft mail"
     },
     "d5": {
       "t": "CRM copilot",
-      "d": "Thread, documents and status in — a summary, the next step, a task and a reply waiting for approval out."
+      "d": "Thread, documents and status in — a summary, the next step, a task and a reply waiting for approval out.",
+      "inv": "lead, thread, files",
+      "outv": "summary + next step"
     },
     "d6": {
       "t": "Table analyst",
-      "d": "CSV or spreadsheet in — calculations, charts, flagged anomalies and a plain-language explanation out."
+      "d": "CSV or spreadsheet in — calculations, charts, flagged anomalies and a plain-language explanation out.",
+      "inv": "CSV, XLSX, sheet link",
+      "outv": "charts + findings"
     },
     "d7": {
       "t": "Cross-document check",
-      "d": "Two versions of one document in — amounts, dates and figures extracted independently from each, then matched. Every mismatch keeps its source line."
+      "d": "Two versions of one document in — amounts, dates and figures extracted independently from each, then matched. Every mismatch keeps its source line.",
+      "inv": "original + translation",
+      "outv": "match report + risk"
     },
     "d8": {
       "t": "Agent gateway",
-      "d": "ACP or A2A agent in — an isolated session with temporary credentials and a bounded Hermes probe out. Live or a deterministic sandbox replay."
+      "d": "ACP or A2A agent in — an isolated session with temporary credentials and a bounded Hermes probe out. Live or a deterministic sandbox replay.",
+      "inv": "agent card",
+      "outv": "verified session + report"
     }
   },
   "demoState": {

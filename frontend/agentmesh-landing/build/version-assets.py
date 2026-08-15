@@ -92,8 +92,10 @@ def main() -> int:
     pages = [ROOT / "index.html"]
     for slug in ["architecture", "security", "licensing", "docs", "demo", "privacy", "terms"]:
         pages.extend(sorted((ROOT / slug).glob("index.html")))
-        pages.extend(sorted((ROOT / "uk" / slug).glob("index.html")))
-    pages.extend(sorted((ROOT / "uk").glob("index.html")))
+        for lang in ["uk", "pl", "ru"]:
+            pages.extend(sorted((ROOT / lang / slug).glob("index.html")))
+    for lang in ["uk", "pl", "ru"]:
+        pages.extend(sorted((ROOT / lang).glob("index.html")))
     for html in pages:
         if html.exists():
             total += version_html(html)
