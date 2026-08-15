@@ -47,6 +47,8 @@ DEMO_MAP = {
     "agents": "agents-demo",
     "agentmesh": "agentmesh-site",
 }
+# статические продукты (не OpsHub-демо): всегда готовы, не «soon»/«down»
+ALWAYS_READY = {"agentmesh"}
 SERVICE_CHOICES = ("rag", "pdf", "dispatcher", "extraction", "crm", "analyst", "other")
 
 
@@ -226,6 +228,8 @@ def _opshub_auth() -> dict[str, str]:
 async def demos():
     # Источник правды — DEMO_MAP: иначе новый слаг ломает ответ KeyError'ом ниже.
     states = {slug: "soon" for slug in DEMO_MAP}
+    for slug in ALWAYS_READY:
+        states[slug] = "ready"  # статические продукты (напр. agentmesh-лендинг) всегда online
     try:
         async with httpx.AsyncClient(timeout=5) as c:
             r = await c.get(f"{config.OPSHUB_URL}/api/overview", headers=_opshub_auth())
