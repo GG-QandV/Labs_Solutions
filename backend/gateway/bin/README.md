@@ -4,7 +4,7 @@
 
 | Файл | Обязателен | Что это |
 |---|---|---|
-| `gatewayd` | да | шлюз ASP-A2A (`cargo build --release` в ASP-A2A_gateway) |
+| `gatewayd` | да | шлюз ACP-A2A (`cargo build --release` в ACP-A2A_gateway) |
 | `hermes` | нужен хотя бы один агент | ACP-агент, запускается как `hermes acp` |
 | `claurst` | нет | второй ACP-агент другой реализации |
 

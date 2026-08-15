@@ -1,6 +1,6 @@
-# ASP-A2A gateway + два ACP-агента на хосте
+# ACP-A2A gateway + два ACP-агента на хосте
 
-Деплой-обвязка для [`GG-QandV/ASP-A2A_gateway`](https://github.com/GG-QandV/ASP-A2A_gateway) —
+Деплой-обвязка для [`GG-QandV/ACP-A2A_gateway`](https://github.com/GG-QandV/ACP-A2A_gateway) —
 шлюз между **ACP-агентами** (hermes, claurst, opencode) и **A2A-клиентами**. Даёт демо-модулям
 парка (в первую очередь `agents` — сверка документов, `docs/SPEC_agents_demo_v1.md`) единый
 HTTP-вход к двум независимым агентам.
@@ -23,7 +23,7 @@ HTTP-вход к двум независимым агентам.
 ```bash
 chmod +x bin/*
 sudo ./install.sh
-systemctl restart asp-gateway
+systemctl restart acp-gateway
 ```
 
 Скрипт ничего не собирает и не качает: проверяет бинари (архитектура + `ldd` — чтобы чужая
@@ -123,5 +123,5 @@ curl -so /dev/null -w '%{http_code}\n' http://127.0.0.1:8348/agents/x/.well-know
 | `bin/` | сюда кладутся `gatewayd`, `hermes`, `claurst` (в git не попадают) |
 | `AGENT_TASK.md` | пошаговое задание агенту-исполнителю |
 | `config.yaml.example` | конфиг шлюза с двумя агентами → `/srv/gateway/config.yaml` |
-| `systemd/asp-gateway.service` | юнит (явный PATH для спавна агентов, лимиты, хардненинг) |
+| `systemd/acp-gateway.service` | юнит (явный PATH для спавна агентов, лимиты, хардненинг) |
 | `traefik-dynamic.yml` | публикация 8348 наружу (file-provider, т.к. шлюз не в Docker) |

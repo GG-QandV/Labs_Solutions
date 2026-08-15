@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Установка ASP-A2A шлюза и агентов из ГОТОВЫХ бинарников.
+# Установка ACP-A2A шлюза и агентов из ГОТОВЫХ бинарников.
 # Ничего не собирает и не качает: кладёт бинари, конфиг, юнит.
 #
 #   sudo ./install.sh
@@ -79,9 +79,9 @@ else
 fi
 
 # --- 5. systemd ------------------------------------------------------------
-install -m 0644 "$HERE/systemd/asp-gateway.service" /etc/systemd/system/asp-gateway.service
+install -m 0644 "$HERE/systemd/acp-gateway.service" /etc/systemd/system/acp-gateway.service
 systemctl daemon-reload
-systemctl enable asp-gateway.service
+systemctl enable acp-gateway.service
 log "готово"
 
 cat <<EOF
@@ -91,7 +91,7 @@ cat <<EOF
   2. Задать РАЗНЫЕ модели агентам (иначе смысл двух агентов теряется):
        sudo -u $GW_USER env HOME=$GW_HOME/workspaces/claurst-a $GW_HOME/bin/claurst /model
        sudo -u $GW_USER env HOME=$GW_HOME/workspaces/claurst-b $GW_HOME/bin/claurst /model
-  3. systemctl restart asp-gateway
+  3. systemctl restart acp-gateway
   4. curl -so /dev/null -w '%{http_code}\\n' \\
        http://127.0.0.1:8348/agents/x/.well-known/agent.json     # 401 = живой
 EOF

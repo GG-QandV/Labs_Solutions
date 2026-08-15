@@ -1,5 +1,5 @@
-# ASP-A2A gateway — конфиг для парка Labs.
-# Источник: github.com/GG-QandV/ASP-A2A_gateway (config.example.yaml).
+# ACP-A2A gateway — конфиг для парка Labs.
+# Источник: github.com/GG-QandV/ACP-A2A_gateway (config.example.yaml).
 # Копировать в /srv/gateway/config.yaml и проверить public_url.
 #
 # ВАЖНО: TCP-порт слушает 127.0.0.1 — шлюз НЕ терминирует TLS, снаружи

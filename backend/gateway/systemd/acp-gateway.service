@@ -1,6 +1,6 @@
 [Unit]
-Description=ASP-A2A gateway (ACP <-> A2A) for Labs demo park
-Documentation=https://github.com/GG-QandV/ASP-A2A_gateway
+Description=ACP-A2A gateway (ACP <-> A2A) for Labs demo park
+Documentation=https://github.com/GG-QandV/ACP-A2A_gateway
 After=network-online.target
 Wants=network-online.target
 

@@ -1,9 +1,9 @@
-# Задание агенту: поставить ASP-A2A шлюз и агентов на хост из готовых бинарников
+# Задание агенту: поставить ACP-A2A шлюз и агентов на хост из готовых бинарников
 
 Ничего не собирать и не компилировать на хосте. Бинари собраны локально и лежат в `bin/`.
 Задача — разложить, настроить, проверить.
 
-**Результат:** `asp-gateway.service` поднят, по HTTPS отдаёт двух независимых
+**Результат:** `acp-gateway.service` поднят, по HTTPS отдаёт двух независимых
 ACP-агентов (`hermes-a`, `hermes-b`) для демо-модуля `agents`.
 
 ---
@@ -42,7 +42,7 @@ sudo ./deploy/install.sh
 ```bash
 ls -l /srv/gateway/bin/                    # gatewayd + агенты
 sudo stat -c '%a %U' /srv/gateway/env      # 600 gateway
-systemctl is-enabled asp-gateway           # enabled
+systemctl is-enabled acp-gateway           # enabled
 ```
 
 **Если install.sh упал на проверке бинарника** (чужая архитектура или нехватка библиотек) —
@@ -84,7 +84,7 @@ sudo -u gateway env HOME=/srv/gateway/workspaces/hermes-b /srv/gateway/bin/herme
 Шлюз на хосте, а не в Docker — labels неприменимы, нужен file-provider:
 
 ```bash
-sudo cp deploy/traefik-dynamic.yml /srv/traefik/dynamic/asp-gateway.yml
+sudo cp deploy/traefik-dynamic.yml /srv/traefik/dynamic/acp-gateway.yml
 ```
 
 Сверить в файле: `Host(...)` = `public_url` из шага 2; адрес бэкенда — реальный адрес хоста
@@ -100,8 +100,8 @@ ip -4 addr show | grep -E '172\.18'   # адрес хоста в сети web, �
 ## 5. Запуск и проверка
 
 ```bash
-sudo systemctl restart asp-gateway
-sudo systemctl status asp-gateway --no-pager
+sudo systemctl restart acp-gateway
+sudo systemctl status acp-gateway --no-pager
 ```
 
 **5.1 — шлюз жив** (агентов не поднимает, годится для мониторинга):
@@ -119,7 +119,7 @@ for a in hermes-a hermes-b; do
     "http://127.0.0.1:8348/agents/$a/.well-known/agent.json"
 done
 ```
-Ожидается `200` у обоих. `503` — агент настроен, но не поднимается (`journalctl -u asp-gateway -n 50`).
+Ожидается `200` у обоих. `503` — агент настроен, но не поднимается (`journalctl -u acp-gateway -n 50`).
 `404` — опечатка в `agent_id` в конфиге.
 
 **5.3 — снаружи:**
@@ -146,7 +146,7 @@ curl -so /dev/null -w '%{http_code}\n' https://<домен>/agents/x/.well-known
 2. Коды ответов из 5.1, 5.2, 5.3.
 3. Модели `hermes-a` и `hermes-b` — только названия, **без ключей**.
 4. Подключён ли `claurst`.
-5. `systemctl is-active asp-gateway` + последние 20 строк `journalctl -u asp-gateway`.
+5. `systemctl is-active acp-gateway` + последние 20 строк `journalctl -u acp-gateway`.
 6. Что пришлось сделать иначе и почему.
 
 Детали архитектуры и ограничений — `deploy/README.md`.
