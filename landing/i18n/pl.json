@@ -106,9 +106,13 @@
   },
   "demos": {
     "eyebrow": "Uruchom sam",
-    "h2": "Siedem modułów. Jeden tor. Bez rejestracji.",
+    "h2": "Osiem modułów. Jeden tor. Bez rejestracji.",
     "h2Rest": ". Jeden tor. Bez rejestracji.",
-    "count": { "one": "moduł", "few": "moduły", "many": "modułów" },
+    "count": {
+      "one": "moduł",
+      "few": "moduły",
+      "many": "modułów"
+    },
     "lead": "Każdy moduł działa samodzielnie lub w połączonym potoku. Przykładowe pliki są wstępnie załadowane — swoje podłączysz tylko gdy chcesz.",
     "in": "Wejście",
     "out": "Wyjście",
@@ -140,6 +144,10 @@
     "d7": {
       "t": "Porównanie dwóch dokumentów",
       "d": "Dwie wersje jednego dokumentu na wejściu — kwoty, daty i liczby wyodrębniane niezależnie z każdej, następnie zestawiane. Każda rozbieżność zachowuje wiersz źródłowy."
+    },
+    "d8": {
+      "t": "Brama agentów",
+      "d": "Agent ACP lub A2A — izolowana sesja z tymczasowymi poświadczeniami i ograniczonym testem Hermes. Na żywo lub deterministyczny sandbox."
     }
   },
   "demoState": {

@@ -45,6 +45,7 @@ DEMO_MAP = {
     "crm": "crm",
     "analyst": "analyst",
     "agents": "agents-demo",
+    "agentmesh": "agentmesh-site",
 }
 SERVICE_CHOICES = ("rag", "pdf", "dispatcher", "extraction", "crm", "analyst", "other")
 

@@ -257,6 +257,21 @@ MySQL + MinIO + Redis + server), LLM — по API. **На публичный п�
 на нашем VPS не поднимаем. Это **доступный вариант для требовательных клиентов** с мощными машинами/серверами
 или в контуре клиента — отдельное внедрение, а не демо. Публичный тизер RAG остаётся лёгким `backend/rag-demo/` (§5.3).
 
+### 5.9. AgentMesh Labs — агентный gateway (отдельный продукт, карточка №8)
+Отдельный продукт: коммерческий gateway для ACP/A2A-агентов с изолированными сессиями,
+временными credentials и bounded Hermes-проверкой. Спека — `backups/agentmesh-labs./`
+(architecture + frontend-spec + landing-skeleton), фронт — `frontend/agentmesh-landing/`.
+
+**Деплой на проде:** `agentmesh-site` (nginx, статика `/srv/agentmesh/public`) + Traefik-роут
+`agentmesh-labs.mnemostroma.com`: `/agents/*` и `/api/v1/agentmesh/*` → gatewayd `172.18.0.1:8348`
+(`/srv/traefik/dynamic/asp-gateway.yml`); остальное → статический лендинг. Gatewayd — внешний
+Rust-репо `ASP-A2A_gateway`.
+
+**Статус:** 🟡 фронт задеплоен (лендинг, SEO-подстраницы, темы, i18n EN/UK, wizard).
+**Не реализовано:** `agentmesh-api` (Python BFF: session lifecycle, rate limits, SSE, revoke,
+OpsHub-интеграция) — сейчас `/api/v1/agentmesh/*` → 404, wizard работает на deterministic mock.
+Полный скоуп — этапы MVP-2…MVP-4 из `agentmesh-labs-architecture.md` §C.
+
 ---
 
 ## 6. Данные и безопасность (сквозные правила)

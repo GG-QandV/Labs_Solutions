@@ -106,9 +106,13 @@
   },
   "demos": {
     "eyebrow": "Run it yourself",
-    "h2": "Seven modules. One track. No sign-up to look.",
+    "h2": "Eight modules. One track. No sign-up to look.",
     "h2Rest": ". One track. No sign-up to look.",
-    "count": { "one": "module", "few": "modules", "many": "modules" },
+    "count": {
+      "one": "module",
+      "few": "modules",
+      "many": "modules"
+    },
     "lead": "Each module works standalone or chained into the full run. Sample files are preloaded — bring your own only when you want to.",
     "in": "In",
     "out": "Out",
@@ -140,6 +144,10 @@
     "d7": {
       "t": "Cross-document check",
       "d": "Two versions of one document in — amounts, dates and figures extracted independently from each, then matched. Every mismatch keeps its source line."
+    },
+    "d8": {
+      "t": "Agent gateway",
+      "d": "ACP or A2A agent in — an isolated session with temporary credentials and a bounded Hermes probe out. Live or a deterministic sandbox replay."
     }
   },
   "demoState": {
