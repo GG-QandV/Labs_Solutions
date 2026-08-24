@@ -1,7 +1,20 @@
 # robots.txt — labs.mnemostroma.com
-# Правило: индексируем контент, закрываем всё, что не должно попадать в выдачу
-# (панель OpsHub, API, служебные и демо-сессионные URL).
+# AI-краулеры: маркетинговый сайт — присутствие в AI-ответах полезно.
+# Правила для AI-ботов РАЗРЕШАЮЩИЕ — ставим ПЕРВЫМИ до Cloudflare Managed.
 
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# Общие правила для остальных ботов
 User-agent: *
 Allow: /
 Allow: /uk/
@@ -15,22 +28,11 @@ Disallow: /*?ref=
 Disallow: /*?session=
 Disallow: /*.json$
 
-# Явно разрешаем статику, нужную рендереру Google
+# Статика для рендереров
 Allow: /assets/
 Allow: /i18n/
 
-# AI-краулеры: маркетинговый сайт — присутствие в AI-ответах полезно.
-# Если политика изменится, меняются только эти блоки.
-User-agent: GPTBot
-Allow: /
-
-User-agent: ClaudeBot
-Allow: /
-
-User-agent: PerplexityBot
-Allow: /
-
-# Агрессивные SEO-скрейперы — отключены (лишняя нагрузка на VPS)
+# Агрессивные SEO-скрейперы — отключены
 User-agent: AhrefsBot
 Disallow: /
 

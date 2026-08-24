@@ -1,0 +1,316 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Labs Mnemostroma Site API",
+    "description": "API for consultation booking, demo management, and health checks.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "Labs Mnemostroma",
+      "url": "https://labs.mnemostroma.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://labs.mnemostroma.com/api/v1",
+      "description": "Production"
+    }
+  ],
+  "paths": {
+    "/consult": {
+      "post": {
+        "operationId": "createConsult",
+        "summary": "Submit consultation request",
+        "description": "Create a new consultation request. Returns a reference code for tracking.",
+        "tags": ["Consultation"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConsultBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "202": {
+            "description": "Request accepted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/consult/{ref}": {
+      "get": {
+        "operationId": "getConsultStatus",
+        "summary": "Get consultation status",
+        "description": "Check the status of a consultation request by reference code.",
+        "tags": ["Consultation"],
+        "parameters": [
+          {
+            "name": "ref",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^LM-\\d{4}-[A-Z0-9]{6}$"
+            },
+            "description": "Reference code (e.g., LM-2026-4KD8QZ)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Consultation status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConsultStatus"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found"
+          },
+          "429": {
+            "description": "Rate limited"
+          }
+        }
+      }
+    },
+    "/slots": {
+      "get": {
+        "operationId": "listSlots",
+        "summary": "List available booking slots",
+        "description": "Get available time slots for consultation booking.",
+        "tags": ["Slots"],
+        "responses": {
+          "200": {
+            "description": "Available slots",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Slot"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demos": {
+      "get": {
+        "operationId": "listDemos",
+        "summary": "Get demo statuses",
+        "description": "Returns the status of all demo modules (ready, soon, or down).",
+        "tags": ["Demos"],
+        "responses": {
+          "200": {
+            "description": "Demo statuses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DemoStatus"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/demos/{slug}/wake": {
+      "post": {
+        "operationId": "wakeDemo",
+        "summary": "Wake a sleeping demo",
+        "description": "Start a demo container that is currently sleeping. Takes ~15 seconds to warm up.",
+        "tags": ["Demos"],
+        "parameters": [
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["dispatcher", "ocr", "rag", "report", "crm", "analyst", "agents", "agentmesh"]
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "Demo warming up",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "slug": { "type": "string" },
+                    "state": { "type": "string" },
+                    "eta_seconds": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Unknown demo"
+          },
+          "429": {
+            "description": "Rate limited"
+          }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Health check",
+        "description": "Returns service health status.",
+        "tags": ["Health"],
+        "responses": {
+          "200": {
+            "description": "Healthy",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": { "type": "boolean" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ConsultBody": {
+        "type": "object",
+        "required": ["name", "email", "process"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 80
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "contact_telegram": {
+            "type": "string",
+            "maxLength": 80
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "service": {
+            "type": "string",
+            "enum": ["rag", "pdf", "dispatcher", "extraction", "crm", "analyst", "other"]
+          },
+          "process": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 1200,
+            "description": "Description of your business process"
+          },
+          "slot_id": {
+            "type": "integer"
+          },
+          "locale": {
+            "type": "string",
+            "enum": ["en", "uk", "ru", "pl"],
+            "default": "en"
+          },
+          "page": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "captcha_token": {
+            "type": "string"
+          }
+        }
+      },
+      "ConsultResponse": {
+        "type": "object",
+        "properties": {
+          "ref": {
+            "type": "string",
+            "example": "LM-2026-4KD8QZ"
+          },
+          "status": {
+            "type": "string",
+            "example": "received"
+          }
+        }
+      },
+      "ConsultStatus": {
+        "type": "object",
+        "properties": {
+          "ref": { "type": "string" },
+          "status": { "type": "string" },
+          "next_step": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "slot_starts_at": { "type": "integer", "nullable": true }
+        }
+      },
+      "Slot": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "starts_at": { "type": "integer", "description": "Unix timestamp" }
+        }
+      },
+      "DemoStatus": {
+        "type": "object",
+        "properties": {
+          "slug": { "type": "string" },
+          "state": { "type": "string", "enum": ["ready", "soon", "down"] },
+          "url": { "type": "string", "nullable": true }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "detail": { "type": "string" },
+          "code": { "type": "string" }
+        }
+      }
+    }
+  }
+}

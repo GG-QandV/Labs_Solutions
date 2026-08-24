@@ -1,0 +1,61 @@
+# Labs Mnemostroma
+
+> Live AI automation you can run before you buy
+
+Labs Mnemostroma is a showcase of working AI pipelines for document processing, request handling, and CRM integration. Run demos on your own data, inspect every source and confidence score, and keep a human signature before anything leaves the system.
+
+## What We Do
+
+- **Document Processing (OCR/Extraction)** — AI-powered document understanding with confidence scoring
+- **RAG (Retrieval-Augmented Generation)** — Semantic search over your documents with cited answers
+- **PDF Report Generation** — Automated report assembly from structured data
+- **Dispatcher** — Intelligent request routing and classification
+- **CRM Integration** — AI-assisted customer relationship management
+- **Analyst** — Data analysis and insights pipeline
+- **Agent Mesh** — Multi-agent orchestration platform
+
+## Demos
+
+Interactive demos are available at `/demos/{slug}`:
+- `/demos/dispatcher` — Request routing and classification
+- `/demos/extraction` — Document OCR and data extraction
+- `/demos/rag` — Retrieval-augmented generation
+- `/demos/reports` — PDF report generation
+- `/demos/crm` — CRM integration
+- `/demos/analyst` — Data analysis
+
+Demo status: `GET /api/v1/demos`
+
+## API
+
+Base URL: `https://labs.mnemostroma.com/api/v1`
+
+### Endpoints
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/consult` | Submit consultation request |
+| GET | `/consult/{ref}` | Check consultation status |
+| GET | `/slots` | List available booking slots |
+| GET | `/demos` | Get demo statuses |
+| POST | `/demos/{slug}/wake` | Wake a sleeping demo |
+| GET | `/health` | Health check |
+
+### Authentication
+
+- Public endpoints: no auth required
+- Rate limiting: IP-based, varies per endpoint
+- CAPTCHA: Cloudflare Turnstile on consultation form
+
+## Languages
+
+- English (default): `/`
+- Ukrainian: `/uk/`
+- Polish: `/pl/`
+- Russian: `/ru/`
+
+## Contact
+
+- Website: https://labs.mnemostroma.com
+- Consultation: POST `/api/v1/consult`
+- Location: Ukraine / EU / remote
