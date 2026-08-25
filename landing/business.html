@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Labs Mnemostroma — автоматизация рутины для бизнеса</title>
+<meta name="description" content="Автоматизация рутины, которую можно проверить до оплаты. Загрузите свой файл в пример на этой странице и увидите результат. Без регистрации.">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/assets/css/style.css?v=3">
+<script src="/assets/js/theme-init.js"></script>
+<style>
+/* business-page scoped additions */
+.biz-ph{border:2px dashed var(--line,#cbd5e1);border-radius:14px;padding:var(--s4,24px);
+  background:linear-gradient(135deg,rgba(99,102,241,.06),rgba(14,165,233,.08));
+  display:flex;align-items:center;justify-content:center;text-align:center;
+  color:var(--muted,#64748b);font-size:.95rem;min-height:180px}
+.biz-ph svg{opacity:.55;margin-bottom:.5rem}
+.biz-flow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;align-items:center}
+.biz-flow .step{background:var(--card,#fff);border:1px solid var(--line,#e2e8f0);
+  border-radius:10px;padding:10px 14px;font-size:.92rem;font-weight:500}
+.biz-flow .arr{color:var(--muted,#94a3b8);font-weight:700}
+.biz-approve{margin-top:12px;text-align:center;font-size:.9rem;color:var(--ok,#059669);font-weight:600}
+.badge-soon{display:inline-block;font-size:.72rem;padding:2px 8px;border-radius:999px;
+  background:var(--warn-bg,#fef3c7);color:var(--warn,#92400e);margin-left:6px;vertical-align:middle}
+</style>
+</head>
+<body>
+<header class="site-head"><div class="wrap site-head__row">
+  <a class="brand" href="/"><span class="brand__mark">◆</span> Labs.Mnemostroma</a>
+  <nav class="site-nav">
+    <a href="#demos">Примеры</a><a href="#price">Стоимость</a>
+    <a href="/">Техническая версия</a>
+  </nav>
+</div></header>
+
+<main>
+<!-- S0 HERO -->
+<section class="hero">
+  <div class="wrap hero__grid">
+    <div class="hero__copy">
+      <p class="eyebrow">Проверьте до оплаты</p>
+      <h1 class="h1">Автоматизация рутины, которую можно проверить до оплаты</h1>
+      <p class="lead">Загрузите свой файл в пример на этой странице и увидите результат.
+        Без регистрации. Это работает прямо сейчас.</p>
+      <div class="hero__cta">
+        <a class="btn btn--primary" href="#demos">Попробовать пример</a>
+        <a class="btn" href="#price">Сколько это стоит</a>
+      </div>
+      <ul class="hero__facts">
+        <li>Пилот ставим на одном процессе. Не на «платформе на весь офис».</li>
+      </ul>
+    </div>
+    <div class="hero__panel biz-ph" aria-hidden="true">
+      <div>
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 15l5-5 4 4 3-3 6 6"/></svg>
+        <p>Визуал героя готовится<br>(ТЗ: comics-before-after)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S1 RECOGNITION -->
+<section class="sec" id="problem">
+  <div class="wrap">
+    <h2>Знакомая рутина?</h2>
+    <div class="grid grid--3">
+      <article class="card"><p>Пока вы читаете это, кто-то в вашей команде снова перепечатывает данные из документов.</p></article>
+      <article class="card"><p>Счёт пришёл в пятницу вечером. Кто занесёт его в систему до понедельника?</p></article>
+      <article class="card"><p>Цена есть. Она в прайсе. Прайс где-то в почте за март.</p></article>
+    </div>
+    <p class="lead" style="margin-top:16px">Это не лень и не плохие люди. Это работа, которую машина умеет делать за минуты.</p>
+  </div>
+</section>
+
+<!-- S2 BEFORE/AFTER -->
+<section class="sec sec--alt" id="before-after">
+  <div class="wrap">
+    <h2>Один процесс: как было и как стало</h2>
+    <div class="grid grid--2">
+      <article class="card">
+        <h3>Сейчас</h3>
+        <p>Документ приходит в почту → кто-то открывает → перепечатывает поля в таблицу →
+           проверяет вручную → если забыл — висит до понедельника.</p>
+      </article>
+      <article class="card">
+        <h3>С автоматизацией</h3>
+        <p>Документ распознался сам → поля попали в вашу таблицу и базу → система пометила,
+           что требует проверки → человек подтвердил одним нажатием → готово. Даже в пятницу вечером.</p>
+      </article>
+    </div>
+    <p style="font-size:.9rem;color:var(--muted,#64748b)"><em>Распознать документ</em> = программа читает файл
+       и вытаскивает из него нужные поля: сумму, номер, дату, поставщика.</p>
+    <div class="biz-ph" aria-hidden="true">
+      <div>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 6h13M8 12h13M8 18h13"/><path d="M3 6h.01M3 12h.01M3 18h.01"/></svg>
+        <p>Комикс «до → после» готовится<br>(плейсхолдер · ТЗ: comics-before-after)</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- S3 LIVE DEMOS -->
+<section class="sec" id="demos">
+  <div class="wrap">
+    <h2>Не верьте нам на слово — проверьте</h2>
+    <p class="lead">Каждый пример ниже — работающий инструмент. Загрузите свой файл и посмотрите результат.
+       Регистрация не нужна.</p>
+    <div class="grid grid--4">
+      <article class="card card--demo" data-demo="dispatcher"><span class="pill" data-demo-state>—</span>
+        <h3>Входящие заявки разбираются сами</h3><p>письма и заявки сортируются, черновики ответов ждут вашего подтверждения</p></article>
+      <article class="card card--demo" data-demo="rag"><span class="pill" data-demo-state>—</span>
+        <h3>Спросите свои документы о чём угодно</h3><p>ответ со ссылкой на страницу источника</p></article>
+      <article class="card card--demo" data-demo="report"><span class="pill" data-demo-state>—</span>
+        <h3>Отчёт из вашего PDF</h3><p>отчёты собираются сами</p></article>
+      <article class="card card--demo" data-demo="agents"><span class="pill" data-demo-state>—</span>
+        <h3>Дайте задание — агент выполнит</h3><p>и покажет каждый шаг</p></article>
+      <article class="card card--demo" data-demo="agentmesh"><span class="pill" data-demo-state>—</span>
+        <h3>Несколько агентов работают как одна команда</h3><p>сложный процесс делится между исполнителями</p></article>
+      <article class="card card--demo"><span class="badge-soon">скоро</span>
+        <h3>Фото документа → текст</h3><p>распознавание сканов и фотографий</p>
+        <p style="font-size:.85rem;color:var(--muted)">Скоро — оставьте почту, пришлём первым.</p></article>
+      <article class="card card--demo"><span class="badge-soon">скоро</span>
+        <h3>Из письма — сразу в вашу CRM</h3><p>контакты и заявки попадают в систему без перепечатывания</p>
+        <p style="font-size:.85rem;color:var(--muted)">Скоро — оставьте почту, пришлём первым.</p></article>
+      <article class="card card--demo"><span class="badge-soon">скоро</span>
+        <h3>Цифры месяца — коротким выводом</h3><p>отчёт превращается в понятное резюме</p>
+        <p style="font-size:.85rem;color:var(--muted)">Скоро — оставьте почту, пришлём первым.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- S4 COMPOSITION -->
+<section class="sec sec--alt" id="process">
+  <div class="wrap">
+    <h2>Восемь инструментов — или один процесс</h2>
+    <p class="lead">Каждый инструмент выше работает отдельно. Настоящая экономия начинается,
+       когда они соединены.</p>
+    <div class="biz-flow">
+      <span class="step">документ распознался</span><span class="arr">→</span>
+      <span class="step">попал в базу</span><span class="arr">→</span>
+      <span class="step">ответ нашёлся с источником</span><span class="arr">→</span>
+      <span class="step">отчёт собрался</span>
+    </div>
+    <p class="biz-approve">✓ Вы подтвердили — система сделала остальное</p>
+    <div class="biz-ph" aria-hidden="true">
+      <div>
+        <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="5" cy="12" r="2.5"/><circle cx="19" cy="6" r="2.5"/><circle cx="19" cy="18" r="2.5"/><path d="M7.5 11L16.5 6.8M7.5 13l9 4.2"/></svg>
+        <p>Анимированная схема процесса готовится<br>(плейсхолдер · ТЗ: pipeline-animation) — выше рабочая статичная версия</p>
+      </div>
+    </div>
+    <div class="hero__cta" style="justify-content:center;margin-top:20px">
+      <a class="btn btn--primary" href="#consult-mid">Показать это на моём процессе</a>
+    </div>
+  </div>
+</section>
+
+<!-- S5 HUMAN IN CONTROL -->
+<section class="sec" id="control">
+  <div class="wrap">
+    <h2>ИИ готовит — человек подтверждает</h2>
+    <p class="lead">Ничего не уходит клиенту и не меняется в ваших системах само.
+       У каждого действия — человек, который нажимает «подтвердить».
+       Источники и исходные данные видны всегда: любая цифра проверяется до отправки.</p>
+  </div>
+</section>
+
+<!-- S6 WHERE IT RUNS -->
+<section class="sec sec--alt" id="runs-where">
+  <div class="wrap">
+    <h2>Работает там, где живут ваши данные</h2>
+    <p class="lead">Всё может работать на вашем сервере. Данные не покидают инфраструктуру без вашего разрешения.
+       ИИ можно подключить облачный — а можно свой, локальный: тогда наружу не уходит ничего.
+       Самые чувствительные поля маскируются до любого обращения к облаку.</p>
+    <p><a href="/">Как именно это устроено технически — отдельная страница →</a></p>
+  </div>
+</section>
+
+<!-- S7 PRICING FRAME -->
+<section class="sec" id="price">
+  <div class="wrap">
+    <h2>Платите за работу, не за лицензии</h2>
+    <p class="lead">Сторонние компоненты — свободные и бесплатные. Наши разработки лицензируются
+       символически — <strong>$1 за установку</strong>, когда внедрение выполняем мы.
+       Основная оплата — за анализ, настройку, интеграцию и поддержку.</p>
+    <p class="lead">Начните с одного процесса. Не платформы на весь офис.<br>
+       Расходы на облачные модели — по факту использования; с локальной моделью их может не быть совсем.</p>
+    <div class="hero__cta"><a class="btn btn--primary" href="#consult-end">Обсудить мой процесс</a></div>
+  </div>
+</section>
+
+<!-- S8 HOW WORK GOES -->
+<section class="sec sec--alt" id="how">
+  <div class="wrap">
+    <h2>Как проходит работа</h2>
+    <ol class="steps">
+      <li><strong>Разбор процесса</strong> — созвон, смотрим ваш реальный процесс и документы. Без презентаций.</li>
+      <li><strong>Пилот на одном процессе</strong> — автоматизируем один узкий кусок, вы меряете результат.</li>
+      <li><strong>Решение ваше</strong> — расширяем, что сработало; что не сработало — остаётся пилотом.</li>
+      <li><strong>Поддержка</strong> — процессы меняются, автоматизация подстраивается.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- S9 FAQ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <h2>Частые вопросы</h2>
+    <details><summary>А если ИИ ошибётся?</summary><p>Человек подтверждает каждое действие; ошибки ловятся до того, как уйдут наружу.</p></details>
+    <details><summary>Куда уйдут мои данные?</summary><p>На ваш сервер; чувствительные поля маскируются до любого облака; локальная модель = ноль наружу.</p></details>
+    <details><summary>Нас заставят всё переделать?</summary><p>Пилот на одном процессе; текущие таблицы и почта остаются как были.</p></details>
+    <details><summary>У нас нет айтишника, кто будет это обслуживать?</summary><p>Поддержка входит в работу; интерфейсы — привычные таблица и почта.</p></details>
+    <details><summary>Сколько это стоит?</summary><p>Разбор бесплатно, лицензии символические ($1), платите за внедрение и поддержку.</p></details>
+    <details><summary>Почему это проще, чем платформа X?</summary><p>Нет подписки за каждого сотрудника; платите за настроенный процесс, а не за места.</p></details>
+    <details><summary>Что если мы захотим уйти?</summary><p>Всё стоит на вашей инфраструктуре, данные ваши; уход = просто перестанем поддерживать.</p></details>
+  </div>
+</section>
+
+<!-- consult anchors -->
+<section class="sec sec--alt" id="consult-mid"><div class="wrap">
+  <h2>Расскажите о своём процессе</h2>
+  <p class="lead">Форма консультации подключается здесь (существующий /api/v1/consult).</p>
+</div></section>
+<section class="sec" id="consult-end"><div class="wrap">
+  <h2>Обсудить мой процесс</h2>
+  <p class="lead">Форма консультации подключается здесь (существующий /api/v1/consult).</p>
+</div></section>
+</main>
+
+<footer class="site-foot"><div class="wrap">
+  <p>Labs.Mnemostroma · <a href="/">Техническое описание</a> · EN/UA/PL переводы после валидации RU</p>
+</div></footer>
+<script src="/assets/js/app.js?v=3" defer></script>
+</body>
+</html>
