@@ -37,7 +37,7 @@ services:
       - "traefik.enable=false"    # reached only through dispatcher-web (nginx)
 
   dispatcher-redis:
-    image: redis:7-alpine
+    image: valkey/valkey:8-alpine
     container_name: dispatcher-redis
     restart: on-failure
     mem_limit: 128m

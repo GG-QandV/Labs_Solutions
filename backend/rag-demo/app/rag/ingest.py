@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import base64
+import io
 import logging
 import re
 from typing import Any
@@ -33,12 +34,13 @@ def sniff_type(filename: str, head: bytes) -> str:
 def extract_pages(path: str, kind: str) -> list[tuple[int, str]]:
     """Returns [(page_number, text)]. Pages with no text layer come back empty (OCR candidates)."""
     if kind == "pdf":
-        import fitz  # PyMuPDF
+        import pdfplumber
 
         pages: list[tuple[int, str]] = []
-        with fitz.open(path) as doc:
-            for i, page in enumerate(doc, start=1):
-                pages.append((i, clean(page.get_text("text"))))
+        with pdfplumber.open(path) as pdf:
+            for i, page in enumerate(pdf.pages, start=1):
+                text = page.extract_text() or ""
+                pages.append((i, clean(text)))
         return pages
     if kind == "docx":
         import docx
@@ -71,14 +73,19 @@ async def ocr_pages(path: str, page_numbers: list[int]) -> dict[int, str]:
     if config.LLM_PROVIDER != "gemini" or not config.GEMINI_API_KEY:
         raise IngestError("This PDF looks scanned and OCR is not configured (Gemini vision required).")
 
-    import fitz
+    import pypdfium2 as pdfium
 
     out: dict[int, str] = {}
     async with httpx.AsyncClient(timeout=120) as client:
-        with fitz.open(path) as doc:
+        pdf = pdfium.PdfDocument(path)
+        try:
             for n in page_numbers:
-                pix = doc[n - 1].get_pixmap(dpi=150)
-                png_b64 = base64.b64encode(pix.tobytes("png")).decode()
+                page = pdf[n - 1]
+                bitmap = page.render(scale=150 / 72)
+                pil_image = bitmap.to_pil()
+                buf = io.BytesIO()
+                pil_image.save(buf, format="PNG")
+                png_b64 = base64.b64encode(buf.getvalue()).decode()
                 body = {
                     "contents": [{"parts": [
                         {"text": "Transcribe all text from this page as plain markdown. Output text only, no commentary."},
@@ -98,6 +105,8 @@ async def ocr_pages(path: str, page_numbers: list[int]) -> dict[int, str]:
                     for p in c.get("content", {}).get("parts", [])
                 )
                 out[n] = clean(text)
+        finally:
+            pdf.close()
     return out
 
 
